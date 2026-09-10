@@ -1,0 +1,43 @@
+{
+  "schema_id": "flamehaven.navier-stokes-m3-crosswalk.v1",
+  "source_revision": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+  "authority": "STATIC_SOURCE_INSPECTION",
+  "build_status": "UNAVAILABLE_TOOLCHAIN_NOT_EXECUTED",
+  "entries": [
+    {
+      "key": "average",
+      "paper_locator": "navier-stokes.pdf:25:eq-4.6",
+      "lean_locator": "NavierStokes/ProfileHistories.lean::average",
+      "status": "PRESENT",
+      "sha256": "0A9EEBC158A73081FFE973E13D19EA934DF388CAC29C069FE1E91BA96B142ED5"
+    },
+    {
+      "key": "radial_flux",
+      "paper_locator": "navier-stokes.pdf:26:eq-4.7",
+      "lean_locator": "NavierStokes/SlowDivergence.lean::radialFlux",
+      "status": "PRESENT",
+      "sha256": "7E2D7023041760AD5F84AB6854C3B1C60CB99CBE496636A9B412AB8701972332"
+    },
+    {
+      "key": "pressure_derivative",
+      "paper_locator": "navier-stokes.pdf:26:eq-4.7",
+      "lean_locator": "NavierStokes/ProfileHistories.lean::radialPartial_pressure",
+      "status": "PRESENT",
+      "sha256": "0A9EEBC158A73081FFE973E13D19EA934DF388CAC29C069FE1E91BA96B142ED5"
+    },
+    {
+      "key": "canonical_pressure",
+      "paper_locator": "navier-stokes.pdf:33:eq-4.25",
+      "lean_locator": "NavierStokes/NominalProfile.lean::pressure_canonical",
+      "status": "PRESENT",
+      "sha256": "DAD575051635DD54F2CAF07891638CA7675CA8D0493874E9E93204272CF7FD1B"
+    },
+    {
+      "key": "selected_candidate",
+      "paper_locator": "navier-stokes.pdf:32-34:theorem-4.6",
+      "lean_locator": "NavierStokes/ActualCandidateAssembly.lean::selected_candidate",
+      "status": "PRESENT_STATIC_ONLY",
+      "sha256": "4CCB3CF45B65669F43DA240F93DA8F318B7DA7C224F21ABF1F460DFB13889332"
+    }
+  ]
+}

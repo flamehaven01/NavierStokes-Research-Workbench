@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flamehaven.org/contracts/research-proof-contract-v1.schema.json",
+  "title": "Research Proof Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_id", "contract_version", "research_id", "control_type", "sources", "theorem", "crosswalk", "checks", "falsifiers"],
+  "properties": {
+    "schema_id": {"const": "flamehaven.research-proof-contract.v1"},
+    "contract_version": {"const": "1.0.0"},
+    "research_id": {"type": "string", "minLength": 1},
+    "control_type": {"enum": ["PRIMARY_CASE", "NEGATIVE_CONTROL"]},
+    "sources": {"type": "array", "minItems": 1},
+    "theorem": {"type": "object"},
+    "crosswalk": {"type": "array"},
+    "checks": {"type": "object"},
+    "falsifiers": {"type": "array"}
+  }
+}

@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "navier-stokes-research-workbench"
+version = "0.1.0"
+description = "Evidence-bound paper-to-formal-proof research workbench"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/flamehaven01/NavierStokes-Research-Workbench"
+Repository = "https://github.com/flamehaven01/NavierStokes-Research-Workbench"
+Issues = "https://github.com/flamehaven01/NavierStokes-Research-Workbench/issues"
+
+[project.optional-dependencies]
+dev = [
+  "numpy>=2.0",
+  "pytest>=8",
+  "pytest-cov>=5",
+  "ruff>=0.4",
+  "spar-framework @ git+https://github.com/flamehaven01/SPAR-Framework.git@24748be5f19fc0c2f6a231d85a0d84fd5393663a",
+]
+
+[project.scripts]
+nsrw = "nsrw.cli:main"
+nsrw-math = "nsrw.math_cli:main"
+nsrw-analytic = "nsrw.analytic_cli:main"
+nsrw-m3 = "nsrw.m3_cli:main"
+nsrw-m3-evidence = "nsrw.m3_evidence_cli:main"
+nsrw-m4 = "nsrw.m4_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q --cov=nsrw --cov-report=term-missing --cov-fail-under=90"
+
+[tool.coverage.run]
+source = ["nsrw"]
+omit = ["src/nsrw/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 99
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I"]
+ignore = ["E501"]

@@ -1,0 +1,37 @@
+{
+  "schema": "nsrw.external-experiment.v1",
+  "experiment_id": "E2_HF_FNO_DATASET_AUDIT",
+  "status": "DESIGN_ONLY_INPUT_NOT_PINNED",
+  "source": {
+    "asset_id": "abelsr1710/navier-stokes-2d-fno",
+    "source_url": "https://huggingface.co/datasets/abelsr1710/navier-stokes-2d-fno",
+    "repository_id": "abelsr1710/navier-stokes-2d-fno",
+    "revision": "REQUIRED_AT_EXECUTION",
+    "file": "REQUIRED_AT_EXECUTION",
+    "source_file_sha256": "REQUIRED_AT_EXECUTION",
+    "forcing_scope": "REQUIRED_EXPLICITLY",
+    "dimension": "2D",
+    "representation": "vorticity",
+    "domain": "periodic",
+    "domain_lengths": "REQUIRED_FROM_SOURCE_METADATA"
+  },
+  "execution": {
+    "input_shape": "(time, height, width)",
+    "subset": "one trajectory before any model inference",
+    "scheme": "periodic_fft_poisson",
+    "checks": [
+      "finite_input",
+      "zero_mean_vorticity",
+      "spectral_divergence",
+      "vorticity_reconstruction"
+    ],
+    "metrics": ["energy_by_step", "enstrophy_by_step"]
+  },
+  "claim_status": "UNVERIFIED",
+  "evidence_class": "EXTERNAL_REPRODUCIBLE_NUMERICAL_EXPERIMENT",
+  "non_claims": [
+    "not a 3D finite-time breakdown proof",
+    "not a Lean semantic-equivalence result",
+    "not a uniform estimate from finite samples"
+  ]
+}

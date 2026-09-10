@@ -1,0 +1,39 @@
+{
+  "schema_id": "flamehaven.navier-stokes-m3-missing-link-register.v1",
+  "stage": "M3",
+  "claim_status": "UNVERIFIED",
+  "entries": [
+    {
+      "id": "ML-001",
+      "question": "Is the incompressibility-derived V0 relation absent from the Lean graph?",
+      "paper": "navier-stokes.pdf:26:eq-4.7",
+      "evidence": "NavierStokes/SlowDivergence.lean::radialFlux and physical_flux_axial_balance",
+      "status": "FALSIFIED_AS_MISSING",
+      "next_test": "Keep as a regression fixture; do not report this as an open gap."
+    },
+    {
+      "id": "ML-002",
+      "question": "Is the pressure derivative/canonical normalization entirely absent?",
+      "paper": "navier-stokes.pdf:26:eq-4.7; navier-stokes.pdf:33:eq-4.25",
+      "evidence": "ProfileHistories.radialPartial_pressure and NominalProfile.pressure_canonical",
+      "status": "PRESENT_STATIC_ONLY",
+      "next_test": "Run Lean build and inspect the exact theorem dependencies and tail normalization."
+    },
+    {
+      "id": "ML-003",
+      "question": "Does the Lean selected candidate establish every quantitative conjunction (i)-(vi) of Theorem 4.6?",
+      "paper": "navier-stokes.pdf:32-34:theorem-4.6",
+      "evidence": "ActualCandidateAssembly.selected_candidate is textually present; toolchain/build unavailable.",
+      "status": "OPEN_BUILD_AND_SEMANTIC_AUDIT",
+      "next_test": "Build the pinned Lean revision, emit #print axioms, and map each theorem-4.6 conjunct to a declaration and proof dependency."
+    },
+    {
+      "id": "ML-004",
+      "question": "Does the constructed candidate prove the original periodic Navier-Stokes existence/blow-up target rather than a comparator adapter?",
+      "paper": "navier-stokes-fromPDF.md:36:theorem-1.1",
+      "evidence": "ProblemStatement labels candidateStatement OPEN; comparator theorems consume selected_candidate.",
+      "status": "OPEN_GLOBAL_SEMANTIC_BRIDGE",
+      "next_test": "Independently check domain, forcing, regularity, maximal lifespan, and blow-up quantifiers against the source problem statement."
+    }
+  ]
+}

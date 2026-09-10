@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flamehaven.nsrw-m4-obligation-manifest.v1",
+  "title": "NSRW M4 Parametric Obligation Manifest",
+  "type": "object",
+  "required": ["schema_id", "manifest_id", "stage", "source_binding", "required_mutations", "obligations"],
+  "properties": {
+    "schema_id": {"const": "flamehaven.nsrw-m4-obligation-manifest.v1"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "stage": {"const": "M4-P"},
+    "source_binding": {
+      "type": "object",
+      "required": ["formal_source_commit", "compiled_targets"],
+      "properties": {
+        "formal_source_commit": {"type": "string", "pattern": "^[0-9A-Fa-f]{40}$"},
+        "compiled_targets": {"type": "object", "minProperties": 1}
+      },
+      "additionalProperties": true
+    },
+    "required_mutations": {"type": "array", "minItems": 6, "uniqueItems": true},
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "obligation_id", "family", "source_quantifiers", "artifact_quantifiers",
+          "assumptions", "evidence_class", "claimed_scope", "constructibility",
+          "compiled_target", "source_locator", "evaluator"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true
+}

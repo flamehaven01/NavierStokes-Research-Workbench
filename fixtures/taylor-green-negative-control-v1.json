@@ -1,0 +1,53 @@
+{
+  "schema_id": "flamehaven.research-proof-contract.v1",
+  "contract_version": "1.0.0",
+  "research_id": "taylor-green-initial-draft-negative-control",
+  "control_type": "NEGATIVE_CONTROL",
+  "sources": [
+    {
+      "source_id": "initial_draft",
+      "representation": "derived_summary",
+      "authority": "DERIVED",
+      "locator": "external_sources/early-singularity-draft.md",
+      "sha256": "63B6E91D28EE050AB154E123D16A6C3328B80B3FBE80E4E53AF62812CED70846"
+    },
+    {
+      "source_id": "paper_pdf",
+      "representation": "primary_pdf",
+      "authority": "PRIMARY",
+      "locator": "external_sources/navier-stokes.pdf",
+      "sha256": "0E779481C4DA40BD28D1E642E1D8CA57447D129610DF28DFA5A11E9AF8AE228F"
+    },
+    {
+      "source_id": "openai_lean",
+      "representation": "formal_source",
+      "authority": "FORMAL",
+      "locator": "external_sources/NavierStokesAndEuler",
+      "git_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538"
+    }
+  ],
+  "theorem": {
+    "theorem_id": "invalid_taylor_green_blowup_draft",
+    "problem_id": "historical_negative_control",
+    "formulation": "unforced_taylor_green_blowup_claim",
+    "claim_status": "FALSIFIED",
+    "hypotheses": ["taylor_green_ansatz"],
+    "conclusion": "finite_time_blowup",
+    "bkm_quantity": "not_established",
+    "non_claims": ["valid_navier_stokes_solution", "clay_problem_resolution"]
+  },
+  "crosswalk": [],
+  "checks": {
+    "source_hashes": "PASS",
+    "lean_build": "UNAVAILABLE",
+    "semantic_alignment": "FAIL"
+  },
+  "falsifiers": [
+    {
+      "falsifier_id": "TG-001",
+      "blocking": true,
+      "status": "TRIGGERED",
+      "condition": "the ansatz does not establish a valid Navier-Stokes blowup solution"
+    }
+  ]
+}

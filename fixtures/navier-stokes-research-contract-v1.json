@@ -1,0 +1,85 @@
+{
+  "schema_id": "flamehaven.research-proof-contract.v1",
+  "contract_version": "1.0.0",
+  "research_id": "openai-navier-stokes-forced-blowup-2026",
+  "control_type": "PRIMARY_CASE",
+  "sources": [
+    {
+      "source_id": "paper_pdf",
+      "representation": "primary_pdf",
+      "authority": "PRIMARY",
+      "locator": "external_sources/navier-stokes.pdf",
+      "sha256": "0E779481C4DA40BD28D1E642E1D8CA57447D129610DF28DFA5A11E9AF8AE228F"
+    },
+    {
+      "source_id": "paper_markdown",
+      "representation": "searchable_transport",
+      "authority": "TRANSPORT",
+      "locator": "external_sources/navier-stokes-fromPDF.md",
+      "sha256": "B0AB289505D375DD99DA0F87219CD4C23B80F00B3E7003B6DA76F907008DB652"
+    },
+    {
+      "source_id": "openai_lean",
+      "representation": "formal_source",
+      "authority": "FORMAL",
+      "locator": "external_sources/NavierStokesAndEuler",
+      "git_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538"
+    }
+  ],
+  "theorem": {
+    "theorem_id": "theorem_1_1",
+    "problem_id": "navier_stokes_clay",
+    "formulation": "forced_clay_C_or_D",
+    "claim_status": "UNVERIFIED",
+    "hypotheses": [
+      "smooth_divergence_free_initial_data",
+      "smooth_compactly_supported_forcing",
+      "forced_navier_stokes",
+      "domain_R3_or_periodic"
+    ],
+    "conclusion": "finite_time_breakdown",
+    "bkm_quantity": "time_integral_vorticity_Linf",
+    "non_claims": [
+      "unforced_global_regular_or_blowup",
+      "independent_reproof",
+      "local_lean_build_success",
+      "paper_lean_semantic_equivalence"
+    ]
+  },
+  "crosswalk": [
+    {
+      "paper_locator": "navier-stokes-fromPDF.md:36",
+      "formal_source_id": "openai_lean",
+      "lean_file": "NavierStokes/ComparatorSolution.lean",
+      "declaration": "navier_stokes_breakdown_R3",
+      "mapping_status": "PARTIAL"
+    },
+    {
+      "paper_locator": "navier-stokes-fromPDF.md:36",
+      "formal_source_id": "openai_lean",
+      "lean_file": "NavierStokes/ComparatorTheorem.lean",
+      "declaration": "navier_stokes_breakdown_periodic",
+      "mapping_status": "PARTIAL"
+    },
+    {
+      "paper_locator": "navier-stokes-fromPDF.md:6573",
+      "formal_source_id": "openai_lean",
+      "lean_file": "NavierStokes/ActualCandidateAssembly.lean",
+      "declaration": "selected_candidate",
+      "mapping_status": "MAPPED"
+    }
+  ],
+  "checks": {
+    "source_hashes": "PASS",
+    "lean_declaration_static_presence": "PASS",
+    "lean_build": "UNAVAILABLE",
+    "semantic_alignment": "UNVERIFIED"
+  },
+  "falsifiers": [
+    {"falsifier_id": "F-001", "blocking": true, "status": "OPEN", "condition": "forced scope is inflated to unforced scope"},
+    {"falsifier_id": "F-002", "blocking": true, "status": "OPEN", "condition": "a required theorem hypothesis is removed"},
+    {"falsifier_id": "F-003", "blocking": true, "status": "OPEN", "condition": "BKM quantity is replaced by a pointwise terminal norm"},
+    {"falsifier_id": "F-004", "blocking": true, "status": "OPEN", "condition": "source hash or formal commit does not reproduce"},
+    {"falsifier_id": "F-005", "blocking": true, "status": "OPEN", "condition": "claim is marked CONFIRMED without Lean build and semantic alignment"}
+  ]
+}

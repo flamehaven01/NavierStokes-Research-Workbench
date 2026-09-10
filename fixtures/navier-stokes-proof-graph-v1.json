@@ -1,0 +1,31 @@
+{
+  "schema_id": "flamehaven.research-proof-graph-seed.v1",
+  "root_claim": "theorem:theorem_1_1",
+  "nodes": [
+    {"node_id": "paper:theorem_1_1", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:36"},
+    {"node_id": "paper:theorem_3_1", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:850"},
+    {"node_id": "paper:theorem_4_6", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:1814"},
+    {"node_id": "paper:proposition_5_5", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:3407"},
+    {"node_id": "paper:lemma_7_4", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:4539"},
+    {"node_id": "paper:proposition_7_5", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:4637"},
+    {"node_id": "paper:proposition_8_3", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:5227"},
+    {"node_id": "paper:proposition_9_6", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:6045"},
+    {"node_id": "paper:proposition_9_9", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:6401"},
+    {"node_id": "paper:proposition_10_1", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:6573"},
+    {"node_id": "paper:corollary_10_6", "kind": "PAPER_STATEMENT", "authority": "TRANSPORT", "status": "MAPPED", "locator": "navier-stokes-fromPDF.md:7007"}
+  ],
+  "edges": [
+    {"source": "theorem:theorem_1_1", "target": "paper:theorem_1_1", "relation": "depends_on"},
+    {"source": "paper:theorem_1_1", "target": "paper:theorem_3_1", "relation": "depends_on"},
+    {"source": "paper:theorem_3_1", "target": "paper:theorem_4_6", "relation": "depends_on"},
+    {"source": "paper:theorem_4_6", "target": "paper:proposition_5_5", "relation": "depends_on"},
+    {"source": "paper:proposition_5_5", "target": "paper:lemma_7_4", "relation": "depends_on"},
+    {"source": "paper:proposition_5_5", "target": "paper:proposition_7_5", "relation": "depends_on"},
+    {"source": "paper:lemma_7_4", "target": "paper:proposition_8_3", "relation": "depends_on"},
+    {"source": "paper:proposition_7_5", "target": "paper:proposition_8_3", "relation": "depends_on"},
+    {"source": "paper:proposition_8_3", "target": "paper:proposition_9_6", "relation": "depends_on"},
+    {"source": "paper:proposition_9_6", "target": "paper:proposition_9_9", "relation": "depends_on"},
+    {"source": "paper:proposition_9_9", "target": "paper:proposition_10_1", "relation": "depends_on"},
+    {"source": "paper:proposition_10_1", "target": "paper:corollary_10_6", "relation": "depends_on"}
+  ]
+}

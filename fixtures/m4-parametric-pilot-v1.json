@@ -1,0 +1,130 @@
+{
+  "schema_id": "flamehaven.nsrw-m4-obligation-manifest.v1",
+  "manifest_id": "nsrw-m4-parametric-pilot-v1",
+  "stage": "M4-P",
+  "source_binding": {
+    "formal_source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+    "compiled_targets": {
+      "+NavierStokes.OutgoingDilation": {
+        "check_status": "PASS",
+        "receipt_sha256": "3C0C43EBEFCAE55A3AAD952C36E4AFBE5FD6DB57B3E3CEA3E6E2A1199B9038B9"
+      },
+      "+NavierStokes.OutgoingCone": {"check_status": "HELD"},
+      "+NavierStokes.NominalConeAssembly": {"check_status": "HELD"}
+    },
+    "semantic_equivalence_status": "OPEN_RESEARCH_OBLIGATION"
+  },
+  "required_mutations": [
+    "swap_quantifier_order",
+    "drop_required_assumption",
+    "finite_grid_to_symbolic",
+    "parametric_to_source_instance",
+    "malformed_source_hash",
+    "compiled_target_drift"
+  ],
+  "obligations": [
+    {
+      "obligation_id": "M4P-SUPPORT-001",
+      "family": "SUPPORT",
+      "source_quantifiers": [
+        {"quantifier": "FORALL", "binder": "F"},
+        {"quantifier": "EXISTS", "binder": "R"},
+        {"quantifier": "FORALL", "binder": "X"}
+      ],
+      "artifact_quantifiers": [
+        {"quantifier": "ONE_FIXTURE", "binder": "F_star"},
+        {"quantifier": "DECLARED", "binder": "R_star"},
+        {"quantifier": "FINITE_GRID", "binder": "X_grid"}
+      ],
+      "assumptions": ["ordered_regions", "positive_cutoff"],
+      "evidence_class": "FINITE_GRID",
+      "claimed_scope": "SAMPLED_PARAMETRIC_DIAGNOSTIC",
+      "constructibility": "EXISTENTIAL__NO_PINNED_NUMERICAL_EVALUATOR",
+      "compiled_target": "+NavierStokes.OutgoingDilation",
+      "source_locator": {
+        "relative_path": "NavierStokes/OutgoingDilation.lean",
+        "declaration": "theorem preserves_specification",
+        "sha256": "BE46401810940D1021C2F2CCF0CE00BDFFEF82D413F2146742564D15C5516438"
+      },
+      "evaluator": {
+        "required_assumptions": ["ordered_regions", "positive_cutoff"],
+        "cutoff": 8.0,
+        "intervals": [
+          {"name": "core", "lower": 0.0, "upper": 1.0},
+          {"name": "annulus", "lower": 1.0, "upper": 4.0},
+          {"name": "exterior", "lower": 4.0, "upper": 8.0}
+        ]
+      }
+    },
+    {
+      "obligation_id": "M4P-CONE-001",
+      "family": "CONE",
+      "source_quantifiers": [
+        {"quantifier": "FORALL", "binder": "profile_family"},
+        {"quantifier": "EXISTS", "binder": "threshold_schedule"}
+      ],
+      "artifact_quantifiers": [
+        {"quantifier": "FORALL", "binder": "profile_family"},
+        {"quantifier": "EXISTS", "binder": "threshold_schedule"}
+      ],
+      "assumptions": ["positive_thresholds", "acyclic_dependencies"],
+      "evidence_class": "EXACT_SYMBOLIC",
+      "claimed_scope": "SYMBOLIC_PARAMETRIC_IDENTITY",
+      "constructibility": "DERIVED_COMPUTABLE",
+      "compiled_target": "+NavierStokes.OutgoingCone",
+      "source_locator": {
+        "relative_path": "NavierStokes/OutgoingCone.lean",
+        "declaration": "theorem exists_ordered_clean_cone",
+        "sha256": "71D7B501D85EEBDAE90CA938713314B9A53AE360F3B71CDEDD602D842189D169"
+      },
+      "evaluator": {
+        "required_assumptions": ["positive_thresholds", "acyclic_dependencies"],
+        "threshold_dependencies": {"R_outer": ["R_inner"], "R_inner": []},
+        "inequalities": [
+          {"label": "inner-before-outer", "lhs": 2, "relation": "LE", "rhs": 5, "minimum_margin": 2},
+          {"label": "positive-cone-margin", "lhs": 7, "relation": "GE", "rhs": 3, "minimum_margin": 1}
+        ]
+      }
+    },
+    {
+      "obligation_id": "M4P-MOMENT-001",
+      "family": "MOMENT",
+      "source_quantifiers": [{"quantifier": "FORALL", "binder": "admissible_profile"}],
+      "artifact_quantifiers": [{"quantifier": "FORALL", "binder": "admissible_profile"}],
+      "assumptions": ["exact_rational_fixture"],
+      "evidence_class": "EXACT_SYMBOLIC",
+      "claimed_scope": "SYMBOLIC_PARAMETRIC_IDENTITY",
+      "constructibility": "DERIVED_COMPUTABLE",
+      "compiled_target": "+NavierStokes.NominalConeAssembly",
+      "source_locator": {
+        "relative_path": "NavierStokes/NominalConeAssembly.lean",
+        "declaration": "theorem exists_certificate",
+        "sha256": "8A438CF200978AFA5338B1BB43F746781640E7E6F4726BBAD6DBB6994B455390"
+      },
+      "evaluator": {
+        "required_assumptions": ["exact_rational_fixture"],
+        "identities": [
+          {"label": "cancellation", "terms": ["1/3", "-1/3"], "expected": "0"},
+          {"label": "normalization", "terms": ["1/4", "3/4"], "expected": "1"}
+        ]
+      }
+    },
+    {
+      "obligation_id": "M4P-FALSIFICATION-001",
+      "family": "FALSIFICATION",
+      "source_quantifiers": [{"quantifier": "FORALL", "binder": "manifest_mutation"}],
+      "artifact_quantifiers": [{"quantifier": "FORALL", "binder": "manifest_mutation"}],
+      "assumptions": ["deterministic_mutation_bank"],
+      "evidence_class": "MANUFACTURED_FALSIFIER",
+      "claimed_scope": "SYMBOLIC_PARAMETRIC_IDENTITY",
+      "constructibility": "EXPLICIT",
+      "compiled_target": "+NavierStokes.OutgoingCone",
+      "source_locator": {
+        "relative_path": "NavierStokes/OutgoingCone.lean",
+        "declaration": "theorem exists_ordered_profile_cone",
+        "sha256": "71D7B501D85EEBDAE90CA938713314B9A53AE360F3B71CDEDD602D842189D169"
+      },
+      "evaluator": {"required_assumptions": ["deterministic_mutation_bank"]}
+    }
+  ]
+}
