@@ -1,6 +1,6 @@
 # M4-P Parametric Stress / Cone / Moment Audit
 
-Status: `IN_PROGRESS__TARGET_BUILDS_AND_SPAR_IDENTITY_HELD`
+Status: `OPEN[PILOT_GATE_PASS]`
 
 ## North-star boundary
 
@@ -79,11 +79,11 @@ or drift the compiled target. Every mutation must be killed.
 
 ## Current scoped result
 
-The P0 contract, P1 evaluator, P2/P3 evaluator code, and P4 mutation bank are
-implemented. Focused tests pass. The live pilot remains HELD because
-`+NavierStokes.OutgoingCone` and `+NavierStokes.NominalConeAssembly` do not yet
-have scoped compiled receipts in the manifest. The installed SPAR identity is
-also held: imported source reports `0.6.0`, while editable distribution
-metadata reports `0.1.4`.
+The P0 contract, P1 Support, P2 Cone, P3 Moment, and P4 mutation bank are
+implemented. GitHub Actions run `34497647700` compiled all three pinned Lean
+targets and uploaded their hashes and direct dependency surfaces. The hosted
+SPAR pin resolved consistently to `0.6.0`; the local editable installation's
+older metadata remains a local environment observation only.
 
-This is an active M4-P implementation state, not an M4-P completion claim.
+The pilot gate passes. M4-P remains an open research lane because these
+manufactured obligations do not establish the paper's full analytic estimates.

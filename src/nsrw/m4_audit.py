@@ -93,6 +93,9 @@ def _validate_compiled_target(target: object, record: object, errors: list[str])
     receipt_hash = record.get("receipt_sha256")
     if receipt_hash is not None and not _is_sha256(receipt_hash):
         errors.append(f"compiled target {target} receipt sha256 is invalid")
+    olean_hash = record.get("olean_sha256")
+    if olean_hash is not None and not _is_sha256(olean_hash):
+        errors.append(f"compiled target {target} olean sha256 is invalid")
 
 
 def _validate_source_binding(binding: object, errors: list[str]) -> dict[str, Any]:

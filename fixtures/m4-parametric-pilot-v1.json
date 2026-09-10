@@ -7,11 +7,21 @@
     "compiled_targets": {
       "+NavierStokes.OutgoingDilation": {
         "check_status": "PASS",
-        "receipt_sha256": "3C0C43EBEFCAE55A3AAD952C36E4AFBE5FD6DB57B3E3CEA3E6E2A1199B9038B9"
+        "receipt_sha256": "C5989003C8C7621C51329B03CA4D257A2DAF62F4332961362D3987D937AD2D03",
+        "olean_sha256": "E47FA3AFCA76ED83021C1F030E4FE3ACE43586CA03341EA4B2CAF42A913F344D"
       },
-      "+NavierStokes.OutgoingCone": {"check_status": "HELD"},
-      "+NavierStokes.NominalConeAssembly": {"check_status": "HELD"}
+      "+NavierStokes.OutgoingCone": {
+        "check_status": "PASS",
+        "receipt_sha256": "C5989003C8C7621C51329B03CA4D257A2DAF62F4332961362D3987D937AD2D03",
+        "olean_sha256": "DA5C2E0CC8C2932346945022706F01379314A8134504BD8A766069C7C03E67A4"
+      },
+      "+NavierStokes.NominalConeAssembly": {
+        "check_status": "PASS",
+        "receipt_sha256": "C5989003C8C7621C51329B03CA4D257A2DAF62F4332961362D3987D937AD2D03",
+        "olean_sha256": "1E7049B2B8A6BE3B802EE42C856A06DEE40F4331E14E161A495A8A9B6D515A3D"
+      }
     },
+    "compiled_evidence_url": "https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34497647700",
     "semantic_equivalence_status": "OPEN_RESEARCH_OBLIGATION"
   },
   "required_mutations": [

@@ -2,7 +2,7 @@
 
 Date: `2026-09-10`
 
-Task status: `HELD[TARGET_BUILDS/SPAR_IDENTITY]`
+Task status: `COMPLETED[PILOT_GATE]`
 
 This receipt covers the first integrated implementation of the parametric M4
 audit. It is not an M4 mathematical closure receipt and does not change M4-S.
@@ -11,11 +11,11 @@ audit. It is not an M4 mathematical closure receipt and does not change M4-S.
 
 | Phase | Implementation | Current gate |
 |---|---|---|
-| P0 contract and quantifier custody | `PASS[CODE/TEST]` | `HELD[SPAR_IDENTITY]` |
+| P0 contract and quantifier custody | `PASS[CODE/TEST]` | `PASS[HOSTED_SPAR_PIN]` |
 | P1 Support | `PASS[CODE/TEST/SOURCE_BINDING]` | `PASS[SCOPED:OutgoingDilation]` |
-| P2 Cone | `PASS[CODE/TEST]` | `HELD[COMPILED_TARGET_MISSING]` |
-| P3 Moment | `PASS[CODE/TEST]` | `HELD[COMPILED_TARGET_MISSING]` |
-| P4 mutations | `PASS[6/6_KILLED]` | Does not override P2/P3 holds |
+| P2 Cone | `PASS[CODE/TEST]` | `PASS[SCOPED:OutgoingCone]` |
+| P3 Moment | `PASS[CODE/TEST]` | `PASS[SCOPED:NominalConeAssembly]` |
+| P4 mutations | `PASS[6/6_KILLED]` | Critical mutations all rejected |
 
 `PASS[CODE/TEST]` means the bounded evaluator and its negative tests execute as
 designed. It is not evidence that the paper's analytic obligation is true.
@@ -38,9 +38,9 @@ designed. It is not evidence that the paper's analytic obligation is true.
 
 - `PASS[FOCUSED]`: 24 M4 tests passed.
 - `PASS[FULL]`: 175 tests passed.
-- `PASS[COVERAGE]`: 94.43%, above the 90% gate.
-- `PASS[RUFF]`: `python -m ruff check src tests`.
-- `PASS[COMPILE]`: `python -m compileall -q src`.
+- `PASS[COVERAGE]`: 94.44%, above the 90% gate.
+- `PASS[RUFF]`: `python -m ruff check .`.
+- `PASS[COMPILE]`: `python -m compileall -q src tests`.
 - `PASS[REPLAY]`: two source-bound M4 receipts were byte-identical.
 - `PASS[MUTATIONS]`: 6/6 required mutations killed.
 - `PASS[SOURCE_BYTES]`: pinned commit and four obligation locators/hashes matched.
@@ -51,44 +51,50 @@ designed. It is not evidence that the paper's analytic obligation is true.
 - `OBSERVED[SLOP:PREEXISTING]`: the repository scan remains `clean`, but one
   unrelated E2 module has one high and one low structural finding.
 
-## Remaining hard gates
+## Hosted compiled evidence
 
-1. `+NavierStokes.OutgoingCone` lacks a target-specific compiled receipt and
-   `.olean` artifact in the current build directory.
-2. `+NavierStokes.NominalConeAssembly` lacks a target-specific compiled receipt
-   and `.olean` artifact in the current build directory.
-3. Lean/Lake executables were not present on the current process `PATH`, so the
-   two missing target builds were not attempted in this run.
-4. SPAR imported source reports `0.6.0`, while editable distribution metadata
-   reports `0.1.4`; SPAR admission remains held until identity is consistent.
+GitHub Actions run `34497647700` completed successfully against formal-source
+commit `8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538`. The three scoped `.olean`
+hashes are:
 
-The actual M4 command therefore returned exit code `1` with
-`check_status=FAIL`, `task_status=HELD`. This is expected fail-closed behavior,
-not a failed unit-test suite.
+```text
+OutgoingDilation.olean
+  E47FA3AFCA76ED83021C1F030E4FE3ACE43586CA03341EA4B2CAF42A913F344D
+OutgoingCone.olean
+  DA5C2E0CC8C2932346945022706F01379314A8134504BD8A766069C7C03E67A4
+NominalConeAssembly.olean
+  1E7049B2B8A6BE3B802EE42C856A06DEE40F4331E14E161A495A8A9B6D515A3D
+```
+
+The combined target-hash receipt has SHA-256
+`C5989003C8C7621C51329B03CA4D257A2DAF62F4332961362D3987D937AD2D03`.
+This closes the target-specific compilation gate only. It does not close
+paper--Lean semantic equivalence or the full M4 analytic research lane.
 
 ## Artifact digests
 
 ```text
 m4_audit.py
-  913897C998BB176F05C31B69BDAC27B4A92B54250281F5AA5FB522A192D821A1
+  E573556C6062C4C1DD15ADFBCDDC8DA7B50F736200DA2C4C9273E3BD88264C55
 m4_cli.py
   D72B83FA8DD6D57D2B5A45D18572BFBFB2FB37F20EC3CDA0422FEB6D977FE535
 m4-obligation-manifest-v1.schema.json
   88728D4CD65A8CF123BFDF30F87ADC4F5A550564A41C980A50838CA05965AE65
 m4-parametric-pilot-v1.json
-  8DC81EE9C9FE16D0FB2576704291A4244398FD9AEC01661ADADA28ED5FCBDBC0
+  B25EB45CC381005609D77890D3C520813BF78A461C82CEDF7596A84FD7C4EBE6
 m4-parametric-pilot-receipt.json
-  E68E0A968FE9262BD6BB14D2B0BB26AB3C6065A0C6DE937B2697D67C8488D923
-m4-slop-report.json
-  360DA0AC48927E3D99C47A0E3120B515DA713640E4018AE751B071583291F1C3
+  E6A90913EEA3EE6AF832BE4DBC3C873A18D542620CD20F4EA5FDE88DDC66E856
+public-release-slop-report-2.json
+  730A9346D69F31D8A1B0409DF5D52DE9FB661B69FEC4A704A838E6753EC21137
 ```
 
 ## Claim boundary
 
 ```text
 M3 engineering                         CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY
-M4-P implementation                    IN_PROGRESS[P0-P4]
-M4-P authoritative gate                HELD[TARGET_BUILDS/SPAR_IDENTITY]
+M4-P pilot implementation              COMPLETED[P0-P4]
+M4-P pilot authoritative gate          PASS[SCOPED]
+M4-P research lane                     OPEN
 M4-S selected source instance          HELD[NONCOMPUTABLE_SOURCE_INSTANCE]
 Paper--Lean full semantic equivalence  OPEN_RESEARCH_OBLIGATION
 Millennium-problem solution            NOT_ESTABLISHED

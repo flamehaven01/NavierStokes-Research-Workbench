@@ -14,6 +14,8 @@ artifacts. Research claims retain their separate evidence statuses.
   builds, parametric Support/Cone/Moment obligations, and falsification mutations.
 - SPAR-backed secondary claim-drift review with an independent fail-closed NSRW gate.
 - M4-P obligation manifest schema, portable pilot fixture, CLI, and receipts.
+- Hosted scoped Lean evidence for OutgoingDilation, OutgoingCone, and
+  NominalConeAssembly, including `.olean` hashes and dependency artifacts.
 - External 2-D vorticity experiment contract and Colab design surface.
 
 ### Changed

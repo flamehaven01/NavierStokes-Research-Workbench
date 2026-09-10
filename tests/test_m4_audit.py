@@ -92,6 +92,7 @@ def test_p0_rejects_invalid_compiled_target_records():
     targets = data["source_binding"]["compiled_targets"]
     targets["+NavierStokes.OutgoingDilation"]["receipt_sha256"] = "bad"
     targets["+NavierStokes.OutgoingCone"]["check_status"] = "UNKNOWN"
+    targets["+NavierStokes.NominalConeAssembly"]["olean_sha256"] = "bad"
     targets[""] = []
     errors = validate_manifest(data)
     assert sum("compiled target" in error for error in errors) >= 3
@@ -233,7 +234,14 @@ def test_full_audit_fails_on_hard_gate():
 
 
 def test_target_specific_build_gate_holds_unbuilt_cone_and_moment():
-    receipt = run_m4_audit(fixture())
+    data = fixture()
+    data["source_binding"]["compiled_targets"]["+NavierStokes.OutgoingCone"][
+        "check_status"
+    ] = "HELD"
+    data["source_binding"]["compiled_targets"]["+NavierStokes.NominalConeAssembly"][
+        "check_status"
+    ] = "HELD"
+    receipt = run_m4_audit(data)
     assert receipt["check_status"] == "FAIL"
     failed = [item["check_id"] for item in receipt["checks"] if item["check_status"] == "FAIL"]
     assert "M4P-CONE-001:compiled_target" in failed

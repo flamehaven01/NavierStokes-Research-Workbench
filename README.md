@@ -64,7 +64,7 @@ project is not affiliated with or endorsed by OpenAI.
 | M1 scaling/reconstruction | `PASS[LOCAL]` | Exact algebra and manufactured diagnostics |
 | M2 analytic spine | `PASS[LOCAL]` | Profile interfaces and bounded obligations; no source profile instantiation |
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
-| M4-P parametric lane | `IN_PROGRESS[P0-P4]` | Contract and evaluators exist; additional Lean targets remain gated |
+| M4-P parametric lane | `OPEN[PILOT_GATE_PASS]` | Support/Cone/Moment pilot, source bindings, scoped Lean targets, and 6/6 mutations pass |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
