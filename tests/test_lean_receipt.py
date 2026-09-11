@@ -101,8 +101,9 @@ def test_execute_build_request_discovers_artifact_and_canonicalizes_deps(
         raise AssertionError(args)
 
     monkeypatch.setattr(lean_receipt.subprocess, "run", fake_run)
+    monkeypatch.chdir(tmp_path)
     receipt = lean_receipt.execute_build_request(
-        request, source_root, tmp_path / "deps", timeout_seconds=20
+        request, Path("lean"), Path("deps"), timeout_seconds=20
     )
     record = receipt["targets"]["+Example.Target"]
     assert record["olean_path"] == ".lake/custom/Example/Target.olean"

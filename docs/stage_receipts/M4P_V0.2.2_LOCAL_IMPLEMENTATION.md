@@ -32,7 +32,7 @@ Claim status: `UNVERIFIED[NAVIER_STOKES_THEOREM]`
 
 ```text
 pytest                         PASS[204]
-coverage                       PASS[91.65% >= 90%]
+coverage                       PASS[91.66% >= 90%]
 ruff                           PASS
 compileall                     PASS
 git diff --check               PASS

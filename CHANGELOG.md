@@ -29,6 +29,8 @@ artifacts. Research claims retain their separate evidence statuses.
 - Lean receipt generation, dependency normalization, observed `.olean`
   discovery, live-manifest creation, and CI provenance are owned by
   `nsrw.lean_receipt` rather than inline workflow Python.
+- Relative Lean source and dependency roots are normalized before artifact and
+  source paths are recorded, matching hosted checkout layouts.
 - M3 compiled PASS now requires an executed subprocess with a zero exit code.
 
 ## [0.2.0] - 2026-09-11

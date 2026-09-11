@@ -268,6 +268,8 @@ def execute_build_request(
     timeout_seconds: int = 900,
     working_directory_class: str = "HOSTED_CLEAN_CHECKOUT",
 ) -> dict[str, Any]:
+    lean_root = lean_root.resolve()
+    dependency_dir = dependency_dir.resolve()
     request, raw = load_strict_json(request_path)
     commit, toolchain, targets = _validate_build_request(request, lean_root)
     dependency_dir.mkdir(parents=True, exist_ok=True)
