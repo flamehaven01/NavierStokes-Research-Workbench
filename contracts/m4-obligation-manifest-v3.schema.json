@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flamehaven.nsrw-m4-obligation-manifest.v3",
+  "title": "NSRW M4-P hardened obligation manifest",
+  "type": "object",
+  "required": [
+    "schema_id", "manifest_id", "stage", "compiled_evidence_mode",
+    "canonicalization_profile", "source_binding", "required_mutations", "obligations"
+  ],
+  "properties": {
+    "schema_id": {"const": "flamehaven.nsrw-m4-obligation-manifest.v3"},
+    "manifest_id": {"type": "string", "minLength": 1},
+    "stage": {"const": "M4-P"},
+    "compiled_evidence_mode": {"enum": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"]},
+    "canonicalization_profile": {"const": "NSRW-CANONICAL-JSON-1"},
+    "locator_evidence_class": {"const": "TEXTUAL_PINNED_SOURCE_LOCATOR"},
+    "source_binding": {"$ref": "#/$defs/sourceBinding"},
+    "required_mutations": {"type": "array", "minItems": 1, "uniqueItems": true},
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/obligation"}
+    },
+    "extensions": {"type": "object"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "sourceBinding": {
+      "type": "object",
+      "required": ["formal_source_commit", "formal_source_toolchain", "compiled_targets"],
+      "properties": {
+        "formal_source_commit": {"type": "string", "pattern": "^[0-9A-Fa-f]{40}$"},
+        "formal_source_toolchain": {"type": "string", "minLength": 1},
+        "compiled_targets": {"type": "object", "minProperties": 1}
+      },
+      "additionalProperties": false
+    },
+    "locator": {
+      "type": "object",
+      "required": ["relative_path", "declaration", "sha256", "signature_sha256", "quantifier_projection"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "declaration": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hash"},
+        "signature_sha256": {"$ref": "#/$defs/hash"},
+        "quantifier_projection": {"const": "NAMED_BINDERS_AND_DATA_EXISTENTIALS"},
+        "locator_evidence_class": {"const": "TEXTUAL_PINNED_SOURCE_LOCATOR"}
+      },
+      "additionalProperties": false
+    },
+    "obligation": {
+      "type": "object",
+      "required": [
+        "obligation_id", "family", "source_quantifiers", "artifact_quantifiers",
+        "assumptions", "evidence_class", "claimed_scope", "constructibility",
+        "compiled_target", "source_locator", "evaluator"
+      ],
+      "properties": {
+        "obligation_id": {"type": "string", "minLength": 1},
+        "family": {"enum": ["SUPPORT", "CONE", "MOMENT", "FALSIFICATION"]},
+        "source_quantifiers": {"type": "array", "minItems": 1},
+        "artifact_quantifiers": {"type": "array", "minItems": 1},
+        "assumptions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "evidence_class": {"type": "string", "minLength": 1},
+        "claimed_scope": {"type": "string", "minLength": 1},
+        "constructibility": {"type": "string", "minLength": 1},
+        "compiled_target": {"type": "string", "minLength": 1},
+        "source_locator": {"$ref": "#/$defs/locator"},
+        "evaluator": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

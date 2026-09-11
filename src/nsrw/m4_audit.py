@@ -9,7 +9,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import importlib.metadata
-import json
+import re
 import subprocess
 from dataclasses import asdict, dataclass
 from fractions import Fraction
@@ -18,6 +18,8 @@ from pathlib import Path
 from typing import Any, Callable, cast
 
 SCHEMA_ID = "flamehaven.nsrw-m4-obligation-manifest.v2"
+SCHEMA_ID_V3 = "flamehaven.nsrw-m4-obligation-manifest.v3"
+SUPPORTED_SCHEMA_IDS = frozenset({SCHEMA_ID, SCHEMA_ID_V3})
 COMPILED_EVIDENCE_SCHEMA_ID = "flamehaven.nsrw-lean-compiled-evidence.v1"
 FAMILIES = frozenset({"SUPPORT", "CONE", "MOMENT", "FALSIFICATION"})
 EVIDENCE_CLASSES = frozenset(
@@ -203,6 +205,10 @@ def _validate_locator(prefix: str, locator: object, errors: list[str]) -> None:
         errors.append(f"{prefix}.source_locator.signature_sha256 is invalid")
     if locator.get("quantifier_projection") != SOURCE_QUANTIFIER_PROJECTION:
         errors.append(f"{prefix}.source_locator.quantifier_projection is invalid")
+    if "locator_evidence_class" in locator and locator.get(
+        "locator_evidence_class"
+    ) != "TEXTUAL_PINNED_SOURCE_LOCATOR":
+        errors.append(f"{prefix}.source_locator.locator_evidence_class is invalid")
 
 
 def _validate_source_quantifiers(prefix: str, items: object, errors: list[str]) -> None:
@@ -260,8 +266,16 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
     """Validate the portable P0 contract without claiming source freshness."""
 
     errors: list[str] = []
-    if manifest.get("schema_id") != SCHEMA_ID:
-        errors.append(f"schema_id must be {SCHEMA_ID}")
+    schema_id = manifest.get("schema_id")
+    if schema_id not in SUPPORTED_SCHEMA_IDS:
+        errors.append(f"schema_id must be one of {sorted(SUPPORTED_SCHEMA_IDS)}")
+    if schema_id == SCHEMA_ID_V3:
+        if manifest.get("compiled_evidence_mode") not in {"RECEIPT_REPLAY", "LIVE_ARTIFACT"}:
+            errors.append("v3 compiled_evidence_mode must be RECEIPT_REPLAY or LIVE_ARTIFACT")
+        if manifest.get("canonicalization_profile") != "NSRW-CANONICAL-JSON-1":
+            errors.append("v3 canonicalization_profile must be NSRW-CANONICAL-JSON-1")
+        if manifest.get("locator_evidence_class") not in {None, "TEXTUAL_PINNED_SOURCE_LOCATOR"}:
+            errors.append("v3 locator_evidence_class is invalid")
     if manifest.get("stage") != "M4-P":
         errors.append("stage must be M4-P")
     targets = _validate_source_binding(manifest.get("source_binding"), errors)
@@ -273,6 +287,16 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
     seen: set[str] = set()
     for index, obligation in enumerate(obligations):
         _validate_obligation(index, obligation, targets, seen, errors)
+    if schema_id == SCHEMA_ID_V3:
+        for index, obligation in enumerate(obligations):
+            if isinstance(obligation, dict):
+                locator = obligation.get("source_locator")
+                if isinstance(locator, dict) and locator.get(
+                    "locator_evidence_class"
+                ) != "TEXTUAL_PINNED_SOURCE_LOCATOR":
+                    errors.append(
+                        f"obligations[{index}].source_locator.locator_evidence_class is required for v3"
+                    )
     configured = manifest.get("required_mutations")
     if configured != list(REQUIRED_MUTATIONS):
         errors.append("required_mutations must exactly match the M4-P mutation bank")
@@ -312,20 +336,32 @@ def check_quantifier_custody(obligation: dict[str, Any]) -> Check:
 
 
 def _fraction(value: object) -> Fraction:
-    if not isinstance(value, (str, int)):
+    if isinstance(value, bool) or not isinstance(value, (str, int)):
         raise ValueError("exact moment values must be integer or rational strings")
-    return Fraction(value)
+    text = str(value)
+    if len(text) > 513 or re.fullmatch(r"-?(0|[1-9][0-9]*)(/[1-9][0-9]*)?", text) is None:
+        raise ValueError("exact moment value is outside strict rational grammar")
+    return Fraction(text)
+
+
+def _is_real_number(value: object) -> bool:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return False
+    try:
+        return isfinite(float(value))
+    except (OverflowError, ValueError):
+        return False
 
 
 def _support_interval_error(interval: object, cutoff: float, previous: float) -> tuple[str | None, float]:
     if not isinstance(interval, dict):
         return "support interval is not an object", previous
     lower, upper = interval.get("lower"), interval.get("upper")
-    if not isinstance(lower, (int, float)) or not isinstance(upper, (int, float)):
+    if not _is_real_number(lower) or not _is_real_number(upper):
         return "support bounds must be numeric", previous
     if not all(isfinite(float(item)) for item in (lower, upper, cutoff)):
         return "support bounds must be finite", previous
-    if lower < previous or lower > upper or upper > cutoff:
+    if lower < 0 or lower < previous or lower > upper or upper > cutoff:
         return "support ordering, inclusion, or cutoff failed", previous
     return None, float(upper)
 
@@ -333,10 +369,18 @@ def _support_interval_error(interval: object, cutoff: float, previous: float) ->
 def _evaluate_support(evaluator: dict[str, Any]) -> Check:
     intervals = evaluator.get("intervals")
     cutoff = evaluator.get("cutoff")
-    if not isinstance(intervals, list) or not intervals or not isinstance(cutoff, (int, float)):
+    if not isinstance(intervals, list) or not intervals or not _is_real_number(cutoff):
         return Check("support", "FAIL", "support evaluator requires intervals and cutoff")
+    if float(cutoff) <= 0:
+        return Check("support", "FAIL", "support cutoff must be positive")
     previous = float("-inf")
+    names: set[str] = set()
     for interval in intervals:
+        if not isinstance(interval, dict) or not isinstance(interval.get("name"), str) or not interval["name"]:
+            return Check("support", "FAIL", "support interval names must be non-empty")
+        if interval["name"] in names:
+            return Check("support", "FAIL", "support interval names must be unique")
+        names.add(interval["name"])
         error, previous = _support_interval_error(interval, float(cutoff), previous)
         if error:
             return Check("support", "FAIL", error)
@@ -393,10 +437,12 @@ def _cone_margin(item: object) -> tuple[float | None, str | None]:
     relation = item.get("relation")
     if relation not in {"LE", "GE"}:
         return None, "cone relation must be LE or GE"
-    if not all(isinstance(value, (int, float)) for value in (lhs, rhs, minimum)):
+    if not all(_is_real_number(value) for value in (lhs, rhs, minimum)):
         return None, "cone values must be numeric"
     if not all(isfinite(float(value)) for value in (lhs, rhs, minimum)):
         return None, "cone values must be finite"
+    if float(minimum) < 0:
+        return None, "cone minimum margin must be non-negative"
     margin = float(rhs - lhs) if relation == "LE" else float(lhs - rhs)
     if margin < float(minimum):
         return None, "a cone inequality lacks its declared margin"
@@ -410,8 +456,29 @@ def _evaluate_cone(evaluator: dict[str, Any]) -> Check:
         return Check("cone", "FAIL", "cone evaluator requires inequalities and a dependency graph")
     if graph_error := _dependency_graph_error(graph):
         return Check("cone", "FAIL", graph_error)
+    threshold_values = evaluator.get("threshold_values")
+    if threshold_values is not None:
+        if not isinstance(threshold_values, dict) or set(threshold_values) != set(graph):
+            return Check("cone", "FAIL", "threshold values must exactly match dependency nodes")
+        if any(not isinstance(value, str) for value in threshold_values.values()):
+            return Check("cone", "FAIL", "threshold values must use strict rational strings")
+        try:
+            parsed = {str(key): _fraction(value) for key, value in threshold_values.items()}
+        except (TypeError, ValueError, ZeroDivisionError):
+            return Check("cone", "FAIL", "threshold values must use strict rational strings")
+        if any(value <= 0 for value in parsed.values()):
+            return Check("cone", "FAIL", "threshold values must be positive")
+        for node, dependencies in graph.items():
+            if any(parsed[node] <= parsed[dependency] for dependency in dependencies):
+                return Check("cone", "FAIL", "threshold dependency value ordering failed")
     margins: list[float] = []
+    labels: set[str] = set()
     for item in inequalities:
+        if not isinstance(item, dict) or not isinstance(item.get("label"), str) or not item["label"]:
+            return Check("cone", "FAIL", "cone inequality labels must be non-empty")
+        if item["label"] in labels:
+            return Check("cone", "FAIL", "cone inequality labels must be unique")
+        labels.add(item["label"])
         margin, error = _cone_margin(item)
         if error:
             return Check("cone", "FAIL", error)
@@ -425,10 +492,17 @@ def _evaluate_moment(evaluator: dict[str, Any]) -> Check:
     if not isinstance(identities, list) or not identities:
         return Check("moment", "FAIL", "moment evaluator requires exact identities")
     try:
+        labels: set[str] = set()
         for identity in identities:
+            if not isinstance(identity, dict):
+                return Check("moment", "FAIL", "moment identity is malformed")
+            label = identity.get("label")
+            if not isinstance(label, str) or not label or label in labels:
+                return Check("moment", "FAIL", "moment labels must be non-empty and unique")
+            labels.add(label)
             terms = identity["terms"]
             expected = _fraction(identity["expected"])
-            if not isinstance(terms, list) or sum((_fraction(term) for term in terms), Fraction()) != expected:
+            if not isinstance(terms, list) or not terms or sum((_fraction(term) for term in terms), Fraction()) != expected:
                 return Check("moment", "FAIL", "an exact moment or cancellation identity failed")
     except (KeyError, TypeError, ValueError, ZeroDivisionError):
         return Check("moment", "FAIL", "moment identity is malformed")
@@ -565,9 +639,11 @@ def _read_compiled_receipt(
     if actual_hash != str(record.get("receipt_sha256", "")).upper():
         return None, "compiled receipt sha256 mismatch"
     try:
-        receipt = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return None, "compiled receipt is not valid JSON"
+        from .strict_json import StrictJSONError, load_strict_json
+
+        receipt, _ = load_strict_json(path)
+    except (OSError, StrictJSONError):
+        return None, "compiled receipt is not valid strict JSON"
     if not isinstance(receipt, dict):
         return None, "compiled receipt root is not an object"
     return receipt, None
@@ -578,6 +654,7 @@ def _compiled_receipt_matches(
     binding: dict[str, Any],
     target: str,
     record: dict[str, Any],
+    evidence_mode: str | None = None,
 ) -> bool:
     targets = receipt.get("targets")
     if not isinstance(targets, dict) or not isinstance(targets.get(target), dict):
@@ -603,7 +680,8 @@ def _compiled_receipt_matches(
         "olean_path": target_evidence.get("olean_path"),
         "olean_sha256": str(target_evidence.get("olean_sha256", "")).upper(),
     }
-    return actual == expected and _is_sha256(target_evidence.get("dependency_surface_sha256"))
+    mode_ok = evidence_mode is None or receipt.get("compiled_evidence_mode") == evidence_mode
+    return mode_ok and actual == expected and _is_sha256(target_evidence.get("dependency_surface_sha256"))
 
 
 def _compiled_target_evidence_check(
@@ -611,6 +689,7 @@ def _compiled_target_evidence_check(
     record: dict[str, Any],
     binding: dict[str, Any],
     evidence_root: Path | None,
+    evidence_mode: str | None = None,
 ) -> Check:
     check_id = f"compiled_receipt:{target}"
     if record.get("check_status") != "PASS":
@@ -620,7 +699,7 @@ def _compiled_target_evidence_check(
     receipt, error = _read_compiled_receipt(record, evidence_root)
     if error or receipt is None:
         return Check(check_id, "FAIL", error or "compiled receipt is unavailable")
-    matches = _compiled_receipt_matches(receipt, binding, target, record)
+    matches = _compiled_receipt_matches(receipt, binding, target, record, evidence_mode)
     detail = (
         "receipt hash, source commit, toolchain, target, exit code, .olean, and dependency hash match"
         if matches
@@ -635,8 +714,9 @@ def verify_compiled_evidence(
     """Cross-check target PASS records against a pinned structured receipt."""
 
     binding = manifest.get("source_binding", {})
+    evidence_mode = manifest.get("compiled_evidence_mode")
     return [
-        _compiled_target_evidence_check(target, record, binding, evidence_root)
+        _compiled_target_evidence_check(target, record, binding, evidence_root, evidence_mode)
         for target, record in binding.get("compiled_targets", {}).items()
     ]
 
@@ -667,7 +747,17 @@ def _assessment(
             )
         )
     if lean_root is None:
-        checks.append(Check("source_bindings", "SKIPPED", "no Lean source root supplied"))
+        replay = manifest.get("compiled_evidence_mode") == "RECEIPT_REPLAY"
+        checks.append(
+            Check(
+                "source_bindings",
+                "SKIPPED",
+                "no Lean source root supplied; replay mode does not assert current-source freshness"
+                if replay
+                else "no Lean source root supplied",
+                critical=not replay,
+            )
+        )
     else:
         checks.extend(verify_source_bindings(manifest, lean_root))
     checks.extend(verify_compiled_evidence(manifest, evidence_root))
@@ -755,7 +845,9 @@ def inspect_spar_identity(expected_version: str = "0.6.0") -> dict[str, str]:
             "expected_version": expected_version,
             "source_version": source_version,
             "distribution_version": distribution_version,
-            "module_path": str(Path(spar_framework.__file__).resolve()),
+            # Absolute import paths are machine-private and must not enter a
+            # public evidence receipt.
+            "module_path": "REDACTED_PUBLIC_RECEIPT",
         }
     except ImportError:
         return {
@@ -831,6 +923,11 @@ def run_m4_audit(
         "check_status": "FAIL" if hard_fail else "PASS",
         "task_status": "HELD" if hard_fail else "COMPLETED",
         "claim_status": "UNVERIFIED",
+        "authority_status": (
+            "HARDENED_V3"
+            if manifest.get("schema_id") == SCHEMA_ID_V3
+            else "HISTORICAL_V2_REPLAY"
+        ),
         "lane_status": {
             "M4-P": "OPEN[PARAMETRIC_ONLY]" if not hard_fail else "HELD",
             "M4-S": "HELD[NONCOMPUTABLE_SOURCE_INSTANCE]",
@@ -848,7 +945,12 @@ def run_m4_audit(
 
 
 def load_manifest(path: Path) -> dict[str, Any]:
-    data = json.loads(path.read_text(encoding="utf-8"))
+    from .strict_json import StrictJSONError, load_strict_json
+
+    try:
+        data, _ = load_strict_json(path)
+    except StrictJSONError as exc:
+        raise ValueError(str(exc)) from exc
     if not isinstance(data, dict):
         raise ValueError("manifest root must be an object")
     return data

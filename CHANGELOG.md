@@ -6,6 +6,21 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+### Added
+
+- Strict bounded JSON parsing with duplicate-key/non-finite-value rejection and
+  separate raw-input and canonical semantic digests.
+- Versioned v3 M4-P, compiled-evidence, and run-specific provenance schemas.
+- Deterministic atomic compiled-receipt writer and live-target build helper.
+
+### Changed
+
+- M4 Support, Cone, and Moment evaluators now reject negative domains, boolean
+  numerics, negative margins, duplicate labels, and empty exact identities.
+- v2 remains historical replay-only; v3 uses explicit evidence-mode routing.
+- README positioning now describes NSRW as a governance and guardrail workbench,
+  while future mathematical/CFD/SciML lanes remain non-authoritative.
+
 ## [0.2.0] - 2026-09-11
 
 ### Added

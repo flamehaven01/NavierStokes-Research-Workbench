@@ -3,24 +3,27 @@
 [![CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An evidence-bound research environment for turning Navier--Stokes arguments,
-formal statements, numerical constructions, and falsification tests into
-inspectable artifacts.
+NSRW is a governance-oriented, executable claim-custody workbench for selected
+checkable surfaces between a Navier--Stokes manuscript, a Lean formalization,
+and bounded computational controls.
 
-This is an independent research program. It is not a wrapper around one paper,
-not a repackaging of OpenAI's Lean repository, and not an assertion that the
-Navier--Stokes millennium problem has been solved. The OpenAI manuscript and
-Lean formalization are important source assets and adversarial benchmarks, but
-they are one input lane within a broader program of mathematical reconstruction,
-formal dependency analysis, independent numerical controls, and claim-scope
-verification.
+It is a serious research guardrail, not a theorem prover, CFD product, AI
+research lab, or solution to the Navier--Stokes millennium problem. The OpenAI
+manuscript and Lean repository are important pinned source assets and audit
+benchmarks; they are not the project's proof authority and are not vendored.
+
+The current contribution is narrow and inspectable: preserve source identity,
+make executable scope explicit, test mathematical control surfaces, and refuse
+to promote evidence when a boundary is missing. Independent mathematical,
+numerical, CFD, and SciML work are future research lanes, not current proof
+claims.
 
 ## Research objective
 
-The long-range objective is deliberately ambitious: develop new, testable
+The long-range objective is deliberately ambitious: explore new, testable
 directions toward the three-dimensional Navier--Stokes regularity/blowup problem.
-The workbench supports that objective by asking smaller questions that can be
-answered honestly and reproduced:
+The present workbench does not claim to answer that problem. It asks smaller
+questions that can be answered honestly and reproduced:
 
 - Which analytic identities can be derived independently from declared equations?
 - Which support, cone, moment, pressure-tail, and scaling obligations are actually
@@ -36,11 +39,11 @@ The goal is not to generate a persuasive narrative. It is to create a chain of
 artifacts from equations to executable checks, with every loss of authority made
 visible.
 
-## What makes this project independent
+## What is independently implemented here
 
-The current OpenAI construction and Lean proof graph provide a valuable compiled
-formal surface. They do not define the full research agenda. NSRW adds independent
-layers that remain useful for other Navier--Stokes constructions:
+The pinned OpenAI construction and Lean proof graph provide a valuable compiled
+formal surface. NSRW adds bounded, independently implemented controls that can
+also be reused for later Navier--Stokes candidates:
 
 1. exact scaling and similarity-coordinate algebra;
 2. differential-operator and manufactured-solution controls;
@@ -48,7 +51,7 @@ layers that remain useful for other Navier--Stokes constructions:
 4. source-versus-executable quantifier custody;
 5. parametric Support, Cone, and Moment obligation evaluators;
 6. mutation-based tests of the verifier itself;
-7. external CFD, spectral, PINN, and neural-operator comparison surfaces;
+7. planned external CFD, spectral, PINN, and neural-operator comparison surfaces;
 8. a typed evidence graph separating papers, formal sources, computations,
    receipts, hypotheses, and non-claims.
 
@@ -64,7 +67,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M1 scaling/reconstruction | `PASS[LOCAL]` | Exact algebra and manufactured diagnostics |
 | M2 analytic spine | `PASS[LOCAL]` | Profile interfaces and bounded obligations; no source profile instantiation |
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
-| M4-P parametric lane | `OPEN[HARDENED_PILOT_GATE_PASS]` | Manufactured evaluators pass; source signatures, compiled receipts, and 6/6 mutation deltas are bound |
+| M4-P fixed pilot | `PASS[SCOPED]` | Manufactured control surface passes its declared bounded checks |
+| M4-P general verifier | `HELD[RELEASE_GATE_PENDING]` | v0.2.1 evidence-integrity hardening is in progress; hosted release gate is not yet closed |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
@@ -73,6 +77,23 @@ project is not affiliated with or endorsed by OpenAI.
 Status words are scoped. `PASS[LOCAL_TESTS]` is not a proof claim.
 `PASS[COMPILED_TARGET]` does not mean a paper is correct, that all library
 targets compile, or that two mathematical statements are equivalent.
+
+## Public vocabulary and posture
+
+The project prefers plain descriptions over authority-heavy labels:
+
+| Project term | Meaning here | Explicit non-meaning |
+|---|---|---|
+| claim custody | keeping source, scope, input, and result boundaries inspectable | truth of the underlying theorem |
+| scope ledger | recording source and executable quantifiers side by side | formal quantifier equivalence |
+| hard gate | a fail-closed admission rule for declared evidence | a mathematical proof |
+| manufactured control | a deliberately constructed test input | the selected Navier--Stokes witness |
+| SPAR diagnostic | secondary structural drift review | semantic AI review or proof authority |
+| independent lane | a future research/comparator track | a completed independent solution |
+
+This wording is intentional. The lab's role is governance, reproducibility, and
+guardrails around mathematical research. It does not use verification language
+to imply a stronger result than the recorded artifact supports.
 
 ## Architecture
 
@@ -95,15 +116,17 @@ Primary papers / datasets / formal repositories
        Navier--Stokes hard evidence gate
                       |
                       v
-       SPAR secondary claim-drift review
+       SPAR secondary structural drift diagnostic
                       |
                       v
        deterministic receipt + non-claims
 ```
 
-The NSRW hard gate owns admission. SPAR helps review claim/evidence consistency,
-but its aggregate score cannot override a missing source hash, a failed
-quantifier check, a missing compiled target, or another critical obligation.
+The NSRW hard gate owns admission. SPAR is only a secondary structural diagnostic
+for claim/evidence drift; its score or verdict cannot override a missing source
+hash, a failed scope check, a missing compiled target, or another critical
+obligation. SPAR is not an AI semantic engine and does not establish theorem
+truth.
 
 ## Navier--Stokes-specific validation pipeline
 
@@ -130,7 +153,8 @@ The dedicated pipeline is additional to ordinary software CI.
 - `Cone`: inequality direction, threshold dependencies, margin propagation;
 - `Moment`: exact cancellation and normalization using rational arithmetic;
 - `Falsification`: manufactured mutations that must be rejected;
-- `Quantifier custody`: record source and executable quantifiers side by side.
+- `Scope ledger`: record source quantifiers and executable checks side by side;
+  this is an audit record, not a proof of quantifier equivalence.
 
 The active v2 M4 contract also hashes each normalized Lean declaration
 signature, checks ordered source fragments under the declared
@@ -219,10 +243,11 @@ python -m compileall -q src
 
 ## External experiments
 
-The first planned external artifact is a pinned 2-D periodic-vorticity audit:
+The first planned external artifact is a pinned 2-D periodic-vorticity comparator:
 spectral velocity reconstruction, divergence, vorticity consistency, energy,
 and enstrophy. It is a numerical/control surface, not evidence of a 3-D
-finite-time singularity. See `docs/COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md`.
+finite-time singularity and not part of the current proof authority. See
+`docs/COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md`.
 
 ## Limits and non-claims
 
@@ -245,6 +270,7 @@ witnesses, parameters, or evidence remain explicitly unknown or held.
 - [Realistic research design](docs/REALISTIC_RESEARCH_DESIGN.md)
 - [M4-P design](docs/M4_PARAMETRIC_AUDIT_DESIGN.md)
 - [M4-P verifier hardening](docs/M4P_VERIFIER_HARDENING_2026-09-11.md)
+- [M4-P v0.2.1 evidence-integrity patch plan](docs/M4P_V0.2.1_EVIDENCE_INTEGRITY_PATCH_PLAN.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)

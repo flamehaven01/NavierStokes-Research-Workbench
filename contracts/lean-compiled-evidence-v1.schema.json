@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flamehaven.nsrw-lean-compiled-evidence.v1",
+  "title": "NSRW Lean compiled evidence receipt",
+  "type": "object",
+  "required": [
+    "schema_id", "formal_source_commit", "toolchain", "compiled_evidence_mode",
+    "command_spec_id", "command_spec", "build_cleanliness_class",
+    "input_bytes_sha256", "canonical_manifest_sha256", "dependency_surface_profile",
+    "canonicalization_profile", "targets"
+  ],
+  "properties": {
+    "schema_id": {"const": "flamehaven.nsrw-lean-compiled-evidence.v1"},
+    "formal_source_commit": {"type": "string", "pattern": "^[0-9A-Fa-f]{40}$"},
+    "toolchain": {"type": "string", "minLength": 1},
+    "compiled_evidence_mode": {"enum": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"]},
+    "command_spec_id": {"type": "string", "minLength": 1},
+    "command_spec": {
+      "type": "object",
+      "required": ["argv", "timeout_seconds", "working_directory_class"],
+      "properties": {
+        "argv": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "timeout_seconds": {"type": "integer", "minimum": 1},
+        "working_directory_class": {"enum": ["ISOLATED_CLEAN_BUILD", "HOSTED_CLEAN_CHECKOUT"]}
+      },
+      "additionalProperties": false
+    },
+    "build_cleanliness_class": {"enum": ["ISOLATED_CLEAN_BUILD", "HOSTED_CLEAN_CHECKOUT"]},
+    "input_bytes_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "canonical_manifest_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "dependency_surface_profile": {"const": "NSRW-DEPS-LF-SORTED-V1"},
+    "canonicalization_profile": {"const": "NSRW-CANONICAL-JSON-1"},
+    "targets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["target", "exit_code", "olean_path", "olean_sha256", "dependency_surface_sha256"],
+        "properties": {
+          "target": {"type": "string", "minLength": 1},
+          "exit_code": {"type": "integer"},
+          "olean_path": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
+          "olean_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+          "dependency_surface_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

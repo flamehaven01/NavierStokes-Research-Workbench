@@ -150,6 +150,15 @@ def test_p1_support_positive_and_boundaries():
         item = obligation("SUPPORT")
         change(item["evaluator"])
         assert evaluate_obligation(item).check_status == "FAIL"
+    for mutation in (
+        lambda e: e.update(cutoff=-1),
+        lambda e: e.update(cutoff=True),
+        lambda e: e["intervals"][0].update(lower=-1),
+        lambda e: e["intervals"][1].update(name="core"),
+    ):
+        item = obligation("SUPPORT")
+        mutation(item["evaluator"])
+        assert evaluate_obligation(item).check_status == "FAIL"
 
 
 def test_p2_cone_positive_margin_and_cycle_failures():
@@ -179,6 +188,24 @@ def test_p2_cone_positive_margin_and_cycle_failures():
     variants.append(dangling)
     for item in variants:
         assert evaluate_obligation(item).check_status == "FAIL"
+    negative_margin = obligation("CONE")
+    negative_margin["evaluator"]["inequalities"][0]["minimum_margin"] = -1
+    assert evaluate_obligation(negative_margin).check_status == "FAIL"
+    bool_value = obligation("CONE")
+    bool_value["evaluator"]["inequalities"][0]["lhs"] = True
+    assert evaluate_obligation(bool_value).check_status == "FAIL"
+
+
+def test_p2_threshold_values_are_exact_and_ordered():
+    item = obligation("CONE")
+    item["evaluator"]["threshold_values"] = {"R_inner": "2", "R_outer": "5"}
+    assert evaluate_obligation(item).check_status == "PASS"
+    bad = obligation("CONE")
+    bad["evaluator"]["threshold_values"] = {"R_inner": "2", "R_outer": "2"}
+    assert evaluate_obligation(bad).check_status == "FAIL"
+    malformed = obligation("CONE")
+    malformed["evaluator"]["threshold_values"] = {"R_inner": True, "R_outer": "5"}
+    assert evaluate_obligation(malformed).check_status == "FAIL"
 
 
 def test_p3_exact_moment_positive_and_failures():
@@ -192,6 +219,12 @@ def test_p3_exact_moment_positive_and_failures():
     missing = obligation("MOMENT")
     missing["evaluator"]["identities"] = []
     assert evaluate_obligation(missing).check_status == "FAIL"
+    empty = obligation("MOMENT")
+    empty["evaluator"]["identities"][0]["terms"] = []
+    assert evaluate_obligation(empty).check_status == "FAIL"
+    duplicate = obligation("MOMENT")
+    duplicate["evaluator"]["identities"][1]["label"] = "cancellation"
+    assert evaluate_obligation(duplicate).check_status == "FAIL"
 
 
 def test_dispatch_handles_falsification_missing_and_unknown():
@@ -405,9 +438,40 @@ def test_source_binding_cannot_be_skipped_for_an_authoritative_pass():
     )
 
 
+def test_v3_replay_does_not_require_current_lean_checkout(tmp_path: Path):
+    data = fixture()
+    data["schema_id"] = m4_audit.SCHEMA_ID_V3
+    data["compiled_evidence_mode"] = "RECEIPT_REPLAY"
+    data["canonicalization_profile"] = "NSRW-CANONICAL-JSON-1"
+    data["locator_evidence_class"] = "TEXTUAL_PINNED_SOURCE_LOCATOR"
+    for item in data["obligations"]:
+        item["source_locator"]["locator_evidence_class"] = "TEXTUAL_PINNED_SOURCE_LOCATOR"
+    replay_receipt = json.loads(
+        (ROOT / "fixtures" / "evidence" / "lean-scoped-targets-v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    replay_receipt["compiled_evidence_mode"] = "RECEIPT_REPLAY"
+    replay_path = tmp_path / "replay.json"
+    replay_path.write_text(
+        json.dumps(replay_receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    replay_hash = hashlib.sha256(replay_path.read_bytes()).hexdigest()
+    for record in data["source_binding"]["compiled_targets"].values():
+        record["receipt_path"] = "replay.json"
+        record["receipt_sha256"] = replay_hash
+    assert validate_manifest(data) == []
+    receipt = run_m4_audit(data, lean_root=None, evidence_root=tmp_path)
+    assert receipt["check_status"] == "PASS"
+    source_check = next(item for item in receipt["checks"] if item["check_id"] == "source_bindings")
+    assert source_check["check_status"] == "SKIPPED"
+    assert all(item["check_status"] != "FAIL" for item in receipt["checks"])
+
+
 def test_spar_identity_is_explicit_and_diagnostic_cannot_override_failure():
     identity = inspect_spar_identity()
     assert identity["check_status"] in {"PASS", "FAIL", "ERROR"}
+    assert not Path(identity["module_path"]).is_absolute()
     result = run_spar_diagnostic([type("C", (), {"check_id": "x", "check_status": "FAIL", "detail": "bad", "critical": True})()])
     assert result["check_status"] == "FAIL"
 

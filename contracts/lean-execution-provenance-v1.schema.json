@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flamehaven.nsrw-lean-execution-provenance.v1",
+  "title": "NSRW run-specific execution provenance envelope",
+  "type": "object",
+  "required": ["schema_id", "provider", "workflow", "run_id", "attempt", "platform", "canonical_receipt_sha256"],
+  "properties": {
+    "schema_id": {"const": "flamehaven.nsrw-lean-execution-provenance.v1"},
+    "provider": {"type": "string", "minLength": 1},
+    "workflow": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "attempt": {"type": "integer", "minimum": 1},
+    "platform": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "minLength": 1},
+    "completed_at": {"type": "string", "minLength": 1},
+    "canonical_receipt_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"}
+  },
+  "additionalProperties": false
+}

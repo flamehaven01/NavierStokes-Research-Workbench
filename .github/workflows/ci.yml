@@ -89,6 +89,13 @@ jobs:
           json.load(open('fixtures/external-e2-contract-v1.json',encoding='utf-8'));
           n=json.load(open('colab/NSRW_E2_HF_FNO_DATASET_AUDIT.ipynb',encoding='utf-8'));
           assert not any(c.get('outputs') for c in n.get('cells',[]))"
+      - name: Validate v3 custody schemas and strict parser
+        run: >-
+          python -c "import json; from pathlib import Path; from jsonschema import Draft202012Validator;
+          from nsrw.strict_json import parse_strict_json_bytes;
+          paths=[Path('contracts/m4-obligation-manifest-v3.schema.json'),Path('contracts/lean-compiled-evidence-v1.schema.json'),Path('contracts/lean-execution-provenance-v1.schema.json')];
+          [Draft202012Validator.check_schema(json.loads(p.read_text(encoding='utf-8'))) for p in paths];
+          parse_strict_json_bytes(b'{}'); print('v3-custody-schemas: PASS')"
 
   lean-scoped-targets:
     name: Pinned Lean targets consumed by M4
@@ -118,7 +125,7 @@ jobs:
             +NavierStokes.NominalConeAssembly
           test: false
           lint: false
-          use-github-cache: true
+          use-github-cache: false
       - name: Capture target hashes and direct dependency surfaces
         shell: bash
         run: |
