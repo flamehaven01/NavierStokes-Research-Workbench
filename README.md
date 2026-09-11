@@ -3,20 +3,22 @@
 [![CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-NSRW is a governance-oriented, executable claim-custody workbench for selected
-checkable surfaces between a Navier--Stokes manuscript, a Lean formalization,
-and bounded computational controls.
+NSRW is an open research-lab workbench for studying selected, checkable links
+between Navier--Stokes papers, Lean formalizations, and bounded computational
+experiments. It records what source was used, what was actually checked, and
+which conclusions remain unavailable.
 
-It is a serious research guardrail, not a theorem prover, CFD product, AI
-research lab, or solution to the Navier--Stokes millennium problem. The OpenAI
-manuscript and Lean repository are important pinned source assets and audit
-benchmarks; they are not the project's proof authority and are not vendored.
+The project supports serious mathematical research without claiming to be a
+theorem prover, production CFD solver, or solution to the Navier--Stokes
+millennium problem. The OpenAI manuscript and Lean repository are important
+pinned research inputs and audit benchmarks; they are not proof authority for
+this project and are not vendored.
 
 The current contribution is narrow and inspectable: preserve source identity,
-make executable scope explicit, test mathematical control surfaces, and refuse
-to promote evidence when a boundary is missing. Independent mathematical,
-numerical, CFD, and SciML work are future research lanes, not current proof
-claims.
+state executable scope, test bounded mathematical controls, and withhold
+stronger conclusions when evidence is missing. New mathematical, numerical,
+CFD, and SciML investigations are research-program directions, not current
+proof claims.
 
 ## Research objective
 
@@ -48,7 +50,7 @@ also be reused for later Navier--Stokes candidates:
 1. exact scaling and similarity-coordinate algebra;
 2. differential-operator and manufactured-solution controls;
 3. cylindrical leading-field and pressure-closure diagnostics;
-4. source-versus-executable quantifier custody;
+4. side-by-side comparison of source quantifiers and executable checks;
 5. parametric Support, Cone, and Moment obligation evaluators;
 6. mutation-based tests of the verifier itself;
 7. planned external CFD, spectral, PINN, and neural-operator comparison surfaces;
@@ -68,7 +70,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M2 analytic spine | `PASS[LOCAL]` | Profile interfaces and bounded obligations; no source profile instantiation |
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
 | M4-P fixed pilot | `PASS[SCOPED]` | Manufactured control surface passes its declared bounded checks |
-| M4-P general verifier | `HELD[RELEASE_GATE_PENDING]` | v0.2.1 evidence-integrity hardening is in progress; hosted release gate is not yet closed |
+| M4-P v3 replay pilot | `PASS[LOCAL_REPLAY]` | Hardened contract and 13 applicable staged mutations pass locally; live-only mutation is not applicable |
+| M4-P general verifier | `HELD[HOSTED_LIVE_GATE_PENDING]` | v0.2.2 local hardening is implemented; same-run hosted Lean evidence is not yet confirmed |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
@@ -78,18 +81,18 @@ Status words are scoped. `PASS[LOCAL_TESTS]` is not a proof claim.
 `PASS[COMPILED_TARGET]` does not mean a paper is correct, that all library
 targets compile, or that two mathematical statements are equivalent.
 
-## Public vocabulary and posture
+## Public vocabulary and research posture
 
 The project prefers plain descriptions over authority-heavy labels:
 
 | Project term | Meaning here | Explicit non-meaning |
 |---|---|---|
-| claim custody | keeping source, scope, input, and result boundaries inspectable | truth of the underlying theorem |
-| scope ledger | recording source and executable quantifiers side by side | formal quantifier equivalence |
-| hard gate | a fail-closed admission rule for declared evidence | a mathematical proof |
+| evidence traceability | keeping source, scope, input, and result boundaries inspectable | truth of the underlying theorem |
+| source/check comparison | recording source and executable quantifiers side by side | formal quantifier equivalence |
+| required validation | a check that must succeed before an artifact is accepted | a mathematical proof |
 | manufactured control | a deliberately constructed test input | the selected Navier--Stokes witness |
-| SPAR diagnostic | secondary structural drift review | semantic AI review or proof authority |
-| independent lane | a future research/comparator track | a completed independent solution |
+| structural consistency check | a secondary review implemented with the pinned SPAR package | semantic AI review or proof authority |
+| research direction | a planned investigation or comparator track | a completed independent solution |
 
 This wording is intentional. The lab's role is governance, reproducibility, and
 guardrails around mathematical research. It does not use verification language
@@ -113,26 +116,26 @@ Primary papers / datasets / formal repositories
           |                       |
           +-----------+-----------+
                       v
-       Navier--Stokes hard evidence gate
+       required Navier--Stokes validation
                       |
                       v
-       SPAR secondary structural drift diagnostic
+       secondary structural consistency check
                       |
                       v
        deterministic receipt + non-claims
 ```
 
-The NSRW hard gate owns admission. SPAR is only a secondary structural diagnostic
-for claim/evidence drift; its score or verdict cannot override a missing source
-hash, a failed scope check, a missing compiled target, or another critical
-obligation. SPAR is not an AI semantic engine and does not establish theorem
-truth.
+The required NSRW checks determine whether an artifact is accepted. A secondary
+structural consistency check, implemented with the pinned SPAR package, can
+flag suspicious wording or structure. Its score cannot override a missing
+source hash, failed scope check, missing compiled target, or other required
+condition. It is not an AI semantic engine and does not establish theorem truth.
 
 ## Navier--Stokes-specific validation pipeline
 
 The dedicated pipeline is additional to ordinary software CI.
 
-### Source custody
+### Source traceability
 
 - pin the formal repository commit and primary-artifact hashes;
 - distinguish the primary PDF from lossy searchable transports;
@@ -152,15 +155,17 @@ The dedicated pipeline is additional to ordinary software CI.
 - `Support`: inclusion, region ordering, cutoff interaction;
 - `Cone`: inequality direction, threshold dependencies, margin propagation;
 - `Moment`: exact cancellation and normalization using rational arithmetic;
-- `Falsification`: manufactured mutations that must be rejected;
-- `Scope ledger`: record source quantifiers and executable checks side by side;
+- `Negative controls`: manufactured mutations that must be rejected;
+- `Source/check comparison`: record source quantifiers and executable checks side by side;
   this is an audit record, not a proof of quantifier equivalence.
 
-The active v2 M4 contract also hashes each normalized Lean declaration
-signature, checks ordered source fragments under the declared
-`NAMED_BINDERS_AND_DATA_EXISTENTIALS` projection, and opens the structured
-compiled receipt rather than trusting a handwritten `PASS`. The retained v1
-schema and fixture are historical and are not accepted by the v2 runtime.
+The active v3 M4 contract hashes each normalized Lean declaration signature,
+checks ordered source fragments under the declared
+`NAMED_BINDERS_AND_DATA_EXISTENTIALS` projection, and reads structured compiled
+evidence rather than trusting a handwritten `PASS`. Version 3 also separates
+historical replay from same-run live evidence and uses a 14-case staged negative
+control corpus. The v1 and v2 fixtures remain historical compatibility inputs
+and cannot be promoted to v3 authority.
 
 Checking one fixture and a finite grid remains
 `SAMPLED_PARAMETRIC_DIAGNOSTIC`. It cannot be promoted to a source statement
@@ -173,10 +178,10 @@ of the form `forall F, exists R(F), forall X >= R(F)`.
 | `contracts/` | Versioned research and M4 obligation schemas |
 | `fixtures/` | Manufactured, negative-control, graph, and portable contract fixtures |
 | `src/nsrw/contracts.py` | Source pins, theorem scope, hashes, and locator validation |
-| `src/nsrw/falsification.py` | Research-contract mutation gate |
+| `src/nsrw/falsification.py` | Research-contract negative controls |
 | `src/nsrw/graph.py` | Typed proof/evidence graph and authority propagation |
 | `src/nsrw/math_kernel/` | Scaling, operators, profiles, closure, and bounded diagnostics |
-| `src/nsrw/m4_audit.py` | Quantifier custody, Support/Cone/Moment checks, SPAR adapter, M4 mutations |
+| `src/nsrw/m4_audit.py` | Source/check scope comparison, Support/Cone/Moment checks, secondary diagnostic adapter, and M4 mutations |
 | `src/nsrw/external_experiments/` | Pinned external numerical experiment auditors |
 | `colab/` | Project-owned notebooks; execution evidence is not prefilled |
 | `docs/` | Designs, checklists, boundaries, receipts, and research map |
@@ -191,8 +196,8 @@ cd NavierStokes-Research-Workbench
 python -m pip install -e ".[dev]"
 ```
 
-The development extra pins SPAR to the reviewed public commit used by this
-project. No local source archive is included.
+The development extra pins the optional SPAR structural-check dependency to the
+reviewed public commit used by this project. No local source archive is included.
 
 ## Running the workbench
 
@@ -211,22 +216,24 @@ For M3, pass `--lean-root` or set `NSRW_LEAN_ROOT`.
 
 ```bash
 python -m nsrw.m3_evidence_cli --lean-root /path/to/NavierStokesAndEuler
-python -m nsrw.m4_cli fixtures/m4-parametric-pilot-v2.json \
-  --lean-root /path/to/NavierStokesAndEuler \
+python -m nsrw.m4_cli fixtures/m4-parametric-pilot-v3.json \
+  --evidence-root . \
   --output outputs/m4-parametric-pilot-receipt.json
 ```
 
-The current v2 fixture returns `0` only when the pinned source signatures and
-structured compiled receipt are both available and match. Exit code `1` means
-a critical source, quantifier-fragment, receipt, or target binding is missing
-or invalid. It does not by itself mean the mathematical theorem is false.
+The v3 example above is a historical receipt replay and does not claim current
+Lean artifact freshness. Hosted CI separately performs the same-run clean build,
+generates a live receipt through `nsrw.lean_receipt`, and verifies the live
+manifest against the pinned source. The v2 fixture remains available only for
+historical compatibility. Exit code `1` means a critical declared gate failed;
+it does not by itself mean the mathematical theorem is false.
 
 ## CI and verification
 
 The GitHub Actions pipeline contains three distinct jobs:
 
 1. cross-platform Python quality: pytest, coverage, Ruff, and compilation;
-2. deterministic artifact replay plus SPAR identity and mutation checks;
+2. deterministic artifact replay, structural-check dependency identity, and mutation checks;
 3. pinned upstream Lean builds for the exact Navier--Stokes targets consumed by M4.
 
 Generated runtime outputs are ignored by Git. Reviewable bounded receipts live
@@ -261,17 +268,24 @@ finite-time singularity and not part of the current proof authority. See
 - External datasets, PINNs, FNOs, and CFD solvers are comparators and
   falsification surfaces, not proof authorities.
 
-The governing principle is `ABSTAIN > FABRICATE`: missing equations, source
-witnesses, parameters, or evidence remain explicitly unknown or held.
+The governing principle is simple: do not invent missing evidence. Missing
+equations, source witnesses, parameters, or evidence remain explicitly unknown
+or held.
 
 ## Documentation
 
-- [North-star map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
+- [Documentation status index](docs/README.md)
+- [Research direction map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
+- [Public research language guide](docs/PUBLIC_RESEARCH_LANGUAGE.md)
 - [Realistic research design](docs/REALISTIC_RESEARCH_DESIGN.md)
 - [M4-P design](docs/M4_PARAMETRIC_AUDIT_DESIGN.md)
 - [M4-P verifier hardening](docs/M4P_VERIFIER_HARDENING_2026-09-11.md)
 - [M4-P v0.2.1 evidence-integrity patch plan](docs/M4P_V0.2.1_EVIDENCE_INTEGRITY_PATCH_PLAN.md)
+- [v0.2.2 audit-alignment implementation addendum](docs/V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md)
+- [M3 historical execution-assertion tombstone](docs/stage_receipts/M3_HISTORICAL_INVALIDATION.md)
+- [M4-P v0.2.2 local implementation receipt](docs/stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
+- [v0.2.2 release notes](docs/releases/v0.2.2.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)
 

@@ -85,7 +85,7 @@ A local math-kernel stage is GREEN only when:
 4. wrong forcing and compressible fields are detected;
 5. similarity coordinates reconstruct the defining equation;
 6. focused tests, full pytest coverage gate, Ruff, compile checks, deterministic receipt replay,
-   and a nonzero-coverage slop scan pass.
+   and a nonzero-coverage code-quality heuristic scan pass.
 
 None of these checks promotes the Clay claim. Progress toward that goal requires implementing
 and falsifying specific analytic lemmas from the construction, with their hypotheses and norms

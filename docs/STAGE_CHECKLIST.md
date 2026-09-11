@@ -54,7 +54,7 @@ Use this checklist before marking any implementation stage GREEN.
   are cross-verified; an unrelated or handwritten PASS cannot satisfy the gate.
 - [ ] `EXISTENTIAL_NONCOMPUTABLE_IN_CURRENT_SOURCE_INTERFACE` is a custody
   classification, not a claim of absolute mathematical nonconstructibility.
-- [ ] SPAR score/verdict is secondary and cannot override any critical M4 hard gate.
+- [ ] The optional SPAR-backed structural check is secondary and cannot override any required M4 validation.
 - [ ] M4-P fixtures test verifier behavior and are not labeled as the selected source candidate.
 - [ ] External E2 records HF repository revision, source file, bounded sample id,
   source hash, forcing scope, representation, and domain lengths.
@@ -80,7 +80,7 @@ Use this checklist before marking any implementation stage GREEN.
 - [ ] Cone relations are restricted to the declared enum and dependency graphs
   reject both cycles and references to undeclared nodes.
 
-## Slop diagnostic
+## Code-quality heuristic scan
 
 - [ ] Unsupported specificity, fake precision, invented citations, and decorative proof nodes are absent.
 - [ ] No status is broader than its measured coverage.

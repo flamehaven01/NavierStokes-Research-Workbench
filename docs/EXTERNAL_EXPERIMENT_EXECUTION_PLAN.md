@@ -7,7 +7,7 @@ execution sequence. The external lane is a numerical/control/falsification
 surface; it cannot promote the forced OpenAI result, the Lean source, or the
 Clay claim.
 
-## `#map-north-star` placement
+## Research-map placement
 
 The external lane is useful only when it advances one of the map's research
 questions: expose an equation-level quantity, independently reconstruct it,
@@ -75,7 +75,7 @@ error is not a PDE residual or incompressibility proof.
 
 ## Four-stage research ladder
 
-| Stage | Mechanism exposed | Required falsifier | North-star value |
+| Stage | Mechanism exposed | Required negative control | Research value |
 |---|---|---|---|
 | E1 Taylor–Green | known analytic field and derivative error | grid refinement | calibration |
 | E2 HF trajectory | dataset-to-field representation loss | mean/divergence/curl mutation | independent observation |

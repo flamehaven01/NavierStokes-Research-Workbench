@@ -1,5 +1,8 @@
 # Final Checked Checklist
 
+Historical authority: initial project-stage snapshot. Counts and release
+boundaries in this file are not the current v0.2.2 state.
+
 Date: 2026-09-09
 
 ## Authority and scope

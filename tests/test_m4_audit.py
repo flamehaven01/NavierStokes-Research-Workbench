@@ -9,7 +9,7 @@ import pytest
 
 import nsrw.m4_audit as m4_audit
 from nsrw.m4_audit import (
-    REQUIRED_MUTATIONS,
+    HISTORICAL_V2_MUTATIONS,
     _canonical_source_sha256,
     _normalized_declaration_signature,
     check_quantifier_custody,
@@ -362,7 +362,7 @@ def test_compiled_receipt_rejects_missing_file_hash_and_manifest_drift(tmp_path:
 
 def test_p4_all_required_mutations_are_killed():
     results = run_mutations(fixture())
-    assert tuple(item.mutation_id for item in results) == REQUIRED_MUTATIONS
+    assert tuple(item.mutation_id for item in results) == HISTORICAL_V2_MUTATIONS
     assert all(item.killed for item in results)
 
 
@@ -439,33 +439,82 @@ def test_source_binding_cannot_be_skipped_for_an_authoritative_pass():
 
 
 def test_v3_replay_does_not_require_current_lean_checkout(tmp_path: Path):
-    data = fixture()
-    data["schema_id"] = m4_audit.SCHEMA_ID_V3
-    data["compiled_evidence_mode"] = "RECEIPT_REPLAY"
-    data["canonicalization_profile"] = "NSRW-CANONICAL-JSON-1"
-    data["locator_evidence_class"] = "TEXTUAL_PINNED_SOURCE_LOCATOR"
-    for item in data["obligations"]:
-        item["source_locator"]["locator_evidence_class"] = "TEXTUAL_PINNED_SOURCE_LOCATOR"
-    replay_receipt = json.loads(
-        (ROOT / "fixtures" / "evidence" / "lean-scoped-targets-v1.json").read_text(
-            encoding="utf-8"
-        )
-    )
-    replay_receipt["compiled_evidence_mode"] = "RECEIPT_REPLAY"
-    replay_path = tmp_path / "replay.json"
-    replay_path.write_text(
-        json.dumps(replay_receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
-    replay_hash = hashlib.sha256(replay_path.read_bytes()).hexdigest()
-    for record in data["source_binding"]["compiled_targets"].values():
-        record["receipt_path"] = "replay.json"
-        record["receipt_sha256"] = replay_hash
+    data = load_manifest(ROOT / "fixtures" / "m4-parametric-pilot-v3.json")
     assert validate_manifest(data) == []
-    receipt = run_m4_audit(data, lean_root=None, evidence_root=tmp_path)
+    receipt = run_m4_audit(data, lean_root=None, evidence_root=ROOT)
     assert receipt["check_status"] == "PASS"
     source_check = next(item for item in receipt["checks"] if item["check_id"] == "source_bindings")
     assert source_check["check_status"] == "SKIPPED"
     assert all(item["check_status"] != "FAIL" for item in receipt["checks"])
+    assert len(receipt["mutations"]) == 14
+    missing = next(
+        item for item in receipt["mutations"] if item["mutation_id"] == "missing_live_olean"
+    )
+    assert missing["killed"] is None
+    assert missing["full_manifest_check_status"] == "NOT_APPLICABLE"
+
+
+def test_v3_staged_corpus_requires_direct_and_full_oracles() -> None:
+    data = load_manifest(ROOT / "fixtures" / "m4-parametric-pilot-v3.json")
+    results = run_mutations(data, evidence_root=ROOT)
+    assert len(results) == 14
+    direct = {
+        item.mutation_id: item.direct_evaluator_check_status
+        for item in results
+        if item.direct_evaluator_check_status != "NOT_APPLICABLE"
+    }
+    assert direct == {
+        "negative_cutoff": "PASS",
+        "negative_radial_bound": "PASS",
+        "negative_minimum_margin": "PASS",
+        "boolean_as_numeric": "PASS",
+        "empty_moment_terms": "PASS",
+        "dependency_value_order_drift": "PASS",
+    }
+    assert all(
+        item.full_manifest_check_status == "PASS"
+        for item in results
+        if item.killed is not None
+    )
+
+
+def test_missing_live_olean_is_killed_only_in_live_mode(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    data = load_manifest(ROOT / "fixtures" / "m4-parametric-pilot-v3.json")
+    data["compiled_evidence_mode"] = "LIVE_ARTIFACT"
+    original = data["source_binding"]["compiled_targets"][
+        "+NavierStokes.OutgoingDilation"
+    ]["olean_path"]
+
+    def assessment(candidate, lean_root, evidence_root):
+        path = candidate["source_binding"]["compiled_targets"][
+            "+NavierStokes.OutgoingDilation"
+        ]["olean_path"]
+        if path == original:
+            return []
+        return [
+            m4_audit.Check(
+                "live_artifact:+NavierStokes.OutgoingDilation", "FAIL", "missing"
+            ),
+            m4_audit.Check(
+                "compiled_receipt:+NavierStokes.OutgoingDilation", "FAIL", "drift"
+            ),
+        ]
+
+    monkeypatch.setattr(m4_audit, "_assessment", assessment)
+    monkeypatch.setattr(
+        m4_audit,
+        "MUTATIONS",
+        (("missing_live_olean", m4_audit._missing_live_olean),),
+    )
+    result = run_mutations(data)
+    assert len(result) == 1
+    assert result[0].killed is True
+    assert result[0].reasons == (
+        "compiled_receipt:+NavierStokes.OutgoingDilation",
+        "live_artifact:+NavierStokes.OutgoingDilation",
+    )
 
 
 def test_spar_identity_is_explicit_and_diagnostic_cannot_override_failure():

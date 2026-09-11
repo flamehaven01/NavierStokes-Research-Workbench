@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "navier-stokes-research-workbench"
-version = "0.2.0"
-description = "Evidence-bound paper-to-formal-proof research workbench"
+version = "0.2.2"
+description = "Research-lab workbench for traceable Navier-Stokes evidence and bounded checks"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -33,6 +33,7 @@ nsrw-analytic = "nsrw.analytic_cli:main"
 nsrw-m3 = "nsrw.m3_cli:main"
 nsrw-m3-evidence = "nsrw.m3_evidence_cli:main"
 nsrw-m4 = "nsrw.m4_cli:main"
+nsrw-lean-receipt = "nsrw.lean_receipt:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

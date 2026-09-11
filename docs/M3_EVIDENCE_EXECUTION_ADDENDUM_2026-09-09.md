@@ -6,7 +6,7 @@ Status: `HELD_LEAN_TOOLCHAIN_AND_SOURCE_INSTANCE__M4_HELD`
 
 This addendum records the post-review M3 evidence execution without modifying the original session handoff file. The handoff remains preserved at SHA-256 `353ce46db32a9d0110258b29b3899b329213e5f8ce967ab4b0ec31ccac9e66ba`.
 
-This is claim custody, not proof authority. The local executable and static checks strengthen the inspectable surface while the global Navier–Stokes theorem claim remains `UNVERIFIED`.
+This is evidence traceability, not proof authority. The local executable and static checks strengthen the inspectable surface while the global Navier–Stokes theorem claim remains `UNVERIFIED`.
 
 ## Executed evidence
 

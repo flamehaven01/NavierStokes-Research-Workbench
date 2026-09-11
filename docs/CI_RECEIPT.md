@@ -1,5 +1,8 @@
 # CI/CD Foundation Receipt
 
+Historical authority: initial CI foundation snapshot. See the current README,
+workflow, and versioned release notes for current job counts and release status.
+
 Status: `CI_CONFIG_GREEN__HOSTED_RUN_UNVERIFIED__CD_HELD`
 
 ## Implemented CI

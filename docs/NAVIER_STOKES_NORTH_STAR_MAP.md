@@ -1,8 +1,11 @@
-# `#map-north-star` — Navier–Stokes research direction
+# Navier--Stokes research direction map
 
 Status: adopted research principle; not an executable gate.
 
-## North star
+This document was previously called the internal `#map-north-star`. The plain
+title is used publicly; the research objective is unchanged.
+
+## Long-range objective
 
 The workbench exists to discover, isolate, and eventually prove a mathematical
 mechanism that closes a genuine gap in the three-dimensional incompressible
@@ -44,7 +47,8 @@ Before adding code, a ledger, a receipt, or a new research lane, ask:
    Navier–Stokes argument?
 
 If all answers are no, the artifact is process growth rather than research
-progress and should be removed or deferred. Tests, CI, slop checks, and receipts
+progress and should be removed or deferred. Tests, CI, code-quality heuristic
+checks, and receipts
 are guardrails: they protect the research engine but are not its destination.
 
 ## Current map position

@@ -44,8 +44,8 @@ jobs:
       - name: Pytest and coverage gate
         run: python -m pytest
 
-  research-custody:
-    name: NSRW contract, SPAR, mutation, and replay gates
+  research-validation:
+    name: Research contracts, structural checks, mutations, and replay
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -74,14 +74,15 @@ jobs:
           cmp outputs/math-a.json outputs/math-b.json
           cmp outputs/analytic-a.json outputs/analytic-b.json
           cmp outputs/m3-a.json outputs/m3-b.json
-      - name: Verify M4 hard gate, SPAR identity, and mutations
+      - name: Verify required M4 checks, dependency identity, and mutations
         run: >-
           python -c "from pathlib import Path; from nsrw.m4_audit import inspect_spar_identity,load_manifest,run_m4_audit,verify_compiled_evidence;
-          m=load_manifest(Path('fixtures/m4-parametric-pilot-v2.json')); r=run_m4_audit(m,evidence_root=Path('.'));
+          m=load_manifest(Path('fixtures/m4-parametric-pilot-v3.json')); r=run_m4_audit(m,evidence_root=Path('.'));
           assert inspect_spar_identity()['check_status']=='PASS';
           assert all(x.check_status=='PASS' for x in verify_compiled_evidence(m,Path('.')));
-          assert r['task_status']=='HELD';
-          assert all(x['killed'] for x in r['mutations']);
+          assert r['task_status']=='COMPLETED';
+          assert len(r['mutations'])==14;
+          assert all(x['killed'] is True for x in r['mutations'] if x['killed'] is not None);
           assert r['lane_status']['M4-S']=='HELD[NONCOMPUTABLE_SOURCE_INSTANCE]'"
       - name: Verify portable external artifacts
         run: >-
@@ -93,7 +94,7 @@ jobs:
         run: >-
           python -c "import json; from pathlib import Path; from jsonschema import Draft202012Validator;
           from nsrw.strict_json import parse_strict_json_bytes;
-          paths=[Path('contracts/m4-obligation-manifest-v3.schema.json'),Path('contracts/lean-compiled-evidence-v1.schema.json'),Path('contracts/lean-execution-provenance-v1.schema.json')];
+          paths=[Path('contracts/m4-obligation-manifest-v3.schema.json'),Path('contracts/m4-mutation-corpus-v1.schema.json'),Path('contracts/lean-build-request-v1.schema.json'),Path('contracts/lean-compiled-evidence-v1.schema.json'),Path('contracts/lean-execution-provenance-v1.schema.json'),Path('contracts/lean-receipt-migration-v1.schema.json')];
           [Draft202012Validator.check_schema(json.loads(p.read_text(encoding='utf-8'))) for p in paths];
           parse_strict_json_bytes(b'{}'); print('v3-custody-schemas: PASS')"
 
@@ -114,123 +115,41 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           path: nsrw
-      - name: Install pinned Lean toolchain and build scoped targets
+      - name: Install pinned Lean toolchain
         uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
         with:
           auto-config: false
-          build: true
-          build-args: >-
-            +NavierStokes.OutgoingDilation
-            +NavierStokes.OutgoingCone
-            +NavierStokes.NominalConeAssembly
+          build: false
           test: false
           lint: false
           use-github-cache: false
-      - name: Capture target hashes and direct dependency surfaces
+      - name: Build targets and publish structured live evidence
         shell: bash
+        working-directory: nsrw
         run: |
           set -euo pipefail
-          sha256sum \
-            .lake/build/lib/lean/NavierStokes/OutgoingDilation.olean \
-            .lake/build/lib/lean/NavierStokes/OutgoingCone.olean \
-            .lake/build/lib/lean/NavierStokes/NominalConeAssembly.olean \
-            | tee lean-target-sha256.txt
-          lake env lean --deps NavierStokes/OutgoingDilation.lean > outgoing-dilation-deps.txt
-          lake env lean --deps NavierStokes/OutgoingCone.lean > outgoing-cone-deps.txt
-          lake env lean --deps NavierStokes/NominalConeAssembly.lean > nominal-cone-deps.txt
-      - name: Build and cross-check structured Lean receipt
-        shell: bash
-        run: |
-          set -euo pipefail
-          python - <<'PY'
-          import hashlib
-          import json
-          from pathlib import Path
-
-          targets = {
-              "+NavierStokes.OutgoingDilation": (
-                  ".lake/build/lib/lean/NavierStokes/OutgoingDilation.olean",
-                  "outgoing-dilation-deps.txt",
-              ),
-              "+NavierStokes.OutgoingCone": (
-                  ".lake/build/lib/lean/NavierStokes/OutgoingCone.olean",
-                  "outgoing-cone-deps.txt",
-              ),
-              "+NavierStokes.NominalConeAssembly": (
-                  ".lake/build/lib/lean/NavierStokes/NominalConeAssembly.olean",
-                  "nominal-cone-deps.txt",
-              ),
-          }
-          receipt = {
-              "formal_source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
-              "schema_id": "flamehaven.nsrw-lean-compiled-evidence.v1",
-              "targets": {},
-              "toolchain": "leanprover/lean4:v4.34.0-rc2",
-          }
-          for target, (olean_path, deps_path) in targets.items():
-              receipt["targets"][target] = {
-                  "dependency_surface_sha256": hashlib.sha256(Path(deps_path).read_bytes()).hexdigest().upper(),
-                  "exit_code": 0,
-                  "olean_path": olean_path,
-                  "olean_sha256": hashlib.sha256(Path(olean_path).read_bytes()).hexdigest().upper(),
-                  "target": target,
-              }
-          Path("lean-compiled-receipt.json").write_text(
-              json.dumps(receipt, indent=2, sort_keys=True) + "\n",
-              encoding="utf-8",
-          )
-          PY
-          cmp lean-compiled-receipt.json nsrw/fixtures/evidence/lean-scoped-targets-v1.json
-          PYTHONPATH=nsrw/src python - <<'PY'
-          import json
-          from pathlib import Path
-
-          from nsrw.m4_audit import load_manifest, run_m4_audit
-
-          manifest = load_manifest(Path("nsrw/fixtures/m4-parametric-pilot-v2.json"))
-          result = run_m4_audit(
-              manifest,
-              lean_root=Path("."),
-              evidence_root=Path("nsrw"),
-          )
-          failed_checks = [
-              check for check in result["checks"] if check["check_status"] != "PASS"
-          ]
-          failed_mutations = [
-              mutation for mutation in result["mutations"] if not mutation["killed"]
-          ]
-          if failed_checks or failed_mutations:
-              print(
-                  json.dumps(
-                      {
-                          "check_status": result["check_status"],
-                          "task_status": result["task_status"],
-                          "failed_checks": failed_checks,
-                          "failed_mutations": failed_mutations,
-                      },
-                      indent=2,
-                  )
-              )
-          assert result["check_status"] == "PASS"
-          assert result["task_status"] == "COMPLETED"
-          assert not failed_mutations
-          assert all(
-              check["check_status"] == "PASS"
-              for check in result["checks"]
-              if check["check_id"].startswith(
-                  ("source_quantifier_binding:", "compiled_receipt:")
-              )
-          )
-          PY
+          PYTHONPATH=src python -m nsrw.lean_receipt \
+            --request fixtures/evidence/lean-scoped-build-request-v1.json \
+            --source-root .. \
+            --dependency-dir ../lean-deps \
+            --output outputs/lean-compiled-receipt.json \
+            --manifest-template fixtures/m4-parametric-pilot-v3.json \
+            --live-manifest-output outputs/m4-parametric-pilot-v3-live.json \
+            --provenance-output outputs/lean-execution-provenance.json
+          PYTHONPATH=src python -m nsrw.m4_cli \
+            outputs/m4-parametric-pilot-v3-live.json \
+            --lean-root .. \
+            --evidence-root . \
+            --output outputs/m4-parametric-pilot-v3-live-receipt.json
       - name: Upload scoped Lean evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: scoped-lean-target-evidence
           path: |
-            lean-target-sha256.txt
-            outgoing-dilation-deps.txt
-            outgoing-cone-deps.txt
-            nominal-cone-deps.txt
-            lean-compiled-receipt.json
+            lean-deps/
+            nsrw/outputs/lean-compiled-receipt.json
+            nsrw/outputs/lean-execution-provenance.json
+            nsrw/outputs/m4-parametric-pilot-v3-live.json
+            nsrw/outputs/m4-parametric-pilot-v3-live-receipt.json
           if-no-files-found: error
           retention-days: 30

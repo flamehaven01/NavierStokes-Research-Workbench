@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
+import subprocess
 from math import exp
 from pathlib import Path
 
@@ -15,9 +17,74 @@ from nsrw.math_kernel.profile_closure import audit_lean_crosswalk
 DEFAULT_LEAN_ROOT = Path(os.environ.get("NSRW_LEAN_ROOT", "external/NavierStokesAndEuler"))
 
 
-def execute(lean_root: Path) -> dict[str, object]:
+def _unfinished_build(
+    lake: str | None,
+    lean: str | None,
+    command: list[str],
+    *,
+    attempted: bool,
+    error: str,
+) -> dict[str, object]:
+    return {
+        "check_status": "ERROR",
+        "claim_status": "UNVERIFIED",
+        "build_attempted": attempted,
+        "lake_executable": lake,
+        "lean_executable": lean,
+        "command": command,
+        "exit_code": None,
+        "stdout_sha256": None,
+        "stderr_sha256": None,
+        "error": error,
+    }
+
+
+def _execute_lean_build(lean_root: Path, timeout_seconds: int) -> dict[str, object]:
     lake = shutil.which("lake")
     lean = shutil.which("lean")
+    command = ["lake", "build", "+NavierStokes.OutgoingDilation"]
+    if not lake or not lean:
+        return _unfinished_build(
+            lake,
+            lean,
+            command,
+            attempted=False,
+            error="lake/lean executable not found on PATH",
+        )
+    try:
+        process = subprocess.run(
+            command,
+            cwd=lean_root,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=timeout_seconds,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return _unfinished_build(
+            lake,
+            lean,
+            command,
+            attempted=True,
+            error=f"{type(exc).__name__}: build did not complete",
+        )
+    passed = process.returncode == 0
+    return {
+        "check_status": "PASS" if passed else "FAIL",
+        "claim_status": "SUPPORTED" if passed else "UNVERIFIED",
+        "build_attempted": True,
+        "lake_executable": lake,
+        "lean_executable": lean,
+        "command": command,
+        "exit_code": process.returncode,
+        "stdout_sha256": hashlib.sha256(process.stdout.encode("utf-8")).hexdigest().upper(),
+        "stderr_sha256": hashlib.sha256(process.stderr.encode("utf-8")).hexdigest().upper(),
+        "error": None if passed else "scoped Lean target build returned non-zero",
+    }
+
+
+def execute(lean_root: Path, timeout_seconds: int = 900) -> dict[str, object]:
+    lean_build = _execute_lean_build(lean_root, timeout_seconds)
     crosswalk = audit_lean_crosswalk(lean_root)
     entries = crosswalk["entries"]
     static_status = "PASS" if all(entry["status"] == "PRESENT" for entry in entries) else "FAIL"
@@ -28,17 +95,9 @@ def execute(lean_root: Path) -> dict[str, object]:
         cutoff=2.0 * exp(14.0 / 5.0),
     )
     return {
-        "schema": "nsrw.m3-evidence-execution.v1",
+        "schema": "nsrw.m3-evidence-execution.v2",
         "stage": "M3",
-        "lean_build": {
-            "check_status": "PASS" if lake and lean else "ERROR",
-            "claim_status": "UNVERIFIED",
-            "build_attempted": True,
-            "lake_executable": lake,
-            "lean_executable": lean,
-            "commands": ["lake build", "lake env lean NavierStokes.lean"],
-            "error": None if lake and lean else "lake/lean executable not found on PATH",
-        },
+        "lean_build": lean_build,
         "theorem_dependency_surface": {
             "check_status": static_status,
             "claim_status": "SUPPORTED" if static_status == "PASS" else "UNVERIFIED",
@@ -57,7 +116,11 @@ def execute(lean_root: Path) -> dict[str, object]:
                 "NavierStokes/OutgoingDilation.lean:E_tail_factorization",
             ],
         },
-        "stage_status": "HELD_LEAN_TOOLCHAIN_AND_SOURCE_INSTANCE",
+        "stage_status": (
+            "CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY"
+            if lean_build["check_status"] == "PASS"
+            else "HELD_LEAN_BUILD_AND_SOURCE_INSTANCE"
+        ),
         "claim_status": "UNVERIFIED",
         "non_claims": [
             "No Lean build or compiled dependency graph is established when the toolchain is absent.",

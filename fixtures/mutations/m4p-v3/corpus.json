@@ -1,0 +1,118 @@
+{
+  "schema_id": "flamehaven.nsrw-m4p-mutation-corpus.v1",
+  "baseline_fixture": "fixtures/m4-parametric-pilot-v3.json",
+  "cases": [
+    {
+      "mutation_id": "swap_quantifier_order",
+      "full_manifest_expected_detector": "M4P-CONE-001:quantifier_custody",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "drop_required_assumption",
+      "full_manifest_expected_detector": "manifest_contract",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "finite_grid_to_symbolic",
+      "full_manifest_expected_detector": "M4P-SUPPORT-001:quantifier_custody",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "parametric_to_source_instance",
+      "full_manifest_expected_detector": "M4P-SUPPORT-001:quantifier_custody",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "malformed_source_hash",
+      "full_manifest_expected_detector": "manifest_contract",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "compiled_target_drift",
+      "full_manifest_expected_detector": "manifest_contract",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "negative_cutoff",
+      "full_manifest_expected_detector": "M4P-SUPPORT-001:support",
+      "direct_evaluator_expected_detector": "M4P-SUPPORT-001:support",
+      "direct_obligation_id": "M4P-SUPPORT-001",
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "negative_radial_bound",
+      "full_manifest_expected_detector": "M4P-SUPPORT-001:support",
+      "direct_evaluator_expected_detector": "M4P-SUPPORT-001:support",
+      "direct_obligation_id": "M4P-SUPPORT-001",
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "negative_minimum_margin",
+      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "direct_evaluator_expected_detector": "M4P-CONE-001:cone",
+      "direct_obligation_id": "M4P-CONE-001",
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "boolean_as_numeric",
+      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "direct_evaluator_expected_detector": "M4P-CONE-001:cone",
+      "direct_obligation_id": "M4P-CONE-001",
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "empty_moment_terms",
+      "full_manifest_expected_detector": "M4P-MOMENT-001:moment",
+      "direct_evaluator_expected_detector": "M4P-MOMENT-001:moment",
+      "direct_obligation_id": "M4P-MOMENT-001",
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "missing_live_olean",
+      "full_manifest_expected_detector": "live_artifact:+NavierStokes.OutgoingDilation",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": ["compiled_receipt:+NavierStokes.OutgoingDilation"]
+    },
+    {
+      "mutation_id": "dependency_value_order_drift",
+      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "direct_evaluator_expected_detector": "M4P-CONE-001:cone",
+      "direct_obligation_id": "M4P-CONE-001",
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    },
+    {
+      "mutation_id": "schema_runtime_divergence",
+      "full_manifest_expected_detector": "manifest_contract",
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
+      "allowed_secondary_detectors": []
+    }
+  ]
+}

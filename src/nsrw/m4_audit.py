@@ -23,7 +23,13 @@ SUPPORTED_SCHEMA_IDS = frozenset({SCHEMA_ID, SCHEMA_ID_V3})
 COMPILED_EVIDENCE_SCHEMA_ID = "flamehaven.nsrw-lean-compiled-evidence.v1"
 FAMILIES = frozenset({"SUPPORT", "CONE", "MOMENT", "FALSIFICATION"})
 EVIDENCE_CLASSES = frozenset(
-    {"FINITE_GRID", "EXACT_SYMBOLIC", "COMPILED_TARGET", "MANUFACTURED_FALSIFIER"}
+    {
+        "FINITE_GRID",
+        "EXACT_SYMBOLIC",
+        "COMPILED_TARGET",
+        "MANUFACTURED_FALSIFIER",
+        "MANUFACTURED_EXACT_CONTROL",
+    }
 )
 CLAIM_SCOPES = frozenset(
     {"SAMPLED_PARAMETRIC_DIAGNOSTIC", "SYMBOLIC_PARAMETRIC_IDENTITY", "SOURCE_INSTANCE"}
@@ -36,13 +42,23 @@ CONSTRUCTIBILITY = frozenset(
         "EXISTENTIAL_NONCOMPUTABLE_IN_CURRENT_SOURCE_INTERFACE",
     }
 )
-REQUIRED_MUTATIONS = (
+HISTORICAL_V2_MUTATIONS = (
     "swap_quantifier_order",
     "drop_required_assumption",
     "finite_grid_to_symbolic",
     "parametric_to_source_instance",
     "malformed_source_hash",
     "compiled_target_drift",
+)
+REQUIRED_MUTATIONS = HISTORICAL_V2_MUTATIONS + (
+    "negative_cutoff",
+    "negative_radial_bound",
+    "negative_minimum_margin",
+    "boolean_as_numeric",
+    "empty_moment_terms",
+    "missing_live_olean",
+    "dependency_value_order_drift",
+    "schema_runtime_divergence",
 )
 EXPECTED_MUTATION_DETECTORS = {
     "swap_quantifier_order": "M4P-CONE-001:quantifier_custody",
@@ -51,6 +67,14 @@ EXPECTED_MUTATION_DETECTORS = {
     "parametric_to_source_instance": "M4P-SUPPORT-001:quantifier_custody",
     "malformed_source_hash": "manifest_contract",
     "compiled_target_drift": "manifest_contract",
+    "negative_cutoff": "M4P-SUPPORT-001:support",
+    "negative_radial_bound": "M4P-SUPPORT-001:support",
+    "negative_minimum_margin": "M4P-CONE-001:cone",
+    "boolean_as_numeric": "M4P-CONE-001:cone",
+    "empty_moment_terms": "M4P-MOMENT-001:moment",
+    "missing_live_olean": "live_artifact:+NavierStokes.OutgoingDilation",
+    "dependency_value_order_drift": "M4P-CONE-001:cone",
+    "schema_runtime_divergence": "manifest_contract",
 }
 SOURCE_QUANTIFIER_PROJECTION = "NAMED_BINDERS_AND_DATA_EXISTENTIALS"
 
@@ -70,8 +94,38 @@ class Check(Serializable):
 @dataclass(frozen=True)
 class MutationResult(Serializable):
     mutation_id: str
-    killed: bool
+    killed: bool | None
     reasons: tuple[str, ...]
+    expected_detector: str
+    evidence_mode: str
+    full_manifest_check_status: str
+    direct_evaluator_check_status: str
+    allowed_secondary_detectors: tuple[str, ...]
+
+
+def _obligation_by_id(candidate: dict[str, Any], obligation_id: str) -> dict[str, Any]:
+    for obligation in candidate.get("obligations", []):
+        if isinstance(obligation, dict) and obligation.get("obligation_id") == obligation_id:
+            return obligation
+    raise KeyError(f"missing obligation id: {obligation_id}")
+
+
+def _mutation_corpus() -> dict[str, dict[str, Any]]:
+    from .strict_json import load_strict_json
+
+    path = Path(__file__).resolve().parents[2] / "fixtures" / "mutations" / "m4p-v3" / "corpus.json"
+    value, _ = load_strict_json(path)
+    if not isinstance(value, dict) or not isinstance(value.get("cases"), list):
+        raise ValueError("M4-P mutation corpus is malformed")
+    cases = value["cases"]
+    result = {
+        str(case.get("mutation_id")): case
+        for case in cases
+        if isinstance(case, dict) and isinstance(case.get("mutation_id"), str)
+    }
+    if tuple(result) != REQUIRED_MUTATIONS:
+        raise ValueError("M4-P mutation corpus does not exactly match the v3 bank")
+    return result
 
 def _is_sha256(value: object) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(
@@ -262,6 +316,120 @@ def _validate_obligation(
         errors.append(f"{prefix}.compiled_target has no source-binding record")
 
 
+def _validate_v3_closed_shapes(obligation: object, index: int, errors: list[str]) -> None:
+    if not isinstance(obligation, dict):
+        return
+    allowed_obligation = {
+        "obligation_id",
+        "family",
+        "source_quantifiers",
+        "artifact_quantifiers",
+        "assumptions",
+        "evidence_class",
+        "claimed_scope",
+        "constructibility",
+        "compiled_target",
+        "source_locator",
+        "evaluator",
+    }
+    unexpected = set(obligation) - allowed_obligation
+    if unexpected:
+        errors.append(f"obligations[{index}] has undocumented fields: {sorted(unexpected)}")
+    evaluator = obligation.get("evaluator")
+    if not isinstance(evaluator, dict):
+        return
+    family_fields = {
+        "SUPPORT": {"required_assumptions", "cutoff", "intervals"},
+        "CONE": {
+            "required_assumptions",
+            "threshold_dependencies",
+            "threshold_values",
+            "inequalities",
+        },
+        "MOMENT": {"required_assumptions", "identities"},
+        "FALSIFICATION": {"required_assumptions"},
+    }
+    allowed_evaluator = family_fields.get(str(obligation.get("family")), set())
+    unexpected_evaluator = set(evaluator) - allowed_evaluator
+    if unexpected_evaluator:
+        errors.append(
+            f"obligations[{index}].evaluator has undocumented fields: "
+            f"{sorted(unexpected_evaluator)}"
+        )
+
+
+def _validate_v3_header(manifest: dict[str, Any], errors: list[str]) -> None:
+    if manifest.get("compiled_evidence_mode") not in {"RECEIPT_REPLAY", "LIVE_ARTIFACT"}:
+        errors.append("v3 compiled_evidence_mode must be RECEIPT_REPLAY or LIVE_ARTIFACT")
+    if manifest.get("canonicalization_profile") != "NSRW-CANONICAL-JSON-1":
+        errors.append("v3 canonicalization_profile must be NSRW-CANONICAL-JSON-1")
+    if manifest.get("locator_evidence_class") not in {
+        None,
+        "TEXTUAL_PINNED_SOURCE_LOCATOR",
+    }:
+        errors.append("v3 locator_evidence_class is invalid")
+
+
+def _validate_v3_migration_fields(
+    manifest: dict[str, Any], binding: dict[str, Any], errors: list[str]
+) -> None:
+    replay = manifest.get("compiled_evidence_mode") == "RECEIPT_REPLAY"
+    migration_fields = (
+        binding.get("migration_receipt_path"),
+        binding.get("migration_receipt_sha256"),
+    )
+    if replay and not _valid_relative_path(migration_fields[0]):
+        errors.append("v3 replay migration receipt path is invalid")
+    if replay and not _is_sha256(migration_fields[1]):
+        errors.append("v3 replay migration receipt sha256 is invalid")
+    if not replay and any(value is not None for value in migration_fields):
+        errors.append("v3 live evidence must not carry replay migration fields")
+
+
+def _validate_v3_binding(
+    manifest: dict[str, Any], targets: dict[str, Any], errors: list[str]
+) -> None:
+    binding = manifest.get("source_binding")
+    if not isinstance(binding, dict):
+        return
+    if not _valid_relative_path(binding.get("build_request_path")):
+        errors.append("v3 source_binding.build_request_path is invalid")
+    digest_fields = ("input_bytes_sha256", "canonical_manifest_sha256")
+    errors.extend(
+        f"v3 source_binding.{field} is invalid"
+        for field in digest_fields
+        if not _is_sha256(binding.get(field))
+    )
+    _validate_v3_migration_fields(manifest, binding, errors)
+    for target, record in targets.items():
+        if isinstance(record, dict) and not _valid_relative_path(record.get("olean_path")):
+            errors.append(f"compiled target {target} olean path is invalid")
+
+
+def _validate_manifest_obligations(
+    manifest: dict[str, Any], targets: dict[str, Any], schema_id: object, errors: list[str]
+) -> bool:
+    obligations = manifest.get("obligations")
+    if not isinstance(obligations, list) or not obligations:
+        errors.append("obligations must be a non-empty list")
+        return False
+    seen: set[str] = set()
+    for index, obligation in enumerate(obligations):
+        _validate_obligation(index, obligation, targets, seen, errors)
+        if schema_id == SCHEMA_ID_V3:
+            _validate_v3_closed_shapes(obligation, index, errors)
+    if schema_id == SCHEMA_ID_V3:
+        for index, obligation in enumerate(obligations):
+            locator = obligation.get("source_locator") if isinstance(obligation, dict) else None
+            if isinstance(locator, dict) and locator.get(
+                "locator_evidence_class"
+            ) != "TEXTUAL_PINNED_SOURCE_LOCATOR":
+                errors.append(
+                    f"obligations[{index}].source_locator.locator_evidence_class is required for v3"
+                )
+    return True
+
+
 def validate_manifest(manifest: dict[str, Any]) -> list[str]:
     """Validate the portable P0 contract without claiming source freshness."""
 
@@ -270,35 +438,19 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
     if schema_id not in SUPPORTED_SCHEMA_IDS:
         errors.append(f"schema_id must be one of {sorted(SUPPORTED_SCHEMA_IDS)}")
     if schema_id == SCHEMA_ID_V3:
-        if manifest.get("compiled_evidence_mode") not in {"RECEIPT_REPLAY", "LIVE_ARTIFACT"}:
-            errors.append("v3 compiled_evidence_mode must be RECEIPT_REPLAY or LIVE_ARTIFACT")
-        if manifest.get("canonicalization_profile") != "NSRW-CANONICAL-JSON-1":
-            errors.append("v3 canonicalization_profile must be NSRW-CANONICAL-JSON-1")
-        if manifest.get("locator_evidence_class") not in {None, "TEXTUAL_PINNED_SOURCE_LOCATOR"}:
-            errors.append("v3 locator_evidence_class is invalid")
+        _validate_v3_header(manifest, errors)
     if manifest.get("stage") != "M4-P":
         errors.append("stage must be M4-P")
     targets = _validate_source_binding(manifest.get("source_binding"), errors)
-
-    obligations = manifest.get("obligations")
-    if not isinstance(obligations, list) or not obligations:
-        errors.append("obligations must be a non-empty list")
-        return errors
-    seen: set[str] = set()
-    for index, obligation in enumerate(obligations):
-        _validate_obligation(index, obligation, targets, seen, errors)
     if schema_id == SCHEMA_ID_V3:
-        for index, obligation in enumerate(obligations):
-            if isinstance(obligation, dict):
-                locator = obligation.get("source_locator")
-                if isinstance(locator, dict) and locator.get(
-                    "locator_evidence_class"
-                ) != "TEXTUAL_PINNED_SOURCE_LOCATOR":
-                    errors.append(
-                        f"obligations[{index}].source_locator.locator_evidence_class is required for v3"
-                    )
+        _validate_v3_binding(manifest, targets, errors)
+    if not _validate_manifest_obligations(manifest, targets, schema_id, errors):
+        return errors
     configured = manifest.get("required_mutations")
-    if configured != list(REQUIRED_MUTATIONS):
+    expected_mutations = (
+        REQUIRED_MUTATIONS if schema_id == SCHEMA_ID_V3 else HISTORICAL_V2_MUTATIONS
+    )
+    if configured != list(expected_mutations):
         errors.append("required_mutations must exactly match the M4-P mutation bank")
     return errors
 
@@ -366,6 +518,18 @@ def _support_interval_error(interval: object, cutoff: float, previous: float) ->
     return None, float(upper)
 
 
+def _support_name_error(interval: object, names: set[str]) -> str | None:
+    if not isinstance(interval, dict):
+        return "support interval is not an object"
+    name = interval.get("name")
+    if not isinstance(name, str) or not name:
+        return "support interval names must be non-empty"
+    if name in names:
+        return "support interval names must be unique"
+    names.add(name)
+    return None
+
+
 def _evaluate_support(evaluator: dict[str, Any]) -> Check:
     intervals = evaluator.get("intervals")
     cutoff = evaluator.get("cutoff")
@@ -376,11 +540,8 @@ def _evaluate_support(evaluator: dict[str, Any]) -> Check:
     previous = float("-inf")
     names: set[str] = set()
     for interval in intervals:
-        if not isinstance(interval, dict) or not isinstance(interval.get("name"), str) or not interval["name"]:
-            return Check("support", "FAIL", "support interval names must be non-empty")
-        if interval["name"] in names:
-            return Check("support", "FAIL", "support interval names must be unique")
-        names.add(interval["name"])
+        if name_error := _support_name_error(interval, names):
+            return Check("support", "FAIL", name_error)
         error, previous = _support_interval_error(interval, float(cutoff), previous)
         if error:
             return Check("support", "FAIL", error)
@@ -449,6 +610,47 @@ def _cone_margin(item: object) -> tuple[float | None, str | None]:
     return margin, None
 
 
+def _threshold_values_error(
+    graph: dict[str, object], threshold_values: object
+) -> str | None:
+    if threshold_values is None:
+        return None
+    if not isinstance(threshold_values, dict) or set(threshold_values) != set(graph):
+        return "threshold values must exactly match dependency nodes"
+    if any(not isinstance(value, str) for value in threshold_values.values()):
+        return "threshold values must use strict rational strings"
+    try:
+        parsed = {str(key): _fraction(value) for key, value in threshold_values.items()}
+    except (TypeError, ValueError, ZeroDivisionError):
+        return "threshold values must use strict rational strings"
+    if any(value <= 0 for value in parsed.values()):
+        return "threshold values must be positive"
+    for node, dependencies in graph.items():
+        if any(parsed[node] <= parsed[dependency] for dependency in dependencies):
+            return "threshold dependency value ordering failed"
+    return None
+
+
+def _cone_margins(inequalities: list[object]) -> tuple[list[float], str | None]:
+    margins: list[float] = []
+    labels: set[str] = set()
+    for item in inequalities:
+        if not isinstance(item, dict):
+            return margins, "cone inequality is malformed"
+        label = item.get("label")
+        if not isinstance(label, str) or not label:
+            return margins, "cone inequality labels must be non-empty"
+        if label in labels:
+            return margins, "cone inequality labels must be unique"
+        labels.add(label)
+        margin, error = _cone_margin(item)
+        if error:
+            return margins, error
+        assert margin is not None
+        margins.append(margin)
+    return margins, None
+
+
 def _evaluate_cone(evaluator: dict[str, Any]) -> Check:
     inequalities = evaluator.get("inequalities")
     graph = evaluator.get("threshold_dependencies", {})
@@ -456,35 +658,28 @@ def _evaluate_cone(evaluator: dict[str, Any]) -> Check:
         return Check("cone", "FAIL", "cone evaluator requires inequalities and a dependency graph")
     if graph_error := _dependency_graph_error(graph):
         return Check("cone", "FAIL", graph_error)
-    threshold_values = evaluator.get("threshold_values")
-    if threshold_values is not None:
-        if not isinstance(threshold_values, dict) or set(threshold_values) != set(graph):
-            return Check("cone", "FAIL", "threshold values must exactly match dependency nodes")
-        if any(not isinstance(value, str) for value in threshold_values.values()):
-            return Check("cone", "FAIL", "threshold values must use strict rational strings")
-        try:
-            parsed = {str(key): _fraction(value) for key, value in threshold_values.items()}
-        except (TypeError, ValueError, ZeroDivisionError):
-            return Check("cone", "FAIL", "threshold values must use strict rational strings")
-        if any(value <= 0 for value in parsed.values()):
-            return Check("cone", "FAIL", "threshold values must be positive")
-        for node, dependencies in graph.items():
-            if any(parsed[node] <= parsed[dependency] for dependency in dependencies):
-                return Check("cone", "FAIL", "threshold dependency value ordering failed")
-    margins: list[float] = []
-    labels: set[str] = set()
-    for item in inequalities:
-        if not isinstance(item, dict) or not isinstance(item.get("label"), str) or not item["label"]:
-            return Check("cone", "FAIL", "cone inequality labels must be non-empty")
-        if item["label"] in labels:
-            return Check("cone", "FAIL", "cone inequality labels must be unique")
-        labels.add(item["label"])
-        margin, error = _cone_margin(item)
-        if error:
-            return Check("cone", "FAIL", error)
-        assert margin is not None
-        margins.append(margin)
+    if threshold_error := _threshold_values_error(graph, evaluator.get("threshold_values")):
+        return Check("cone", "FAIL", threshold_error)
+    margins, margin_error = _cone_margins(inequalities)
+    if margin_error:
+        return Check("cone", "FAIL", margin_error)
     return Check("cone", "PASS", f"cone inequalities pass; minimum observed margin={min(margins):.12g}")
+
+
+def _moment_identity_error(identity: object, labels: set[str]) -> str | None:
+    if not isinstance(identity, dict):
+        return "moment identity is malformed"
+    label = identity.get("label")
+    if not isinstance(label, str) or not label or label in labels:
+        return "moment labels must be non-empty and unique"
+    labels.add(label)
+    terms = identity["terms"]
+    expected = _fraction(identity["expected"])
+    if not isinstance(terms, list) or not terms:
+        return "an exact moment or cancellation identity failed"
+    if sum((_fraction(term) for term in terms), Fraction()) != expected:
+        return "an exact moment or cancellation identity failed"
+    return None
 
 
 def _evaluate_moment(evaluator: dict[str, Any]) -> Check:
@@ -494,16 +689,8 @@ def _evaluate_moment(evaluator: dict[str, Any]) -> Check:
     try:
         labels: set[str] = set()
         for identity in identities:
-            if not isinstance(identity, dict):
-                return Check("moment", "FAIL", "moment identity is malformed")
-            label = identity.get("label")
-            if not isinstance(label, str) or not label or label in labels:
-                return Check("moment", "FAIL", "moment labels must be non-empty and unique")
-            labels.add(label)
-            terms = identity["terms"]
-            expected = _fraction(identity["expected"])
-            if not isinstance(terms, list) or not terms or sum((_fraction(term) for term in terms), Fraction()) != expected:
-                return Check("moment", "FAIL", "an exact moment or cancellation identity failed")
+            if error := _moment_identity_error(identity, labels):
+                return Check("moment", "FAIL", error)
     except (KeyError, TypeError, ValueError, ZeroDivisionError):
         return Check("moment", "FAIL", "moment identity is malformed")
     return Check("moment", "PASS", "all declared moment identities hold in exact rational arithmetic")
@@ -649,6 +836,41 @@ def _read_compiled_receipt(
     return receipt, None
 
 
+def _expected_compiled_fields(
+    binding: dict[str, Any], target: str, record: dict[str, Any]
+) -> dict[str, Any]:
+    expected_olean_path = (
+        record.get("olean_path")
+        if binding.get("build_request_path") is not None
+        else ".lake/build/lib/lean/"
+        + target.removeprefix("+").replace(".", "/")
+        + ".olean"
+    )
+    return {
+        "schema_id": COMPILED_EVIDENCE_SCHEMA_ID,
+        "formal_source_commit": binding.get("formal_source_commit"),
+        "toolchain": binding.get("formal_source_toolchain"),
+        "target": target,
+        "exit_code": 0,
+        "olean_path": expected_olean_path,
+        "olean_sha256": str(record.get("olean_sha256", "")).upper(),
+    }
+
+
+def _actual_compiled_fields(
+    receipt: dict[str, Any], target_evidence: dict[str, Any]
+) -> dict[str, Any]:
+    return {
+        "schema_id": receipt.get("schema_id"),
+        "formal_source_commit": receipt.get("formal_source_commit"),
+        "toolchain": receipt.get("toolchain"),
+        "target": target_evidence.get("target"),
+        "exit_code": target_evidence.get("exit_code"),
+        "olean_path": target_evidence.get("olean_path"),
+        "olean_sha256": str(target_evidence.get("olean_sha256", "")).upper(),
+    }
+
+
 def _compiled_receipt_matches(
     receipt: dict[str, Any],
     binding: dict[str, Any],
@@ -660,28 +882,24 @@ def _compiled_receipt_matches(
     if not isinstance(targets, dict) or not isinstance(targets.get(target), dict):
         return False
     target_evidence = targets[target]
-    expected = {
-        "schema_id": COMPILED_EVIDENCE_SCHEMA_ID,
-        "formal_source_commit": binding.get("formal_source_commit"),
-        "toolchain": binding.get("formal_source_toolchain"),
-        "target": target,
-        "exit_code": 0,
-        "olean_path": ".lake/build/lib/lean/"
-        + target.removeprefix("+").replace(".", "/")
-        + ".olean",
-        "olean_sha256": str(record.get("olean_sha256", "")).upper(),
-    }
-    actual = {
-        "schema_id": receipt.get("schema_id"),
-        "formal_source_commit": receipt.get("formal_source_commit"),
-        "toolchain": receipt.get("toolchain"),
-        "target": target_evidence.get("target"),
-        "exit_code": target_evidence.get("exit_code"),
-        "olean_path": target_evidence.get("olean_path"),
-        "olean_sha256": str(target_evidence.get("olean_sha256", "")).upper(),
-    }
+    expected = _expected_compiled_fields(binding, target, record)
+    actual = _actual_compiled_fields(receipt, target_evidence)
+    input_ok = True
+    if binding.get("build_request_path") is not None:
+        input_ok = all(
+            (
+                receipt.get("input_bytes_sha256") == binding.get("input_bytes_sha256"),
+                receipt.get("canonical_manifest_sha256")
+                == binding.get("canonical_manifest_sha256"),
+            )
+        )
     mode_ok = evidence_mode is None or receipt.get("compiled_evidence_mode") == evidence_mode
-    return mode_ok and actual == expected and _is_sha256(target_evidence.get("dependency_surface_sha256"))
+    return (
+        mode_ok
+        and input_ok
+        and actual == expected
+        and _is_sha256(target_evidence.get("dependency_surface_sha256"))
+    )
 
 
 def _compiled_target_evidence_check(
@@ -719,6 +937,101 @@ def verify_compiled_evidence(
         _compiled_target_evidence_check(target, record, binding, evidence_root, evidence_mode)
         for target, record in binding.get("compiled_targets", {}).items()
     ]
+
+
+def _load_bound_migration(
+    binding: dict[str, Any], evidence_root: Path
+) -> tuple[dict[str, Any] | None, str | None]:
+    path = _safe_evidence_path(
+        evidence_root, str(binding.get("migration_receipt_path", ""))
+    )
+    if path is None or not path.is_file():
+        return None, "replay migration receipt is unavailable"
+    actual_hash = hashlib.sha256(path.read_bytes()).hexdigest().upper()
+    if actual_hash != str(binding.get("migration_receipt_sha256", "")).upper():
+        return None, "replay migration receipt hash mismatch"
+    try:
+        from .strict_json import load_strict_json
+
+        migration, _ = load_strict_json(path)
+    except (OSError, ValueError):
+        return None, "replay migration receipt is invalid JSON"
+    if not isinstance(migration, dict):
+        return None, "replay migration receipt is not an object"
+    return migration, None
+
+
+def _migration_artifact_error(
+    migration: dict[str, Any], evidence_root: Path
+) -> str | None:
+    paths_and_hashes = (
+        ("source_receipt_path", "source_receipt_sha256"),
+        ("migrated_receipt_path", "migrated_receipt_sha256"),
+        ("replay_request_path", "replay_request_sha256"),
+    )
+    for path_field, hash_field in paths_and_hashes:
+        artifact = _safe_evidence_path(evidence_root, str(migration.get(path_field, "")))
+        if artifact is None or not artifact.is_file():
+            return f"migration-bound {path_field} is unavailable"
+        digest = hashlib.sha256(artifact.read_bytes()).hexdigest().upper()
+        if digest != str(migration.get(hash_field, "")).upper():
+            return f"migration-bound {hash_field} mismatch"
+    return None
+
+
+def verify_replay_migration(
+    manifest: dict[str, Any], evidence_root: Path | None
+) -> Check | None:
+    if manifest.get("compiled_evidence_mode") != "RECEIPT_REPLAY":
+        return None
+    check_id = "replay_receipt_migration"
+    if evidence_root is None:
+        return Check(check_id, "FAIL", "replay migration evidence root was not supplied")
+    binding = manifest.get("source_binding", {})
+    migration, load_error = _load_bound_migration(binding, evidence_root)
+    if load_error or migration is None:
+        return Check(check_id, "FAIL", load_error or "replay migration unavailable")
+    if artifact_error := _migration_artifact_error(migration, evidence_root):
+        return Check(check_id, "FAIL", artifact_error)
+    if (
+        migration.get("schema_id") != "flamehaven.nsrw-lean-receipt-migration.v1"
+        or migration.get("migration_ruleset") != "NSRW-LEAN-REPLAY-METADATA-1"
+        or migration.get("migration_class") != "MIGRATED_METADATA_ONLY"
+    ):
+        return Check(check_id, "FAIL", "replay migration authority fields are invalid")
+    return Check(
+        check_id,
+        "PASS",
+        "historical and migrated receipts are hash-bound by a metadata-only migration",
+    )
+
+
+def verify_live_artifacts(manifest: dict[str, Any], lean_root: Path | None) -> list[Check]:
+    """Verify bytes in the declared live Lean checkout; replay has no local-artifact claim."""
+
+    if manifest.get("compiled_evidence_mode") != "LIVE_ARTIFACT":
+        return []
+    binding = manifest.get("source_binding", {})
+    checks: list[Check] = []
+    for target, record in binding.get("compiled_targets", {}).items():
+        check_id = f"live_artifact:{target}"
+        if lean_root is None:
+            checks.append(Check(check_id, "FAIL", "live evidence requires a Lean source root"))
+            continue
+        path = _safe_evidence_path(lean_root, str(record.get("olean_path", "")))
+        actual_hash = hashlib.sha256(path.read_bytes()).hexdigest().upper() if path and path.is_file() else ""
+        expected_hash = str(record.get("olean_sha256", "")).upper()
+        matches = bool(actual_hash) and actual_hash == expected_hash
+        checks.append(
+            Check(
+                check_id,
+                "PASS" if matches else "FAIL",
+                "declared same-run artifact bytes match"
+                if matches
+                else "declared live .olean is missing or its bytes drifted",
+            )
+        )
+    return checks
 
 
 def _assessment(
@@ -760,12 +1073,16 @@ def _assessment(
         )
     else:
         checks.extend(verify_source_bindings(manifest, lean_root))
+    migration_check = verify_replay_migration(manifest, evidence_root)
+    if migration_check is not None:
+        checks.append(migration_check)
     checks.extend(verify_compiled_evidence(manifest, evidence_root))
+    checks.extend(verify_live_artifacts(manifest, lean_root))
     return checks
 
 
 def _swap_quantifiers(candidate: dict[str, Any]) -> None:
-    obligation = candidate["obligations"][1]
+    obligation = _obligation_by_id(candidate, "M4P-CONE-001")
     obligation["claimed_scope"] = "SYMBOLIC_PARAMETRIC_IDENTITY"
     obligation["artifact_quantifiers"] = [
         {"quantifier": item["quantifier"], "binder": item["binder"]}
@@ -774,23 +1091,76 @@ def _swap_quantifiers(candidate: dict[str, Any]) -> None:
 
 
 def _drop_assumption(candidate: dict[str, Any]) -> None:
-    candidate["obligations"][0]["assumptions"].pop()
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")["assumptions"].remove(
+        "positive_cutoff"
+    )
 
 
 def _inflate_finite_grid(candidate: dict[str, Any]) -> None:
-    candidate["obligations"][0]["claimed_scope"] = "SYMBOLIC_PARAMETRIC_IDENTITY"
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")[
+        "claimed_scope"
+    ] = "SYMBOLIC_PARAMETRIC_IDENTITY"
 
 
 def _promote_source_instance(candidate: dict[str, Any]) -> None:
-    candidate["obligations"][0]["claimed_scope"] = "SOURCE_INSTANCE"
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")["claimed_scope"] = "SOURCE_INSTANCE"
 
 
 def _malform_hash(candidate: dict[str, Any]) -> None:
-    candidate["obligations"][0]["source_locator"]["sha256"] = "STALE"
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")["source_locator"]["sha256"] = "STALE"
 
 
 def _drift_target(candidate: dict[str, Any]) -> None:
-    candidate["obligations"][0]["compiled_target"] = "+NavierStokes.NotThePinnedTarget"
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")[
+        "compiled_target"
+    ] = "+NavierStokes.NotThePinnedTarget"
+
+
+def _negative_cutoff(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")["evaluator"]["cutoff"] = -1
+
+
+def _negative_radial_bound(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")["evaluator"]["intervals"][0][
+        "lower"
+    ] = -1
+
+
+def _negative_minimum_margin(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-CONE-001")["evaluator"]["inequalities"][0][
+        "minimum_margin"
+    ] = -1
+
+
+def _boolean_as_numeric(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-CONE-001")["evaluator"]["inequalities"][0][
+        "lhs"
+    ] = True
+
+
+def _empty_moment_terms(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-MOMENT-001")["evaluator"]["identities"][0][
+        "terms"
+    ] = []
+
+
+def _missing_live_olean(candidate: dict[str, Any]) -> None:
+    candidate["source_binding"]["compiled_targets"]["+NavierStokes.OutgoingDilation"][
+        "olean_path"
+    ] = ".lake/build/nsrw-missing/OutgoingDilation.olean"
+
+
+def _dependency_value_order_drift(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-CONE-001")["evaluator"]["threshold_values"] = {
+        "R_inner": "5",
+        "R_outer": "2",
+    }
+
+
+def _schema_runtime_divergence(candidate: dict[str, Any]) -> None:
+    _obligation_by_id(candidate, "M4P-SUPPORT-001")["evaluator"][
+        "undocumented_runtime_hint"
+    ] = "must-fail-closed"
 
 
 MUTATIONS: tuple[tuple[str, Callable[[dict[str, Any]], None]], ...] = (
@@ -800,7 +1170,84 @@ MUTATIONS: tuple[tuple[str, Callable[[dict[str, Any]], None]], ...] = (
     ("parametric_to_source_instance", _promote_source_instance),
     ("malformed_source_hash", _malform_hash),
     ("compiled_target_drift", _drift_target),
+    ("negative_cutoff", _negative_cutoff),
+    ("negative_radial_bound", _negative_radial_bound),
+    ("negative_minimum_margin", _negative_minimum_margin),
+    ("boolean_as_numeric", _boolean_as_numeric),
+    ("empty_moment_terms", _empty_moment_terms),
+    ("missing_live_olean", _missing_live_olean),
+    ("dependency_value_order_drift", _dependency_value_order_drift),
+    ("schema_runtime_divergence", _schema_runtime_divergence),
 )
+
+
+def _direct_mutation_status(
+    baseline: dict[str, Any],
+    candidate: dict[str, Any],
+    case: dict[str, Any],
+) -> tuple[bool, str]:
+    expected = str(case.get("direct_evaluator_expected_detector", "NOT_APPLICABLE"))
+    obligation_id = case.get("direct_obligation_id")
+    if expected == "NOT_APPLICABLE" or not isinstance(obligation_id, str):
+        return True, "NOT_APPLICABLE"
+    baseline_check = evaluate_obligation(_obligation_by_id(baseline, obligation_id))
+    mutated_check = evaluate_obligation(_obligation_by_id(candidate, obligation_id))
+    actual = f"{obligation_id}:{mutated_check.check_id}"
+    passed = (
+        baseline_check.check_status == "PASS"
+        and mutated_check.check_status == "FAIL"
+        and actual == expected
+    )
+    return passed, "PASS" if passed else "FAIL"
+
+
+def _execute_mutation_case(
+    manifest: dict[str, Any],
+    mutation_id: str,
+    mutate: Callable[[dict[str, Any]], None],
+    case: dict[str, Any],
+    baseline_failures: set[str],
+    evidence_mode: str,
+    lean_root: Path | None,
+    evidence_root: Path | None,
+) -> MutationResult:
+    expected = str(
+        case.get("full_manifest_expected_detector", EXPECTED_MUTATION_DETECTORS[mutation_id])
+    )
+    applicable_modes = tuple(case.get("applicable_evidence_modes", (evidence_mode,)))
+    allowed_secondary = tuple(case.get("allowed_secondary_detectors", ()))
+    if evidence_mode not in applicable_modes:
+        return MutationResult(
+            mutation_id,
+            None,
+            (),
+            expected,
+            evidence_mode,
+            "NOT_APPLICABLE",
+            "NOT_APPLICABLE",
+            allowed_secondary,
+        )
+    candidate = copy.deepcopy(manifest)
+    mutate(candidate)
+    mutated_failures = {
+        check.check_id
+        for check in _assessment(candidate, lean_root, evidence_root)
+        if check.check_status == "FAIL"
+    }
+    new_failures = tuple(sorted(mutated_failures - baseline_failures))
+    admitted_failures = {expected, *allowed_secondary}
+    full_ok = expected in new_failures and set(new_failures).issubset(admitted_failures)
+    direct_ok, direct_status = _direct_mutation_status(manifest, candidate, case)
+    return MutationResult(
+        mutation_id,
+        full_ok and direct_ok,
+        new_failures,
+        expected,
+        evidence_mode,
+        "PASS" if full_ok else "FAIL",
+        direct_status,
+        allowed_secondary,
+    )
 
 
 def run_mutations(
@@ -814,17 +1261,27 @@ def run_mutations(
         if check.check_status == "FAIL"
     }
     results: list[MutationResult] = []
-    for mutation_id, mutate in MUTATIONS:
-        candidate = copy.deepcopy(manifest)
-        mutate(candidate)
-        mutated_failures = {
-            check.check_id
-            for check in _assessment(candidate, lean_root, evidence_root)
-            if check.check_status == "FAIL"
-        }
-        new_failures = tuple(sorted(mutated_failures - baseline_failures))
-        expected = EXPECTED_MUTATION_DETECTORS[mutation_id]
-        results.append(MutationResult(mutation_id, expected in new_failures, new_failures))
+    evidence_mode = str(manifest.get("compiled_evidence_mode", "HISTORICAL_V2"))
+    required = (
+        REQUIRED_MUTATIONS
+        if manifest.get("schema_id") == SCHEMA_ID_V3
+        else HISTORICAL_V2_MUTATIONS
+    )
+    corpus = _mutation_corpus() if manifest.get("schema_id") == SCHEMA_ID_V3 else {}
+    results.extend(
+        _execute_mutation_case(
+            manifest,
+            mutation_id,
+            mutate,
+            corpus.get(mutation_id, {}),
+            baseline_failures,
+            evidence_mode,
+            lean_root,
+            evidence_root,
+        )
+        for mutation_id, mutate in MUTATIONS
+        if mutation_id in required
+    )
     return results
 
 
@@ -907,12 +1364,15 @@ def run_m4_audit(
 ) -> dict[str, Any]:
     checks = _assessment(manifest, lean_root, evidence_root)
     mutations = run_mutations(manifest, lean_root, evidence_root)
-    mutations_ok = all(item.killed for item in mutations)
+    applicable_mutations = [item for item in mutations if item.killed is not None]
+    mutations_ok = all(item.killed for item in applicable_mutations)
     checks.append(
         Check(
             "required_mutations_killed",
             "PASS" if mutations_ok else "FAIL",
-            f"{sum(item.killed for item in mutations)}/{len(mutations)} required mutations killed",
+            f"{sum(item.killed is True for item in applicable_mutations)}/"
+            f"{len(applicable_mutations)} applicable required mutations killed; "
+            f"{len(mutations) - len(applicable_mutations)} not applicable",
         )
     )
     hard_fail = any(item.critical and item.check_status != "PASS" for item in checks)

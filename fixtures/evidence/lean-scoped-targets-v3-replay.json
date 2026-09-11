@@ -1,0 +1,44 @@
+{
+  "build_cleanliness_class": "HOSTED_CLEAN_CHECKOUT",
+  "canonical_manifest_sha256": "2424245AB1FC285272993CE44320F9A8D438C0842C6D6EB5A852C6C7F0B468EE",
+  "canonicalization_profile": "NSRW-CANONICAL-JSON-1",
+  "command_spec": {
+    "argv": [
+      "lake",
+      "build",
+      "<declared-target>"
+    ],
+    "timeout_seconds": 900,
+    "working_directory_class": "HOSTED_CLEAN_CHECKOUT"
+  },
+  "command_spec_id": "lake-scoped-target-build-v1",
+  "compiled_evidence_mode": "RECEIPT_REPLAY",
+  "dependency_surface_profile": "NSRW-DEPS-LF-SORTED-V1",
+  "formal_source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+  "input_bytes_sha256": "7AE55647C60C53978B386D7469709056DEBF4850D93DBD79596E3FD5A39EC61A",
+  "schema_id": "flamehaven.nsrw-lean-compiled-evidence.v1",
+  "targets": {
+    "+NavierStokes.NominalConeAssembly": {
+      "dependency_surface_sha256": "18E07D171CCB36A82AD186CEB3DFA90C806ED39294301B8D271FFE8C8869B376",
+      "exit_code": 0,
+      "olean_path": ".lake/build/lib/lean/NavierStokes/NominalConeAssembly.olean",
+      "olean_sha256": "1E7049B2B8A6BE3B802EE42C856A06DEE40F4331E14E161A495A8A9B6D515A3D",
+      "target": "+NavierStokes.NominalConeAssembly"
+    },
+    "+NavierStokes.OutgoingCone": {
+      "dependency_surface_sha256": "BFC91B6D90019F67293D17715BE431FD3361CA8A5A0CF82D8716380AEA099DBC",
+      "exit_code": 0,
+      "olean_path": ".lake/build/lib/lean/NavierStokes/OutgoingCone.olean",
+      "olean_sha256": "DA5C2E0CC8C2932346945022706F01379314A8134504BD8A766069C7C03E67A4",
+      "target": "+NavierStokes.OutgoingCone"
+    },
+    "+NavierStokes.OutgoingDilation": {
+      "dependency_surface_sha256": "BD74B99F3DD9DB2E1303619BCC9AFC218292BA9FCA1EF16858589CD64BB8A9CF",
+      "exit_code": 0,
+      "olean_path": ".lake/build/lib/lean/NavierStokes/OutgoingDilation.olean",
+      "olean_sha256": "E47FA3AFCA76ED83021C1F030E4FE3ACE43586CA03341EA4B2CAF42A913F344D",
+      "target": "+NavierStokes.OutgoingDilation"
+    }
+  },
+  "toolchain": "leanprover/lean4:v4.34.0-rc2"
+}

@@ -1,8 +1,8 @@
 # M4-P Parametric Stress / Cone / Moment Audit
 
-Status: `OPEN[HARDENED_PILOT_GATE_PASS]`
+Status: `OPEN[V3_LOCAL_REPLAY_PASS__HOSTED_LIVE_PENDING]`
 
-## North-star boundary
+## Research boundary
 
 M4-P tests symbolic and manufactured parametric obligations. It does not
 reconstruct the source-selected witness, prove the paper equivalent to Lean,
@@ -36,26 +36,27 @@ Lean source / target-specific compiled receipt
         Support / Cone / Moment evaluators
                     |
                     v
-             NSRW critical hard gate
+           required NSRW validation
                     |
                     v
-          SPAR secondary claim diagnostic
+       secondary structural consistency check
 ```
 
-The NSRW hard gate owns admission. SPAR's aggregate score and journal verdict
-are diagnostics and cannot override a critical failure or skipped source
-binding.
+The required NSRW checks determine admission. The optional structural check,
+implemented with the pinned SPAR package, cannot override a critical failure or
+skipped source binding.
 
 ## Phase definitions
 
 ### P0 -- contract
 
-The v2 manifest binds the formal-source commit and toolchain, target-specific
+The v3 manifest binds the formal-source commit and toolchain, target-specific
 structured build receipt, source paths and file hashes, normalized declaration
 signature hashes, ordered quantifier fragments, assumptions, evidence class,
-claim scope, and constructibility classification. The quantifier projection is
-explicitly limited to named binders and data existentials; this is source
-signature custody, not a general Lean parser or semantic-equivalence proof.
+claim scope, constructibility classification, evidence mode, build request, and
+migration record when applicable. The quantifier projection is explicitly
+limited to named binders and data existentials; it is a bounded source/check
+comparison, not a general Lean parser or semantic-equivalence proof.
 
 ### P1 -- support
 
@@ -76,7 +77,7 @@ Moment and normalization identities use exact rational arithmetic. No
 floating tolerance may turn a failed exact cancellation into PASS. The pilot
 result is `PASS[EXACT_FIXTURE_ARITHMETIC]`, not reproduction of a source moment.
 
-### P4 -- falsification
+### P4 -- negative controls
 
 The required mutations change quantifier order, remove an assumption, promote
 finite evidence, claim a noncomputable source instance, malform a source hash,
@@ -87,15 +88,16 @@ failures cannot kill a mutation.
 ## Current scoped result
 
 The P0 contract, P1 Support, P2 Cone, P3 Moment, and P4 mutation bank are
-implemented. GitHub Actions compiled all three pinned Lean targets. The v2
-verifier now opens a deterministic JSON receipt and cross-checks its SHA-256,
-formal-source commit, toolchain, target name, exit code, expected `.olean` path
-and hash, and dependency-surface hash. CI regenerates that receipt from a fresh
-build and compares it byte-for-byte with the admitted receipt.
+implemented locally. The v3 verifier separates historical replay from same-run
+live evidence, opens deterministic JSON records, and cross-checks source and
+target identities. Its 14-case staged mutation corpus uses full-manifest and
+direct-evaluator expectations; the live-only missing-artifact case is not
+applicable during replay.
 
-The hosted SPAR pin resolves consistently to `0.6.0`. A local editable
-installation may still report older distribution metadata; that remains an
-explicit diagnostic and cannot override the NSRW hard gate.
+The optional structural-check dependency is pinned by immutable revision. A
+local editable installation may report different distribution metadata; that
+remains diagnostic information and cannot override required validation.
 
-The pilot gate passes. M4-P remains an open research lane because these
-manufactured obligations do not establish the paper's full analytic estimates.
+The local replay pilot passes. Hosted same-run Lean validation remains required
+for release. M4-P remains an open research direction because these manufactured
+obligations do not establish the paper's full analytic estimates.

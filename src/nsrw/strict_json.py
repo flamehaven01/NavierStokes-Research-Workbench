@@ -17,6 +17,7 @@ MAX_DEPTH = 32
 MAX_OBJECT_MEMBERS = 1_024
 MAX_ARRAY_ITEMS = 4_096
 MAX_STRING_BYTES = 262_144
+MAX_TOTAL_NODES = 100_000
 CANONICALIZATION_PROFILE = "NSRW-CANONICAL-JSON-1"
 
 
@@ -39,23 +40,72 @@ def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return result
 
 
-def _check_limits(value: Any, depth: int = 0) -> None:
+def _string_state(character: str, in_string: bool, escaped: bool) -> tuple[bool, bool]:
+    if not in_string:
+        return character == '"', False
+    if escaped:
+        return True, False
+    if character == "\\":
+        return True, True
+    return character != '"', False
+
+
+def _nesting_delta(character: str) -> int:
+    if character in "[{":
+        return 1
+    if character in "]}":
+        return -1
+    return 0
+
+
+def _scan_nesting_depth(text: str) -> None:
+    depth = 0
+    in_string = False
+    escaped = False
+    for character in text:
+        if in_string:
+            in_string, escaped = _string_state(character, in_string, escaped)
+            continue
+        if character == '"':
+            in_string = True
+            continue
+        depth += _nesting_delta(character)
+        if depth > MAX_DEPTH:
+            raise StrictJSONError("JSON nesting depth limit exceeded")
+        if depth < 0:
+            raise StrictJSONError("JSON nesting is unbalanced")
+
+
+def _check_sequence(items: list[Any], depth: int, nodes: list[int]) -> None:
+    if len(items) > MAX_ARRAY_ITEMS:
+        raise StrictJSONError("JSON array item limit exceeded")
+    for item in items:
+        _check_limits(item, depth + 1, nodes)
+
+
+def _check_mapping(value: dict[Any, Any], depth: int, nodes: list[int]) -> None:
+    if len(value) > MAX_OBJECT_MEMBERS:
+        raise StrictJSONError("JSON object member limit exceeded")
+    for key, item in value.items():
+        _check_limits(key, depth + 1, nodes)
+        _check_limits(item, depth + 1, nodes)
+
+
+def _check_limits(value: Any, depth: int = 0, nodes: list[int] | None = None) -> None:
+    if nodes is None:
+        nodes = [0]
+    nodes[0] += 1
+    if nodes[0] > MAX_TOTAL_NODES:
+        raise StrictJSONError("JSON total node limit exceeded")
     if depth > MAX_DEPTH:
         raise StrictJSONError("JSON nesting depth limit exceeded")
     if isinstance(value, str):
         if len(value.encode("utf-8")) > MAX_STRING_BYTES:
             raise StrictJSONError("JSON string byte limit exceeded")
     elif isinstance(value, list):
-        if len(value) > MAX_ARRAY_ITEMS:
-            raise StrictJSONError("JSON array item limit exceeded")
-        for item in value:
-            _check_limits(item, depth + 1)
+        _check_sequence(value, depth, nodes)
     elif isinstance(value, dict):
-        if len(value) > MAX_OBJECT_MEMBERS:
-            raise StrictJSONError("JSON object member limit exceeded")
-        for key, item in value.items():
-            _check_limits(key, depth + 1)
-            _check_limits(item, depth + 1)
+        _check_mapping(value, depth, nodes)
 
 
 def parse_strict_json_bytes(raw: bytes) -> Any:
@@ -67,6 +117,7 @@ def parse_strict_json_bytes(raw: bytes) -> Any:
         text = raw.decode("utf-8")
     except UnicodeDecodeError as exc:
         raise StrictJSONError("JSON input must be UTF-8") from exc
+    _scan_nesting_depth(text)
     try:
         value = json.loads(
             text,

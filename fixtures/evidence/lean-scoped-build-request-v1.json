@@ -1,0 +1,22 @@
+{
+  "schema_id": "flamehaven.nsrw-lean-build-request.v1",
+  "formal_source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+  "toolchain": "leanprover/lean4:v4.34.0-rc2",
+  "targets": [
+    {
+      "target": "+NavierStokes.OutgoingDilation",
+      "module_source": "NavierStokes/OutgoingDilation.lean",
+      "dependency_output": "outgoing-dilation-deps.txt"
+    },
+    {
+      "target": "+NavierStokes.OutgoingCone",
+      "module_source": "NavierStokes/OutgoingCone.lean",
+      "dependency_output": "outgoing-cone-deps.txt"
+    },
+    {
+      "target": "+NavierStokes.NominalConeAssembly",
+      "module_source": "NavierStokes/NominalConeAssembly.lean",
+      "dependency_output": "nominal-cone-deps.txt"
+    }
+  ]
+}

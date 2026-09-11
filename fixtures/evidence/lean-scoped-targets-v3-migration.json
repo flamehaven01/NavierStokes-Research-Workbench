@@ -1,0 +1,25 @@
+{
+  "schema_id": "flamehaven.nsrw-lean-receipt-migration.v1",
+  "migration_ruleset": "NSRW-LEAN-REPLAY-METADATA-1",
+  "migration_class": "MIGRATED_METADATA_ONLY",
+  "source_receipt_path": "fixtures/evidence/lean-scoped-targets-v1.json",
+  "source_receipt_sha256": "DD8B248947CAD63804788EC3063E3ED4B8E587BD6D4BFD7029A580B74333E073",
+  "migrated_receipt_path": "fixtures/evidence/lean-scoped-targets-v3-replay.json",
+  "migrated_receipt_sha256": "5754A71C14D11585F030A90225552232E2A920A9B75915E3347D176973DDAEEE",
+  "replay_request_path": "fixtures/evidence/lean-scoped-build-request-v1.json",
+  "replay_request_sha256": "7AE55647C60C53978B386D7469709056DEBF4850D93DBD79596E3FD5A39EC61A",
+  "preserved_fields": [
+    "formal_source_commit",
+    "toolchain",
+    "targets.*.target",
+    "targets.*.exit_code",
+    "targets.*.olean_path",
+    "targets.*.olean_sha256",
+    "targets.*.dependency_surface_sha256"
+  ],
+  "non_claims": [
+    "The replay request was not captured as an input to the historical hosted build.",
+    "Added v3 metadata does not establish a new execution or current artifact freshness.",
+    "Only the preserved historical fields retain their original receipt authority."
+  ]
+}

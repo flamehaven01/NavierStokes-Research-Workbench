@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flamehaven.nsrw-lean-receipt-migration.v1",
+  "title": "NSRW historical Lean receipt migration",
+  "type": "object",
+  "required": [
+    "schema_id", "migration_ruleset", "migration_class",
+    "source_receipt_path", "source_receipt_sha256",
+    "migrated_receipt_path", "migrated_receipt_sha256",
+    "replay_request_path", "replay_request_sha256", "preserved_fields",
+    "non_claims"
+  ],
+  "properties": {
+    "schema_id": {"const": "flamehaven.nsrw-lean-receipt-migration.v1"},
+    "migration_ruleset": {"const": "NSRW-LEAN-REPLAY-METADATA-1"},
+    "migration_class": {"const": "MIGRATED_METADATA_ONLY"},
+    "source_receipt_path": {"type": "string", "minLength": 1},
+    "source_receipt_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "migrated_receipt_path": {"type": "string", "minLength": 1},
+    "migrated_receipt_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "replay_request_path": {"type": "string", "minLength": 1},
+    "replay_request_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+    "preserved_fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "non_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false
+}

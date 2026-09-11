@@ -10,6 +10,12 @@ Target release: `v0.2.1`
 
 Scope: verifier integrity hardening only. This plan does not widen any mathematical claim, does not promote M4-S, and does not establish paper--Lean semantic equivalence.
 
+Successor boundary: commit `5434400e9f91ac0892bdca257e7c90e50b32eb35`
+preserves the v0.2.1 implementation checkpoint. Remaining hosted closure and
+the audit-alignment defects are executed under the v0.2.2 addendum in
+`docs/V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md`. This parent
+contract remains authoritative for its P0--P5 requirements.
+
 ## 0. Threat Model and Trust Anchors
 
 `v0.2.1` distinguishes four different properties that must not be collapsed into one another:
