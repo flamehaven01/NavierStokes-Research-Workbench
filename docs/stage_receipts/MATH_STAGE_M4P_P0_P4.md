@@ -36,14 +36,15 @@ designed. It is not evidence that the paper's analytic obligation is true.
 
 ## Verification
 
-- `PASS[FOCUSED]`: 31 M4 tests passed.
-- `PASS[FULL]`: 182 tests passed.
-- `PASS[COVERAGE]`: 94.27%, above the 90% gate.
+- `PASS[FOCUSED]`: 32 M4 tests passed.
+- `PASS[FULL]`: 183 tests passed.
+- `PASS[COVERAGE]`: 94.28%, above the 90% gate.
 - `PASS[RUFF]`: `python -m ruff check .`.
 - `PASS[COMPILE]`: `python -m compileall -q src tests`.
 - `PASS[REPLAY]`: two source-bound M4 receipts were byte-identical.
 - `PASS[MUTATIONS]`: 6/6 expected detectors appeared only in the mutation delta.
-- `PASS[SOURCE_BYTES]`: pinned commit and four obligation file hashes matched.
+- `PASS[SOURCE_BYTES]`: pinned commit and four LF-canonicalized obligation file
+  hashes matched; a dedicated regression test proves LF/CRLF portability.
 - `PASS[SOURCE_SIGNATURES]`: 4/4 normalized declaration signatures and ordered
   named-binder/data-existential fragments matched the pinned Lean source.
 - `PASS[COMPILED_RECEIPTS]`: 3/3 targets matched the structured receipt across
@@ -83,19 +84,19 @@ does not close paper--Lean semantic equivalence or the M4 analytic lane.
 
 ```text
 m4_audit.py
-  3B09D54F4DCF7136F2B2C7833619DDB53720FFAFE2BFDF44D7D1E3FAEC73AF9B
+  DB8F217AAD22DEC5C829B91CCCF4F44B8EE98E802D422807040D50E448B11309
 m4_cli.py
   6A0AF6F5036FFE9E1C3CCD2155B8A05FB680FC2A601D8C40A6AACA473CE3FE24
 m4-obligation-manifest-v2.schema.json
-  48440F1AD1F8B35B04A30A714CA855A884B7A010ED89EB199CB6312A5266E3FF
+  6F166F4433EDCE39B657C3EB3B17C335E0E9456A9B3C8B2821979E28E742E6AF
 m4-parametric-pilot-v2.json
-  3B0B74F9DDC86C79B36B4E58EC8EEAAAE9F1BE1124D2772668B129127CA763D9
+  ED72640FB91F5AB644BBDB4D8575F5ACF3F7B71AC36AA584E9D0DF1CED4C1CD4
 lean-scoped-targets-v1.json
   DD8B248947CAD63804788EC3063E3ED4B8E587BD6D4BFD7029A580B74333E073
 m4-parametric-pilot-v2-a.json
-  C2771F39BF19A7362685359502B84EEF477BDDA3208012FF63A8E5E892718CBE
-m4p-hardening-slop-report.json
-  76C4B0C4584BC2E9A540B1C01942BC322683EAB87A1694B41B7379083AF9E1A9
+  F6F4198AFA9F89ADD776FE0152123C58ADA2AB8A5ACB3F08B89B26B2A325229F
+m4p-hardening-slop-report-v2.json
+  D830D30CDE8AEC6130F4FC49402B3B9E8A5633CD96CB683B3A2571C1497CFFF2
 ```
 
 ## Claim boundary

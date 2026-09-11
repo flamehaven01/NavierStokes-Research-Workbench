@@ -10,6 +10,7 @@ import pytest
 import nsrw.m4_audit as m4_audit
 from nsrw.m4_audit import (
     REQUIRED_MUTATIONS,
+    _canonical_source_sha256,
     _normalized_declaration_signature,
     check_quantifier_custody,
     evaluate_obligation,
@@ -216,7 +217,7 @@ def _make_lean_root(tmp_path: Path, data: dict) -> Path:
         )
     for item in data["obligations"]:
         path = lean_root / item["source_locator"]["relative_path"]
-        item["source_locator"]["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        item["source_locator"]["sha256"] = _canonical_source_sha256(path)
         signature = _normalized_declaration_signature(
             path.read_text(encoding="utf-8"), item["source_locator"]["declaration"]
         )
@@ -235,6 +236,14 @@ def test_source_binding_verification(monkeypatch: pytest.MonkeyPatch, tmp_path: 
     assert all(item.check_status == "PASS" for item in verify_source_bindings(data, lean_root))
     data["obligations"][0]["source_locator"]["sha256"] = "0" * 64
     assert any(item.check_status == "FAIL" for item in verify_source_bindings(data, lean_root))
+
+
+def test_source_hash_is_portable_across_lf_and_crlf(tmp_path: Path):
+    lf = tmp_path / "lf.lean"
+    crlf = tmp_path / "crlf.lean"
+    lf.write_bytes(b"theorem portable : True := by\n  trivial\n")
+    crlf.write_bytes(b"theorem portable : True := by\r\n  trivial\r\n")
+    assert _canonical_source_sha256(lf) == _canonical_source_sha256(crlf)
 
 
 def test_source_quantifier_binding_rejects_signature_and_fragment_drift(

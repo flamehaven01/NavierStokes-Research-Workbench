@@ -77,6 +77,13 @@ def _is_sha256(value: object) -> bool:
     )
 
 
+def _canonical_source_sha256(path: Path) -> str:
+    """Hash source bytes after the sole portable transform CRLF -> LF."""
+
+    canonical_bytes = path.read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.sha256(canonical_bytes).hexdigest().upper()
+
+
 def _quantifier_signature(items: object) -> tuple[tuple[str, str], ...] | None:
     if not isinstance(items, list) or not items:
         return None
@@ -473,7 +480,7 @@ def _source_fragments_are_ordered(signature: str, obligation: dict[str, Any]) ->
 def _verify_source_obligation(obligation: dict[str, Any], lean_root: Path) -> list[Check]:
     locator = obligation.get("source_locator", {})
     path = lean_root / str(locator.get("relative_path", ""))
-    actual = hashlib.sha256(path.read_bytes()).hexdigest().upper() if path.is_file() else ""
+    actual = _canonical_source_sha256(path) if path.is_file() else ""
     expected = str(locator.get("sha256", "")).upper()
     declaration = str(locator.get("declaration", ""))
     text = path.read_text(encoding="utf-8") if path.is_file() else ""
@@ -483,7 +490,7 @@ def _verify_source_obligation(obligation: dict[str, Any], lean_root: Path) -> li
         f"source_locator:{obligation_id}",
         "PASS" if locator_ok else "FAIL",
         (
-            "source bytes and declaration match"
+            "LF-canonicalized source bytes and declaration match"
             if locator_ok
             else "source locator, hash, or declaration mismatch"
         ),

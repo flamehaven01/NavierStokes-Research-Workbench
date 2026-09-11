@@ -174,7 +174,47 @@ jobs:
           )
           PY
           cmp lean-compiled-receipt.json nsrw/fixtures/evidence/lean-scoped-targets-v1.json
-          PYTHONPATH=nsrw/src python -c "from pathlib import Path; from nsrw.m4_audit import load_manifest,run_m4_audit; m=load_manifest(Path('nsrw/fixtures/m4-parametric-pilot-v2.json')); r=run_m4_audit(m,lean_root=Path('.'),evidence_root=Path('nsrw')); assert r['check_status']=='PASS'; assert r['task_status']=='COMPLETED'; assert all(x['killed'] for x in r['mutations']); assert all(x['check_status']=='PASS' for x in r['checks'] if x['check_id'].startswith(('source_quantifier_binding:','compiled_receipt:')))"
+          PYTHONPATH=nsrw/src python - <<'PY'
+          import json
+          from pathlib import Path
+
+          from nsrw.m4_audit import load_manifest, run_m4_audit
+
+          manifest = load_manifest(Path("nsrw/fixtures/m4-parametric-pilot-v2.json"))
+          result = run_m4_audit(
+              manifest,
+              lean_root=Path("."),
+              evidence_root=Path("nsrw"),
+          )
+          failed_checks = [
+              check for check in result["checks"] if check["check_status"] != "PASS"
+          ]
+          failed_mutations = [
+              mutation for mutation in result["mutations"] if not mutation["killed"]
+          ]
+          if failed_checks or failed_mutations:
+              print(
+                  json.dumps(
+                      {
+                          "check_status": result["check_status"],
+                          "task_status": result["task_status"],
+                          "failed_checks": failed_checks,
+                          "failed_mutations": failed_mutations,
+                      },
+                      indent=2,
+                  )
+              )
+          assert result["check_status"] == "PASS"
+          assert result["task_status"] == "COMPLETED"
+          assert not failed_mutations
+          assert all(
+              check["check_status"] == "PASS"
+              for check in result["checks"]
+              if check["check_id"].startswith(
+                  ("source_quantifier_binding:", "compiled_receipt:")
+              )
+          )
+          PY
       - name: Upload scoped Lean evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

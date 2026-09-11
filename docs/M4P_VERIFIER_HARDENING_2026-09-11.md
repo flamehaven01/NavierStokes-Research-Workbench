@@ -29,6 +29,8 @@ defects were in how the Python gate described and consumed that evidence.
 - Bound every obligation to the normalized source declaration signature hash
   and ordered source fragments under
   `NAMED_BINDERS_AND_DATA_EXISTENTIALS`.
+- Canonicalized source-file hash input from CRLF to LF so the same pinned Git
+  source has one locator identity on Windows and Linux.
 - Reclassified P1--P3 as manufactured or sampled evaluator controls rather
   than source-theorem reproductions.
 - Added a deterministic structured Lean build receipt and required every
@@ -62,6 +64,15 @@ whole normalized declaration signature and verifies an ordered projection of
 named binders and data existentials. Anonymous proof arguments and full
 semantic equivalence remain outside this check.
 
+Source-locator `sha256` values are hashes of source bytes after the single
+portable transform CRLF to LF. This preserves every non-line-ending byte while
+avoiding checkout-policy drift between Windows and Linux.
+
 The local editable SPAR environment still reports source `0.6.0` with
 distribution metadata `0.1.4`. The pinned hosted installation is the admitted
 SPAR identity; local drift remains an explicit non-authoritative diagnostic.
+
+The initial hosted hardening run exposed the platform-bound source hash and
+failed closed after all Python/custody jobs passed. The LF-canonicalization
+patch was then validated against both a Windows CRLF checkout and raw LF Git
+blobs before the replacement hosted run.

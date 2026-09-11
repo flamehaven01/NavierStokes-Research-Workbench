@@ -26,6 +26,8 @@ artifacts. Research claims retain their separate evidence statuses.
 - M3 engineering status is separated from the noncomputable selected-source-instance lane.
 - Local archive paths were replaced by portable relative paths and environment configuration.
 - Generated outputs are excluded from version control; bounded stage receipts remain in docs.
+- M4 source-locator hashes now canonicalize CRLF to LF, eliminating checkout
+  platform drift without weakening non-line-ending byte custody.
 
 ### Security
 

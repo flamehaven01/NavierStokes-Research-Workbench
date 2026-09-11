@@ -60,7 +60,7 @@
       "source_locator": {
         "relative_path": "NavierStokes/OutgoingDilation.lean",
         "declaration": "theorem preserves_specification",
-        "sha256": "BE46401810940D1021C2F2CCF0CE00BDFFEF82D413F2146742564D15C5516438",
+        "sha256": "D45C1981A39DF2B771065661250E3CA0EF08E352B53E5667976C6BFF71B9A809",
         "signature_sha256": "C3440114BC3476600A48CB73B61CA5743BFFDE904864CF100F32F645234D0C5E",
         "quantifier_projection": "NAMED_BINDERS_AND_DATA_EXISTENTIALS"
       },
@@ -101,7 +101,7 @@
       "source_locator": {
         "relative_path": "NavierStokes/OutgoingCone.lean",
         "declaration": "theorem exists_ordered_clean_cone",
-        "sha256": "71D7B501D85EEBDAE90CA938713314B9A53AE360F3B71CDEDD602D842189D169",
+        "sha256": "615B435A0983F522137F82501EA105773C38D43287433FA33C5DE951692C4CE3",
         "signature_sha256": "6389A760A487F84F4BED619360DA65C8E534E7209690A4585DA72D664ABA8CE3",
         "quantifier_projection": "NAMED_BINDERS_AND_DATA_EXISTENTIALS"
       },
@@ -130,7 +130,7 @@
       "source_locator": {
         "relative_path": "NavierStokes/NominalConeAssembly.lean",
         "declaration": "theorem exists_certificate",
-        "sha256": "8A438CF200978AFA5338B1BB43F746781640E7E6F4726BBAD6DBB6994B455390",
+        "sha256": "AD0F8947723416C950C1E3CBB82BAC8C83B03EF25FA5ABA495A3E29508B14CB5",
         "signature_sha256": "AD4E902CD4F8B0CF003DD24A3C83215FED649CA37ED634FD44D50EFB8B1A758E",
         "quantifier_projection": "NAMED_BINDERS_AND_DATA_EXISTENTIALS"
       },
@@ -165,7 +165,7 @@
       "source_locator": {
         "relative_path": "NavierStokes/OutgoingCone.lean",
         "declaration": "theorem exists_ordered_profile_cone",
-        "sha256": "71D7B501D85EEBDAE90CA938713314B9A53AE360F3B71CDEDD602D842189D169",
+        "sha256": "615B435A0983F522137F82501EA105773C38D43287433FA33C5DE951692C4CE3",
         "signature_sha256": "A3A8D92DFEF7D39CEA188B8D93B4C30E0F7FA05D0EDE9E8C9CEE2A782332D7A5",
         "quantifier_projection": "NAMED_BINDERS_AND_DATA_EXISTENTIALS"
       },

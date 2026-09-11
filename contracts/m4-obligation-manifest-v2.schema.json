@@ -84,7 +84,11 @@
             "properties": {
               "relative_path": {"type": "string", "minLength": 1},
               "declaration": {"type": "string", "minLength": 1},
-              "sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9A-Fa-f]{64}$",
+                "description": "SHA-256 of source bytes after CRLF-to-LF canonicalization"
+              },
               "signature_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
               "quantifier_projection": {"const": "NAMED_BINDERS_AND_DATA_EXISTENTIALS"}
             },
