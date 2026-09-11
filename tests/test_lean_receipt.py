@@ -62,6 +62,14 @@ def test_live_target_build_uses_declared_root_and_timeout(monkeypatch, tmp_path:
 def test_execute_build_request_discovers_artifact_and_canonicalizes_deps(
     monkeypatch, tmp_path: Path
 ) -> None:
+    for name in (
+        "GITHUB_ACTIONS",
+        "GITHUB_WORKFLOW",
+        "GITHUB_RUN_ID",
+        "GITHUB_RUN_ATTEMPT",
+        "RUNNER_OS",
+    ):
+        monkeypatch.delenv(name, raising=False)
     source_root = tmp_path / "lean"
     source = source_root / "Example" / "Target.lean"
     source.parent.mkdir(parents=True)
