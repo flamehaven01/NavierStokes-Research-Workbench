@@ -6,6 +6,8 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-11
+
 ### Added
 
 - Public MIT-licensed repository foundation.
@@ -38,3 +40,6 @@ artifacts. Research claims retain their separate evidence statuses.
 ### Added
 
 - Initial evidence-bound Navier--Stokes research workbench.
+
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.2.0

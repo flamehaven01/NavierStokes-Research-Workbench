@@ -246,6 +246,7 @@ witnesses, parameters, or evidence remain explicitly unknown or held.
 - [M4-P design](docs/M4_PARAMETRIC_AUDIT_DESIGN.md)
 - [M4-P verifier hardening](docs/M4P_VERIFIER_HARDENING_2026-09-11.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
+- [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)
 
 ## Upstream references
