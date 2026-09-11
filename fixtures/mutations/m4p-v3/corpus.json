@@ -1,118 +1,190 @@
 {
-  "schema_id": "flamehaven.nsrw-m4p-mutation-corpus.v1",
-  "baseline_fixture": "fixtures/m4-parametric-pilot-v3.json",
+  "baseline_fixture": "fixtures/mutations/m4p-v3/baseline.json",
+  "baseline_sha256": "A6854830FD2353499ABA95260D74D539513CFBB7B3E291E02B02E873FABC4A6B",
   "cases": [
     {
-      "mutation_id": "swap_quantifier_order",
-      "full_manifest_expected_detector": "M4P-CONE-001:quantifier_custody",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "NOT_APPLICABLE",
       "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
-    },
-    {
-      "mutation_id": "drop_required_assumption",
+      "fixture_path": "fixtures/mutations/m4p-v3/swap-quantifier-order.json",
+      "fixture_sha256": "F557C60D9FD1191BF4879E1AC4ACFC747CD3118A29A724986B259A5D3647DF17",
       "full_manifest_expected_detector": "manifest_contract",
-      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
-      "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "mutation_id": "swap_quantifier_order"
     },
     {
-      "mutation_id": "finite_grid_to_symbolic",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "fixture_path": "fixtures/mutations/m4p-v3/drop-required-assumption.json",
+      "fixture_sha256": "C0881E4693E3AB9302B3CF6876DA9DC6B7EE415964344E6802290054949F0873",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "drop_required_assumption"
+    },
+    {
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "fixture_path": "fixtures/mutations/m4p-v3/finite-grid-to-symbolic.json",
+      "fixture_sha256": "148840FCD8F611719B1E1F10799A1D3E9958793A5E372E4950424DC816240416",
       "full_manifest_expected_detector": "M4P-SUPPORT-001:quantifier_custody",
-      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
-      "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "mutation_id": "finite_grid_to_symbolic"
     },
     {
-      "mutation_id": "parametric_to_source_instance",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "fixture_path": "fixtures/mutations/m4p-v3/parametric-to-source-instance.json",
+      "fixture_sha256": "7990C87DE2EEB2B8CE1BED0AB0DC92EF831FFC316159C8D7A17E6D467BE8C1B7",
       "full_manifest_expected_detector": "M4P-SUPPORT-001:quantifier_custody",
-      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
-      "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "mutation_id": "parametric_to_source_instance"
     },
     {
-      "mutation_id": "malformed_source_hash",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "fixture_path": "fixtures/mutations/m4p-v3/malformed-source-hash.json",
+      "fixture_sha256": "D5451E5730EEDEDEB5C40B2EB953C8CA0D04E85B95DA8AC597882DB74E4E0369",
       "full_manifest_expected_detector": "manifest_contract",
-      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
-      "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "mutation_id": "malformed_source_hash"
     },
     {
-      "mutation_id": "compiled_target_drift",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
+      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
+      "direct_obligation_id": null,
+      "fixture_path": "fixtures/mutations/m4p-v3/compiled-target-drift.json",
+      "fixture_sha256": "CDA0E81F731C2903A9FDCD49B97FB1ADE1D919AF0DC14C39718876CE15908A01",
       "full_manifest_expected_detector": "manifest_contract",
-      "direct_evaluator_expected_detector": "NOT_APPLICABLE",
-      "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "mutation_id": "compiled_target_drift"
     },
     {
-      "mutation_id": "negative_cutoff",
-      "full_manifest_expected_detector": "M4P-SUPPORT-001:support",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "M4P-SUPPORT-001:support",
       "direct_obligation_id": "M4P-SUPPORT-001",
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/negative-cutoff.json",
+      "fixture_sha256": "9FE57591B7489F714BA1AB1AD2C0B80EE31FF3CE79D43A6DDA246C5BD9624687",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "negative_cutoff"
     },
     {
-      "mutation_id": "negative_radial_bound",
-      "full_manifest_expected_detector": "M4P-SUPPORT-001:support",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "M4P-SUPPORT-001:support",
       "direct_obligation_id": "M4P-SUPPORT-001",
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/negative-radial-bound.json",
+      "fixture_sha256": "1EE1B035CA0F687247A566B38B4ECD51199249658DC7BC17FE1F079F27F17E03",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "negative_radial_bound"
     },
     {
-      "mutation_id": "negative_minimum_margin",
-      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "M4P-CONE-001:cone",
       "direct_obligation_id": "M4P-CONE-001",
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/negative-minimum-margin.json",
+      "fixture_sha256": "089F47E2E26828F90E820A932BC5524779ED61B15F45F9065E6AD56EB2FC6BBA",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "negative_minimum_margin"
     },
     {
-      "mutation_id": "boolean_as_numeric",
-      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "M4P-CONE-001:cone",
       "direct_obligation_id": "M4P-CONE-001",
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/boolean-as-numeric.json",
+      "fixture_sha256": "3BE1B4CF39E78E1248281BC12DA257EC7B995440DAF11652848299F92BD5CC65",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "boolean_as_numeric"
     },
     {
-      "mutation_id": "empty_moment_terms",
-      "full_manifest_expected_detector": "M4P-MOMENT-001:moment",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "M4P-MOMENT-001:moment",
       "direct_obligation_id": "M4P-MOMENT-001",
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/empty-moment-terms.json",
+      "fixture_sha256": "0F067A2436388932815D3E342E817F1875218A75A6835A450209CACF6068A1E2",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "empty_moment_terms"
     },
     {
-      "mutation_id": "missing_live_olean",
-      "full_manifest_expected_detector": "live_artifact:+NavierStokes.OutgoingDilation",
+      "allowed_secondary_detectors": [
+        "compiled_receipt:+NavierStokes.OutgoingDilation"
+      ],
+      "applicable_evidence_modes": [
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "NOT_APPLICABLE",
       "direct_obligation_id": null,
-      "applicable_evidence_modes": ["LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": ["compiled_receipt:+NavierStokes.OutgoingDilation"]
+      "fixture_path": "fixtures/mutations/m4p-v3/missing-live-olean.json",
+      "fixture_sha256": "07C3371A604A1C2BF06F89C208B9B2C103B709AEDCB4429500FF979203C14142",
+      "full_manifest_expected_detector": "live_artifact:+NavierStokes.OutgoingDilation",
+      "mutation_id": "missing_live_olean"
     },
     {
-      "mutation_id": "dependency_value_order_drift",
-      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "M4P-CONE-001:cone",
       "direct_obligation_id": "M4P-CONE-001",
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/dependency-value-order-drift.json",
+      "fixture_sha256": "68E83FE40973362DA7B78DAF2105BC3F395C80F3150E9E919473EDD6C02EEE42",
+      "full_manifest_expected_detector": "M4P-CONE-001:cone",
+      "mutation_id": "dependency_value_order_drift"
     },
     {
-      "mutation_id": "schema_runtime_divergence",
-      "full_manifest_expected_detector": "manifest_contract",
+      "allowed_secondary_detectors": [],
+      "applicable_evidence_modes": [
+        "RECEIPT_REPLAY",
+        "LIVE_ARTIFACT"
+      ],
       "direct_evaluator_expected_detector": "NOT_APPLICABLE",
       "direct_obligation_id": null,
-      "applicable_evidence_modes": ["RECEIPT_REPLAY", "LIVE_ARTIFACT"],
-      "allowed_secondary_detectors": []
+      "fixture_path": "fixtures/mutations/m4p-v3/schema-runtime-divergence.json",
+      "fixture_sha256": "0475FE56E3F79966FDE2393A03BBE112BE77FF8700AEF4BE2F64FDFFE1EC41A5",
+      "full_manifest_expected_detector": "manifest_contract",
+      "mutation_id": "schema_runtime_divergence"
     }
-  ]
+  ],
+  "schema_id": "flamehaven.nsrw-m4p-mutation-corpus.v1"
 }

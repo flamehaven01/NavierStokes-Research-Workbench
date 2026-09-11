@@ -14,7 +14,13 @@ def test_compiled_receipt_record_and_atomic_publication(tmp_path: Path) -> None:
     deps = tmp_path / "deps.txt"
     olean.write_bytes(b"olean")
     deps.write_text("A\nB\n", encoding="utf-8")
-    record = lean_receipt.build_target_record("+Example.Target", olean, deps)
+    record = lean_receipt.build_target_record(
+        "+Example.Target",
+        olean,
+        deps,
+        recorded_olean_path=Path(".lake/build/lib/lean/Example/Target.olean"),
+        recorded_dependency_path=Path("outputs/deps/target.txt"),
+    )
     receipt = lean_receipt.build_compiled_receipt(
         "a" * 40,
         "leanprover/lean4:v4.34.0-rc2",
@@ -103,7 +109,11 @@ def test_execute_build_request_discovers_artifact_and_canonicalizes_deps(
     monkeypatch.setattr(lean_receipt.subprocess, "run", fake_run)
     monkeypatch.chdir(tmp_path)
     receipt = lean_receipt.execute_build_request(
-        request, Path("lean"), Path("deps"), timeout_seconds=20
+        request,
+        Path("lean"),
+        Path("deps"),
+        evidence_root=Path("."),
+        timeout_seconds=20,
     )
     record = receipt["targets"]["+Example.Target"]
     assert record["olean_path"] == ".lake/custom/Example/Target.olean"
@@ -111,6 +121,76 @@ def test_execute_build_request_discovers_artifact_and_canonicalizes_deps(
         "./A.olean\n./B.olean\n"
     )
     assert receipt["compiled_evidence_mode"] == "LIVE_ARTIFACT"
+    assert receipt["build_cleanliness_class"] == "ISOLATED_CLEAN_BUILD"
+
+
+def test_hosted_authority_is_runtime_derived(monkeypatch) -> None:
+    hosted = {
+        "GITHUB_ACTIONS": "true",
+        "GITHUB_WORKFLOW": "CI",
+        "GITHUB_RUN_ID": "123",
+        "GITHUB_RUN_ATTEMPT": "1",
+        "RUNNER_OS": "Linux",
+    }
+    for name in hosted:
+        monkeypatch.delenv(name, raising=False)
+    assert lean_receipt._working_directory_class() == "ISOLATED_CLEAN_BUILD"
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    monkeypatch.setenv("GITHUB_RUN_ID", "123")
+    assert lean_receipt._working_directory_class() == "ISOLATED_CLEAN_BUILD"
+    for name, value in hosted.items():
+        monkeypatch.setenv(name, value)
+    assert lean_receipt._working_directory_class() == "HOSTED_CLEAN_CHECKOUT"
+    first = lean_receipt.build_compiled_receipt(
+        "a" * 40, "toolchain", {}, "b" * 64, "c" * 64
+    )
+    assert first["build_cleanliness_class"] == "HOSTED_CLEAN_CHECKOUT"
+    monkeypatch.setenv("GITHUB_RUN_ID", "456")
+    second = lean_receipt.build_compiled_receipt(
+        "a" * 40, "toolchain", {}, "b" * 64, "c" * 64
+    )
+    assert lean_receipt.canonical_json_bytes(first) == lean_receipt.canonical_json_bytes(
+        second
+    )
+
+
+def test_provenance_rejects_authority_and_hash_contradictions(monkeypatch) -> None:
+    for name in (
+        "GITHUB_ACTIONS",
+        "GITHUB_WORKFLOW",
+        "GITHUB_RUN_ID",
+        "GITHUB_RUN_ATTEMPT",
+        "RUNNER_OS",
+    ):
+        monkeypatch.delenv(name, raising=False)
+    receipt = lean_receipt.build_compiled_receipt(
+        "a" * 40,
+        "toolchain",
+        {
+            "+Example.Target": {
+                "target": "+Example.Target",
+                "exit_code": 0,
+                "olean_path": ".lake/Example/Target.olean",
+                "olean_sha256": "b" * 64,
+                "dependency_surface_path": "outputs/deps.txt",
+                "dependency_surface_sha256": "c" * 64,
+            }
+        },
+        "d" * 64,
+        "e" * 64,
+    )
+    receipt["build_cleanliness_class"] = "HOSTED_CLEAN_CHECKOUT"
+    receipt["command_spec"]["working_directory_class"] = "HOSTED_CLEAN_CHECKOUT"
+    provenance = lean_receipt.build_provenance_envelope(
+        lean_receipt.canonical_json_bytes(receipt) + b"\n"
+    )
+    with pytest.raises(ValueError, match="authority contradict"):
+        lean_receipt.validate_provenance_consistency(receipt, provenance)
+    receipt["build_cleanliness_class"] = "ISOLATED_CLEAN_BUILD"
+    receipt["command_spec"]["working_directory_class"] = "ISOLATED_CLEAN_BUILD"
+    provenance["canonical_receipt_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="does not bind"):
+        lean_receipt.validate_provenance_consistency(receipt, provenance)
 
 
 def test_live_manifest_and_provenance_bind_receipt(monkeypatch, tmp_path: Path) -> None:
@@ -138,6 +218,7 @@ def test_live_manifest_and_provenance_bind_receipt(monkeypatch, tmp_path: Path) 
                 "exit_code": 0,
                 "olean_path": ".lake/observed/Example/Target.olean",
                 "olean_sha256": "b" * 64,
+                "dependency_surface_path": "deps/target.txt",
                 "dependency_surface_sha256": "c" * 64,
             }
         },
@@ -184,6 +265,8 @@ def test_discovery_and_cli_fail_closed(monkeypatch, tmp_path: Path) -> None:
             str(tmp_path),
             "--dependency-dir",
             str(tmp_path / "deps"),
+            "--evidence-root",
+            str(tmp_path),
             "--output",
             str(stale),
         ],
@@ -222,6 +305,8 @@ def test_cli_removes_partial_outputs_after_late_failure(monkeypatch, tmp_path: P
             str(tmp_path),
             "--dependency-dir",
             str(tmp_path / "deps"),
+            "--evidence-root",
+            str(tmp_path),
             "--output",
             str(output),
             "--manifest-template",

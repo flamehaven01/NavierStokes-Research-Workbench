@@ -12,10 +12,10 @@ notes.
   current research position.
 - `STAGE_CHECKLIST.md`: checks required before a stage transition.
 - `M4_PARAMETRIC_AUDIT_DESIGN.md`: active M4-P scope and limits.
-- `V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md`: v0.2.2
-  implementation addendum; filename retained for provenance.
-- `stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md`: current local evidence.
-- `releases/v0.2.2.md`: current release candidate and release boundary.
+- `V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md`: active v0.2.3 audit closure
+  and exact-commit hosted gate.
+- `stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md`: current local evidence.
+- `releases/v0.2.3.md`: current release candidate and release boundary.
 
 ## Research plans and references
 
@@ -44,10 +44,14 @@ provenance; a current document may instead add a supersession notice.
 - `M3R_EXECUTION_RECEIPT_2026-09-10.md`
 - `M4P_VERIFIER_HARDENING_2026-09-11.md`
 - `M4P_V0.2.1_EVIDENCE_INTEGRITY_PATCH_PLAN.md`
+- `V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md`
 - `CI_RECEIPT.md`
 - `FINAL_CHECKLIST.md`
 - `stage_receipts/`
 - `releases/v0.2.0.md`
+- `releases/v0.2.2.md`
+- `stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md`
+- `stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md`
 
 ## Reading rule
 

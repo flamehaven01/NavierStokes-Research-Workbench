@@ -3,10 +3,11 @@
   "$id": "flamehaven.nsrw-m4p-mutation-corpus.v1",
   "title": "NSRW staged M4-P mutation corpus",
   "type": "object",
-  "required": ["schema_id", "baseline_fixture", "cases"],
+  "required": ["schema_id", "baseline_fixture", "baseline_sha256", "cases"],
   "properties": {
     "schema_id": {"const": "flamehaven.nsrw-m4p-mutation-corpus.v1"},
-    "baseline_fixture": {"type": "string", "minLength": 1},
+    "baseline_fixture": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+\\.json$"},
+    "baseline_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
     "cases": {
       "type": "array",
       "minItems": 14,
@@ -16,7 +17,8 @@
         "required": [
           "mutation_id", "full_manifest_expected_detector",
           "direct_evaluator_expected_detector", "direct_obligation_id",
-          "applicable_evidence_modes", "allowed_secondary_detectors"
+          "applicable_evidence_modes", "allowed_secondary_detectors",
+          "fixture_path", "fixture_sha256"
         ],
         "properties": {
           "mutation_id": {"type": "string", "minLength": 1},
@@ -33,7 +35,9 @@
             "type": "array",
             "uniqueItems": true,
             "items": {"type": "string", "minLength": 1}
-          }
+          },
+          "fixture_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+\\.json$"},
+          "fixture_sha256": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"}
         },
         "additionalProperties": false
       }

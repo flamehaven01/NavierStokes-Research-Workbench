@@ -17,7 +17,7 @@
         "required": ["target", "module_source", "dependency_output"],
         "properties": {
           "target": {"type": "string", "pattern": "^\\+[A-Za-z0-9_.]+$"},
-          "module_source": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+\\.lean$"},
+          "module_source": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+\\.lean$"},
           "dependency_output": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.txt$"}
         },
         "additionalProperties": false

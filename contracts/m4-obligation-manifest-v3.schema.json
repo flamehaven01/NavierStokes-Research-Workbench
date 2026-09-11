@@ -15,7 +15,10 @@
     "canonicalization_profile": {"const": "NSRW-CANONICAL-JSON-1"},
     "locator_evidence_class": {"const": "TEXTUAL_PINNED_SOURCE_LOCATOR"},
     "source_binding": {"$ref": "#/$defs/sourceBinding"},
-    "required_mutations": {"type": "array", "minItems": 1, "uniqueItems": true},
+    "required_mutations": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
     "obligations": {
       "type": "array",
       "minItems": 1,
@@ -24,6 +27,27 @@
     "extensions": {"type": "object"}
   },
   "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"compiled_evidence_mode": {"const": "LIVE_ARTIFACT"}}},
+      "then": {
+        "properties": {
+          "source_binding": {
+            "properties": {
+              "compiled_targets": {
+                "additionalProperties": {
+                  "allOf": [
+                    {"$ref": "#/$defs/compiledTarget"},
+                    {"required": ["dependency_surface_path", "dependency_surface_sha256"]}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "hash": {"type": "string", "pattern": "^[0-9A-Fa-f]{64}$"},
     "sourceBinding": {
@@ -35,10 +59,10 @@
       "properties": {
         "formal_source_commit": {"type": "string", "pattern": "^[0-9A-Fa-f]{40}$"},
         "formal_source_toolchain": {"type": "string", "minLength": 1},
-        "build_request_path": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
+        "build_request_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
         "input_bytes_sha256": {"$ref": "#/$defs/hash"},
         "canonical_manifest_sha256": {"$ref": "#/$defs/hash"},
-        "migration_receipt_path": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
+        "migration_receipt_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
         "migration_receipt_sha256": {"$ref": "#/$defs/hash"},
         "compiled_targets": {
           "type": "object",
@@ -53,10 +77,12 @@
       "required": ["check_status", "receipt_path", "receipt_sha256", "olean_path", "olean_sha256"],
       "properties": {
         "check_status": {"enum": ["PASS", "HELD"]},
-        "receipt_path": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
+        "receipt_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+$"},
         "receipt_sha256": {"$ref": "#/$defs/hash"},
-        "olean_path": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+\\.olean$"},
-        "olean_sha256": {"$ref": "#/$defs/hash"}
+        "olean_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+\\.olean$"},
+        "olean_sha256": {"$ref": "#/$defs/hash"},
+        "dependency_surface_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+\\.txt$"},
+        "dependency_surface_sha256": {"$ref": "#/$defs/hash"}
       },
       "additionalProperties": false
     },
@@ -64,7 +90,7 @@
       "type": "object",
       "required": ["relative_path", "declaration", "sha256", "signature_sha256", "quantifier_projection"],
       "properties": {
-        "relative_path": {"type": "string", "minLength": 1},
+        "relative_path": {"type": "string", "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*(^|/)\\.\\.(?:/|$)).+\\.lean$"},
         "declaration": {"type": "string", "minLength": 1},
         "sha256": {"$ref": "#/$defs/hash"},
         "signature_sha256": {"$ref": "#/$defs/hash"},
@@ -83,8 +109,14 @@
       "properties": {
         "obligation_id": {"type": "string", "minLength": 1},
         "family": {"enum": ["SUPPORT", "CONE", "MOMENT", "FALSIFICATION"]},
-        "source_quantifiers": {"type": "array", "minItems": 1},
-        "artifact_quantifiers": {"type": "array", "minItems": 1},
+        "source_quantifiers": {
+          "type": "array", "minItems": 1,
+          "items": {"$ref": "#/$defs/sourceQuantifier"}
+        },
+        "artifact_quantifiers": {
+          "type": "array", "minItems": 1,
+          "items": {"$ref": "#/$defs/artifactQuantifier"}
+        },
         "assumptions": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
         "evidence_class": {
           "enum": [
@@ -92,11 +124,164 @@
             "MANUFACTURED_EXACT_CONTROL"
           ]
         },
-        "claimed_scope": {"type": "string", "minLength": 1},
-        "constructibility": {"type": "string", "minLength": 1},
+        "claimed_scope": {
+          "enum": ["SAMPLED_PARAMETRIC_DIAGNOSTIC", "SYMBOLIC_PARAMETRIC_IDENTITY", "SOURCE_INSTANCE"]
+        },
+        "constructibility": {
+          "enum": [
+            "EXPLICIT", "DERIVED_COMPUTABLE",
+            "EXISTENTIAL__NO_PINNED_NUMERICAL_EVALUATOR",
+            "EXISTENTIAL_NONCOMPUTABLE_IN_CURRENT_SOURCE_INTERFACE"
+          ]
+        },
         "compiled_target": {"type": "string", "minLength": 1},
         "source_locator": {"$ref": "#/$defs/locator"},
         "evaluator": {"type": "object"}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"family": {"const": "SUPPORT"}}},
+          "then": {"properties": {"evaluator": {"$ref": "#/$defs/supportEvaluator"}}}
+        },
+        {
+          "if": {"properties": {"family": {"const": "CONE"}}},
+          "then": {"properties": {"evaluator": {"$ref": "#/$defs/coneEvaluator"}}}
+        },
+        {
+          "if": {"properties": {"family": {"const": "MOMENT"}}},
+          "then": {"properties": {"evaluator": {"$ref": "#/$defs/momentEvaluator"}}}
+        },
+        {
+          "if": {"properties": {"family": {"const": "FALSIFICATION"}}},
+          "then": {"properties": {"evaluator": {"$ref": "#/$defs/falsificationEvaluator"}}}
+        }
+      ]
+    },
+    "sourceQuantifier": {
+      "type": "object",
+      "required": ["quantifier", "binder", "source_fragment"],
+      "properties": {
+        "quantifier": {"enum": ["FORALL", "EXISTS"]},
+        "binder": {"type": "string", "minLength": 1},
+        "source_fragment": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "artifactQuantifier": {
+      "type": "object",
+      "required": ["quantifier", "binder"],
+      "properties": {
+        "quantifier": {"enum": ["ONE_FIXTURE", "FINITE_GRID", "DECLARED"]},
+        "binder": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "requiredAssumptions": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "supportEvaluator": {
+      "type": "object",
+      "required": ["required_assumptions", "cutoff", "intervals", "boundary_policy"],
+      "properties": {
+        "required_assumptions": {"$ref": "#/$defs/requiredAssumptions"},
+        "cutoff": {"type": "number", "exclusiveMinimum": 0},
+        "intervals": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "lower", "upper"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "lower": {"type": "number", "minimum": 0},
+              "upper": {"type": "number", "minimum": 0}
+            },
+            "additionalProperties": false
+          }
+        },
+        "boundary_policy": {
+          "type": "object",
+          "required": ["allow_gaps", "allow_touching", "endpoint_convention"],
+          "properties": {
+            "allow_gaps": {"type": "boolean"},
+            "allow_touching": {"type": "boolean"},
+            "endpoint_convention": {"const": "CLOSED_CONTROL_INTERVALS"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "coneEvaluator": {
+      "type": "object",
+      "required": [
+        "required_assumptions", "threshold_dependencies", "threshold_values",
+        "dependency_relation", "inequalities"
+      ],
+      "properties": {
+        "required_assumptions": {"$ref": "#/$defs/requiredAssumptions"},
+        "threshold_dependencies": {
+          "type": "object", "minProperties": 1,
+          "propertyNames": {"type": "string", "minLength": 1},
+          "additionalProperties": {
+            "type": "array", "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        },
+        "threshold_values": {
+          "type": "object", "minProperties": 1,
+          "propertyNames": {"type": "string", "minLength": 1},
+          "additionalProperties": {"type": "string", "minLength": 1}
+        },
+        "dependency_relation": {"const": "STRICTLY_GREATER_THAN_DEPENDENCIES"},
+        "inequalities": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["label", "lhs", "relation", "rhs", "minimum_margin"],
+            "properties": {
+              "label": {"type": "string", "minLength": 1},
+              "lhs": {"type": "number"},
+              "relation": {"enum": ["LE", "GE"]},
+              "rhs": {"type": "number"},
+              "minimum_margin": {"type": "number", "minimum": 0}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "momentEvaluator": {
+      "type": "object",
+      "required": ["required_assumptions", "identities"],
+      "properties": {
+        "required_assumptions": {"$ref": "#/$defs/requiredAssumptions"},
+        "identities": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["label", "terms", "expected"],
+            "properties": {
+              "label": {"type": "string", "minLength": 1},
+              "terms": {
+                "type": "array", "minItems": 1,
+                "items": {"type": ["string", "integer"]}
+              },
+              "expected": {"type": ["string", "integer"]}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "falsificationEvaluator": {
+      "type": "object",
+      "required": ["required_assumptions"],
+      "properties": {
+        "required_assumptions": {"$ref": "#/$defs/requiredAssumptions"}
       },
       "additionalProperties": false
     }

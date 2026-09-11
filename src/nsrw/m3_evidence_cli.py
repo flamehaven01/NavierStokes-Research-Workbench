@@ -141,7 +141,10 @@ def main() -> int:
         args.output.write_text(rendered, encoding="utf-8")
     else:
         print(rendered, end="")
-    return 0
+    return {"PASS": 0, "FAIL": 1, "ERROR": 2}.get(
+        str(receipt["lean_build"]["check_status"]),
+        2,
+    )
 
 
 if __name__ == "__main__":

@@ -30,7 +30,9 @@ def test_primary_public_pages_avoid_unexplained_internal_jargon() -> None:
         ROOT / "README.md",
         ROOT / "docs" / "NAVIER_STOKES_NORTH_STAR_MAP.md",
         ROOT / "docs" / "M4_PARAMETRIC_AUDIT_DESIGN.md",
-        ROOT / "docs" / "releases" / "v0.2.2.md",
+        ROOT / "docs" / "releases" / "v0.2.3.md",
+        ROOT / "docs" / "stage_receipts" / "M4P_V0.2.3_LOCAL_CLOSURE.md",
+        ROOT / "CHANGELOG.md",
     ]
     disallowed = (
         "spar frame",

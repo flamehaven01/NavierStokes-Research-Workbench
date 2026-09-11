@@ -12,9 +12,10 @@ import tempfile
 from pathlib import Path
 from typing import Any, Mapping
 
-from .strict_json import canonical_json_bytes, evidence_digests, load_strict_json
+from .schema_admission import admit_strict_json, validate_document
+from .strict_json import canonical_json_bytes, evidence_digests
 
-SCHEMA_ID = "flamehaven.nsrw-lean-compiled-evidence.v1"
+SCHEMA_ID = "flamehaven.nsrw-lean-compiled-evidence.v2"
 
 
 def _sha256(path: Path) -> str:
@@ -28,12 +29,16 @@ def build_target_record(
     *,
     exit_code: int = 0,
     recorded_olean_path: Path | None = None,
+    recorded_dependency_path: Path | None = None,
 ) -> dict[str, Any]:
     return {
         "target": target,
         "exit_code": exit_code,
         "olean_path": (recorded_olean_path or olean_path).as_posix(),
         "olean_sha256": _sha256(olean_path),
+        "dependency_surface_path": (
+            recorded_dependency_path or dependency_surface_path
+        ).as_posix(),
         "dependency_surface_sha256": _sha256(dependency_surface_path),
     }
 
@@ -48,8 +53,8 @@ def build_compiled_receipt(
     compiled_evidence_mode: str = "LIVE_ARTIFACT",
     command_spec_id: str = "lake-scoped-target-build-v1",
     timeout_seconds: int = 900,
-    working_directory_class: str = "ISOLATED_CLEAN_BUILD",
 ) -> dict[str, Any]:
+    working_directory_class = _working_directory_class()
     return {
         "schema_id": SCHEMA_ID,
         "formal_source_commit": formal_source_commit,
@@ -89,6 +94,7 @@ def _atomic_write(destination: Path, payload: bytes) -> bytes:
 def write_compiled_receipt(receipt: Mapping[str, Any], destination: Path) -> bytes:
     """Atomically publish a canonical receipt and return the published bytes."""
 
+    validate_document(dict(receipt), SCHEMA_ID)
     return _atomic_write(destination, canonical_json_bytes(dict(receipt)) + b"\n")
 
 
@@ -223,6 +229,7 @@ def _build_requested_target(
     item: dict[str, Any],
     lean_root: Path,
     dependency_dir: Path,
+    evidence_root: Path,
     timeout_seconds: int,
 ) -> tuple[str, Mapping[str, Any]]:
     target = str(item.get("target", ""))
@@ -256,6 +263,7 @@ def _build_requested_target(
         dependency_path,
         exit_code=process.returncode,
         recorded_olean_path=artifact.relative_to(lean_root),
+        recorded_dependency_path=dependency_path.relative_to(evidence_root),
     )
     return target, record
 
@@ -265,20 +273,34 @@ def execute_build_request(
     lean_root: Path,
     dependency_dir: Path,
     *,
+    evidence_root: Path,
     timeout_seconds: int = 900,
-    working_directory_class: str = "HOSTED_CLEAN_CHECKOUT",
 ) -> dict[str, Any]:
     lean_root = lean_root.resolve()
     dependency_dir = dependency_dir.resolve()
-    request, raw = load_strict_json(request_path)
+    evidence_root = evidence_root.resolve()
+    try:
+        dependency_dir.relative_to(evidence_root)
+    except ValueError as exc:
+        raise ValueError("dependency directory escapes the declared evidence root") from exc
+    request, raw = admit_strict_json(
+        request_path,
+        "flamehaven.nsrw-lean-build-request.v1",
+    )
     commit, toolchain, targets = _validate_build_request(request, lean_root)
     dependency_dir.mkdir(parents=True, exist_ok=True)
     records = dict(
-        _build_requested_target(item, lean_root, dependency_dir, timeout_seconds)
+        _build_requested_target(
+            item,
+            lean_root,
+            dependency_dir,
+            evidence_root,
+            timeout_seconds,
+        )
         for item in targets
     )
     digests = evidence_digests(raw, request)
-    return build_compiled_receipt(
+    receipt = build_compiled_receipt(
         commit,
         toolchain,
         records,
@@ -286,8 +308,29 @@ def execute_build_request(
         digests["canonical_manifest_sha256"],
         compiled_evidence_mode="LIVE_ARTIFACT",
         timeout_seconds=timeout_seconds,
-        working_directory_class=working_directory_class,
     )
+    validate_document(receipt, SCHEMA_ID)
+    return receipt
+
+
+def _hosted_runtime_identity() -> bool:
+    workflow = os.environ.get("GITHUB_WORKFLOW", "").strip()
+    run_id = os.environ.get("GITHUB_RUN_ID", "").strip()
+    attempt = os.environ.get("GITHUB_RUN_ATTEMPT", "").strip()
+    runner_os = os.environ.get("RUNNER_OS", "").strip()
+    return all(
+        (
+            os.environ.get("GITHUB_ACTIONS") == "true",
+            bool(workflow),
+            run_id.isdigit() and int(run_id) > 0,
+            attempt.isdigit() and int(attempt) > 0,
+            runner_os in {"Linux", "Windows", "macOS"},
+        )
+    )
+
+
+def _working_directory_class() -> str:
+    return "HOSTED_CLEAN_CHECKOUT" if _hosted_runtime_identity() else "ISOLATED_CLEAN_BUILD"
 
 
 def build_live_manifest(
@@ -307,62 +350,113 @@ def build_live_manifest(
         record["receipt_sha256"] = receipt_hash
         record["olean_path"] = evidence["olean_path"]
         record["olean_sha256"] = evidence["olean_sha256"]
+        record["dependency_surface_path"] = evidence["dependency_surface_path"]
+        record["dependency_surface_sha256"] = evidence["dependency_surface_sha256"]
     return result
 
 
 def build_provenance_envelope(receipt_bytes: bytes) -> dict[str, Any]:
-    return {
+    hosted = _hosted_runtime_identity()
+    envelope = {
         "schema_id": "flamehaven.nsrw-lean-execution-provenance.v1",
-        "provider": "GITHUB_ACTIONS" if os.environ.get("GITHUB_ACTIONS") == "true" else "LOCAL",
-        "workflow": os.environ.get("GITHUB_WORKFLOW", "LOCAL_UNHOSTED"),
-        "run_id": os.environ.get("GITHUB_RUN_ID", "UNHOSTED"),
-        "attempt": int(os.environ.get("GITHUB_RUN_ATTEMPT", "1")),
-        "platform": os.environ.get("RUNNER_OS", os.name),
+        "provider": "GITHUB_ACTIONS" if hosted else "LOCAL",
+        "workflow": os.environ.get("GITHUB_WORKFLOW", "LOCAL_UNHOSTED") if hosted else "LOCAL_UNHOSTED",
+        "run_id": os.environ.get("GITHUB_RUN_ID", "UNHOSTED") if hosted else "UNHOSTED",
+        "attempt": int(os.environ.get("GITHUB_RUN_ATTEMPT", "1")) if hosted else 1,
+        "platform": os.environ.get("RUNNER_OS", os.name) if hosted else os.name,
         "canonical_receipt_sha256": hashlib.sha256(receipt_bytes).hexdigest().upper(),
     }
+    validate_document(envelope, envelope["schema_id"])
+    return envelope
 
 
-def main() -> int:
+def validate_provenance_consistency(
+    receipt: Mapping[str, Any], provenance: Mapping[str, Any]
+) -> None:
+    hosted_receipt = receipt.get("build_cleanliness_class") == "HOSTED_CLEAN_CHECKOUT"
+    hosted_provenance = provenance.get("provider") == "GITHUB_ACTIONS"
+    if hosted_receipt != hosted_provenance:
+        raise ValueError("compiled receipt and provenance authority contradict")
+    expected = hashlib.sha256(canonical_json_bytes(dict(receipt)) + b"\n").hexdigest().upper()
+    if provenance.get("canonical_receipt_sha256") != expected:
+        raise ValueError("provenance does not bind the compiled receipt")
+
+
+def _argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--request", type=Path, required=True)
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--dependency-dir", type=Path, required=True)
+    parser.add_argument("--evidence-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--manifest-template", type=Path)
     parser.add_argument("--live-manifest-output", type=Path)
     parser.add_argument("--provenance-output", type=Path)
     parser.add_argument("--timeout-seconds", type=int, default=900)
-    args = parser.parse_args()
-    destinations = (args.output, args.live_manifest_output, args.provenance_output)
+    return parser
+
+
+def _output_destinations(args: argparse.Namespace) -> tuple[Path | None, ...]:
+    return args.output, args.live_manifest_output, args.provenance_output
+
+
+def _remove_outputs(destinations: tuple[Path | None, ...]) -> None:
     for path in destinations:
         if path is not None:
             path.unlink(missing_ok=True)
+
+
+def _publish_live_manifest(
+    args: argparse.Namespace,
+    receipt: Mapping[str, Any],
+) -> None:
+    requested = args.manifest_template is not None, args.live_manifest_output is not None
+    if requested == (False, False):
+        return
+    if requested != (True, True):
+        raise ValueError("live manifest template and output must be supplied together")
+    template, _ = admit_strict_json(
+        args.manifest_template,
+        "flamehaven.nsrw-m4-obligation-manifest.v3",
+    )
+    live_manifest = build_live_manifest(template, receipt, args.output)
+    validate_document(live_manifest, "flamehaven.nsrw-m4-obligation-manifest.v3")
+    _atomic_write(args.live_manifest_output, canonical_json_bytes(live_manifest) + b"\n")
+
+
+def _publish_provenance(
+    output: Path | None,
+    receipt: Mapping[str, Any],
+    receipt_bytes: bytes,
+) -> None:
+    if output is None:
+        return
+    provenance = build_provenance_envelope(receipt_bytes)
+    validate_provenance_consistency(receipt, provenance)
+    _atomic_write(output, canonical_json_bytes(provenance) + b"\n")
+
+
+def _execute_cli(args: argparse.Namespace) -> None:
+    receipt = execute_build_request(
+        args.request,
+        args.source_root,
+        args.dependency_dir,
+        evidence_root=args.evidence_root,
+        timeout_seconds=args.timeout_seconds,
+    )
+    receipt_bytes = write_compiled_receipt(receipt, args.output)
+    _publish_live_manifest(args, receipt)
+    _publish_provenance(args.provenance_output, receipt, receipt_bytes)
+
+
+def main() -> int:
+    args = _argument_parser().parse_args()
+    destinations = _output_destinations(args)
+    _remove_outputs(destinations)
     try:
-        receipt = execute_build_request(
-            args.request,
-            args.source_root,
-            args.dependency_dir,
-            timeout_seconds=args.timeout_seconds,
-        )
-        receipt_bytes = write_compiled_receipt(receipt, args.output)
-        if args.manifest_template and args.live_manifest_output:
-            template, _ = load_strict_json(args.manifest_template)
-            if not isinstance(template, dict):
-                raise ValueError("live manifest template is not an object")
-            live_manifest = build_live_manifest(template, receipt, args.output)
-            _atomic_write(
-                args.live_manifest_output,
-                canonical_json_bytes(live_manifest) + b"\n",
-            )
-        if args.provenance_output:
-            _atomic_write(
-                args.provenance_output,
-                canonical_json_bytes(build_provenance_envelope(receipt_bytes)) + b"\n",
-            )
+        _execute_cli(args)
     except (OSError, ValueError, RuntimeError, subprocess.TimeoutExpired) as exc:
-        for path in destinations:
-            if path is not None:
-                path.unlink(missing_ok=True)
+        _remove_outputs(destinations)
         print(f"lean receipt generation failed: {exc}")
         return 2
     return 0

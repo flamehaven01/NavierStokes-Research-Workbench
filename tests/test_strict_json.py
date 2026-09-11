@@ -55,6 +55,7 @@ def test_v3_receipt_and_provenance_schemas_are_valid_documents() -> None:
     for path in (
         ROOT / "contracts" / "m4-obligation-manifest-v3.schema.json",
         ROOT / "contracts" / "lean-compiled-evidence-v1.schema.json",
+        ROOT / "contracts" / "lean-compiled-evidence-v2.schema.json",
         ROOT / "contracts" / "lean-execution-provenance-v1.schema.json",
         ROOT / "contracts" / "m4-mutation-corpus-v1.schema.json",
         ROOT / "contracts" / "lean-receipt-migration-v1.schema.json",

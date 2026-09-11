@@ -17,10 +17,14 @@ from math import isfinite
 from pathlib import Path
 from typing import Any, Callable, cast
 
+from .schema_admission import admit_declared_json, admit_strict_json, validate_document
+from .strict_json import canonical_json_bytes, load_strict_json
+
 SCHEMA_ID = "flamehaven.nsrw-m4-obligation-manifest.v2"
 SCHEMA_ID_V3 = "flamehaven.nsrw-m4-obligation-manifest.v3"
 SUPPORTED_SCHEMA_IDS = frozenset({SCHEMA_ID, SCHEMA_ID_V3})
 COMPILED_EVIDENCE_SCHEMA_ID = "flamehaven.nsrw-lean-compiled-evidence.v1"
+COMPILED_EVIDENCE_SCHEMA_ID_V2 = "flamehaven.nsrw-lean-compiled-evidence.v2"
 FAMILIES = frozenset({"SUPPORT", "CONE", "MOMENT", "FALSIFICATION"})
 EVIDENCE_CLASSES = frozenset(
     {
@@ -110,19 +114,59 @@ def _obligation_by_id(candidate: dict[str, Any], obligation_id: str) -> dict[str
     raise KeyError(f"missing obligation id: {obligation_id}")
 
 
-def _mutation_corpus() -> dict[str, dict[str, Any]]:
-    from .strict_json import load_strict_json
-
-    path = Path(__file__).resolve().parents[2] / "fixtures" / "mutations" / "m4p-v3" / "corpus.json"
+def _load_hash_bound_object(
+    project_root: Path,
+    relative_path: object,
+    expected_sha256: object,
+    label: str,
+) -> dict[str, Any]:
+    path = _safe_evidence_path(project_root, str(relative_path))
+    if path is None or not path.is_file():
+        raise ValueError(f"{label} is unavailable")
+    if _sha256_file(path) != str(expected_sha256).upper():
+        raise ValueError(f"{label} hash mismatch")
     value, _ = load_strict_json(path)
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be an object")
+    return value
+
+
+def _admit_mutation_case(
+    project_root: Path,
+    original: object,
+    baseline: dict[str, Any],
+) -> tuple[str, dict[str, Any]] | None:
+    if not isinstance(original, dict) or not isinstance(original.get("mutation_id"), str):
+        return None
+    case = dict(original)
+    golden = _load_hash_bound_object(
+        project_root,
+        case.get("fixture_path"),
+        case.get("fixture_sha256"),
+        "M4-P golden mutation fixture",
+    )
+    case["_baseline_manifest"] = baseline
+    case["_golden_manifest"] = golden
+    return str(case["mutation_id"]), case
+
+
+def _mutation_corpus() -> dict[str, dict[str, Any]]:
+    project_root = Path(__file__).resolve().parents[2]
+    path = project_root / "fixtures" / "mutations" / "m4p-v3" / "corpus.json"
+    value, _ = admit_strict_json(path, "flamehaven.nsrw-m4p-mutation-corpus.v1")
     if not isinstance(value, dict) or not isinstance(value.get("cases"), list):
         raise ValueError("M4-P mutation corpus is malformed")
-    cases = value["cases"]
-    result = {
-        str(case.get("mutation_id")): case
-        for case in cases
-        if isinstance(case, dict) and isinstance(case.get("mutation_id"), str)
-    }
+    baseline = _load_hash_bound_object(
+        project_root,
+        value.get("baseline_fixture"),
+        value.get("baseline_sha256"),
+        "M4-P mutation baseline",
+    )
+    admitted = (
+        _admit_mutation_case(project_root, original, baseline)
+        for original in value["cases"]
+    )
+    result = dict(item for item in admitted if item is not None)
     if tuple(result) != REQUIRED_MUTATIONS:
         raise ValueError("M4-P mutation corpus does not exactly match the v3 bank")
     return result
@@ -161,7 +205,11 @@ def _valid_relative_path(value: object) -> bool:
     if not isinstance(value, str) or not value:
         return False
     path = Path(value)
-    return not path.is_absolute() and ".." not in path.parts
+    return not path.is_absolute() and not path.drive and ".." not in path.parts
+
+
+def _sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest().upper()
 
 
 def _has_bound_compiled_fields(record: dict[str, Any]) -> bool:
@@ -339,12 +387,13 @@ def _validate_v3_closed_shapes(obligation: object, index: int, errors: list[str]
     if not isinstance(evaluator, dict):
         return
     family_fields = {
-        "SUPPORT": {"required_assumptions", "cutoff", "intervals"},
+        "SUPPORT": {"required_assumptions", "cutoff", "intervals", "boundary_policy"},
         "CONE": {
             "required_assumptions",
             "threshold_dependencies",
             "threshold_values",
             "inequalities",
+            "dependency_relation",
         },
         "MOMENT": {"required_assumptions", "identities"},
         "FALSIFICATION": {"required_assumptions"},
@@ -404,6 +453,13 @@ def _validate_v3_binding(
     for target, record in targets.items():
         if isinstance(record, dict) and not _valid_relative_path(record.get("olean_path")):
             errors.append(f"compiled target {target} olean path is invalid")
+        if manifest.get("compiled_evidence_mode") == "LIVE_ARTIFACT" and isinstance(
+            record, dict
+        ):
+            if not _valid_relative_path(record.get("dependency_surface_path")):
+                errors.append(f"compiled target {target} dependency path is invalid")
+            if not _is_sha256(record.get("dependency_surface_sha256")):
+                errors.append(f"compiled target {target} dependency sha256 is invalid")
 
 
 def _validate_manifest_obligations(
@@ -435,6 +491,11 @@ def validate_manifest(manifest: dict[str, Any]) -> list[str]:
 
     errors: list[str] = []
     schema_id = manifest.get("schema_id")
+    if isinstance(schema_id, str) and schema_id in SUPPORTED_SCHEMA_IDS:
+        try:
+            validate_document(manifest, schema_id)
+        except ValueError as exc:
+            errors.append(str(exc))
     if schema_id not in SUPPORTED_SCHEMA_IDS:
         errors.append(f"schema_id must be one of {sorted(SUPPORTED_SCHEMA_IDS)}")
     if schema_id == SCHEMA_ID_V3:
@@ -491,8 +552,13 @@ def _fraction(value: object) -> Fraction:
     if isinstance(value, bool) or not isinstance(value, (str, int)):
         raise ValueError("exact moment values must be integer or rational strings")
     text = str(value)
-    if len(text) > 513 or re.fullmatch(r"-?(0|[1-9][0-9]*)(/[1-9][0-9]*)?", text) is None:
+    match = re.fullmatch(r"-?(0|[1-9][0-9]*)(?:/([1-9][0-9]*))?", text)
+    if match is None:
         raise ValueError("exact moment value is outside strict rational grammar")
+    numerator = text.lstrip("-").split("/", 1)[0]
+    denominator = match.group(2)
+    if len(numerator) > 256 or (denominator is not None and len(denominator) > 256):
+        raise ValueError("exact moment numerator or denominator exceeds 256 digits")
     return Fraction(text)
 
 
@@ -505,17 +571,51 @@ def _is_real_number(value: object) -> bool:
         return False
 
 
-def _support_interval_error(interval: object, cutoff: float, previous: float) -> tuple[str | None, float]:
+def _support_bounds(
+    interval: object, cutoff: float
+) -> tuple[tuple[float, float] | None, str | None]:
     if not isinstance(interval, dict):
-        return "support interval is not an object", previous
+        return None, "support interval is not an object"
     lower, upper = interval.get("lower"), interval.get("upper")
     if not _is_real_number(lower) or not _is_real_number(upper):
-        return "support bounds must be numeric", previous
-    if not all(isfinite(float(item)) for item in (lower, upper, cutoff)):
-        return "support bounds must be finite", previous
-    if lower < 0 or lower < previous or lower > upper or upper > cutoff:
-        return "support ordering, inclusion, or cutoff failed", previous
-    return None, float(upper)
+        return None, "support bounds must be numeric"
+    numeric = float(lower), float(upper)
+    if numeric[0] < 0 or numeric[0] > numeric[1] or numeric[1] > cutoff:
+        return None, "support ordering, inclusion, or cutoff failed"
+    return numeric, None
+
+
+def _support_boundary_error(
+    lower: float,
+    previous: float | None,
+    policy: dict[str, Any],
+) -> str | None:
+    if previous is None:
+        return (
+            "support boundary policy forbids an initial gap"
+            if lower > 0 and not policy["allow_gaps"]
+            else None
+        )
+    if lower < previous:
+        return "support ordering, inclusion, or cutoff failed"
+    if lower == previous and not policy["allow_touching"]:
+        return "support boundary policy forbids touching intervals"
+    if lower > previous and not policy["allow_gaps"]:
+        return "support boundary policy forbids gaps"
+    return None
+
+
+def _support_interval_error(
+    interval: object,
+    cutoff: float,
+    previous: float | None,
+    policy: dict[str, Any],
+) -> tuple[str | None, float | None]:
+    bounds, error = _support_bounds(interval, cutoff)
+    if error or bounds is None:
+        return error, previous
+    lower, upper = bounds
+    return _support_boundary_error(lower, previous, policy), upper
 
 
 def _support_name_error(interval: object, names: set[str]) -> str | None:
@@ -530,6 +630,39 @@ def _support_name_error(interval: object, names: set[str]) -> str | None:
     return None
 
 
+def _support_policy(evaluator: dict[str, Any]) -> tuple[dict[str, Any] | None, str | None]:
+    policy = evaluator.get("boundary_policy")
+    if policy is None:
+        policy = {
+            "allow_gaps": True,
+            "allow_touching": True,
+            "endpoint_convention": "CLOSED_CONTROL_INTERVALS",
+        }
+    if not isinstance(policy, dict) or policy.get(
+        "endpoint_convention"
+    ) != "CLOSED_CONTROL_INTERVALS":
+        return None, "support boundary policy is missing or unsupported"
+    if not isinstance(policy.get("allow_gaps"), bool) or not isinstance(
+        policy.get("allow_touching"), bool
+    ):
+        return None, "support boundary policy is malformed"
+    return policy, None
+
+
+def _support_intervals_error(
+    intervals: list[object], cutoff: float, policy: dict[str, Any]
+) -> str | None:
+    previous: float | None = None
+    names: set[str] = set()
+    for interval in intervals:
+        if name_error := _support_name_error(interval, names):
+            return name_error
+        error, previous = _support_interval_error(interval, cutoff, previous, policy)
+        if error:
+            return error
+    return None
+
+
 def _evaluate_support(evaluator: dict[str, Any]) -> Check:
     intervals = evaluator.get("intervals")
     cutoff = evaluator.get("cutoff")
@@ -537,14 +670,11 @@ def _evaluate_support(evaluator: dict[str, Any]) -> Check:
         return Check("support", "FAIL", "support evaluator requires intervals and cutoff")
     if float(cutoff) <= 0:
         return Check("support", "FAIL", "support cutoff must be positive")
-    previous = float("-inf")
-    names: set[str] = set()
-    for interval in intervals:
-        if name_error := _support_name_error(interval, names):
-            return Check("support", "FAIL", name_error)
-        error, previous = _support_interval_error(interval, float(cutoff), previous)
-        if error:
-            return Check("support", "FAIL", error)
+    policy, policy_error = _support_policy(evaluator)
+    if policy_error or policy is None:
+        return Check("support", "FAIL", policy_error or "support boundary policy is invalid")
+    if error := _support_intervals_error(intervals, float(cutoff), policy):
+        return Check("support", "FAIL", error)
     return Check("support", "PASS", "declared support intervals are ordered and lie below the cutoff")
 
 
@@ -610,21 +740,35 @@ def _cone_margin(item: object) -> tuple[float | None, str | None]:
     return margin, None
 
 
-def _threshold_values_error(
+def _parsed_threshold_values(
     graph: dict[str, object], threshold_values: object
-) -> str | None:
+) -> tuple[dict[str, Fraction] | None, str | None]:
     if threshold_values is None:
-        return None
+        return {}, None
     if not isinstance(threshold_values, dict) or set(threshold_values) != set(graph):
-        return "threshold values must exactly match dependency nodes"
+        return None, "threshold values must exactly match dependency nodes"
     if any(not isinstance(value, str) for value in threshold_values.values()):
-        return "threshold values must use strict rational strings"
+        return None, "threshold values must use strict rational strings"
     try:
         parsed = {str(key): _fraction(value) for key, value in threshold_values.items()}
     except (TypeError, ValueError, ZeroDivisionError):
-        return "threshold values must use strict rational strings"
+        return None, "threshold values must use strict rational strings"
     if any(value <= 0 for value in parsed.values()):
-        return "threshold values must be positive"
+        return None, "threshold values must be positive"
+    return parsed, None
+
+
+def _threshold_values_error(
+    graph: dict[str, object], threshold_values: object, relation: object
+) -> str | None:
+    relation = relation or "STRICTLY_GREATER_THAN_DEPENDENCIES"
+    if relation != "STRICTLY_GREATER_THAN_DEPENDENCIES":
+        return "threshold dependency relation is missing or unsupported"
+    if threshold_values is None:
+        return None
+    parsed, parse_error = _parsed_threshold_values(graph, threshold_values)
+    if parse_error or parsed is None:
+        return parse_error
     for node, dependencies in graph.items():
         if any(parsed[node] <= parsed[dependency] for dependency in dependencies):
             return "threshold dependency value ordering failed"
@@ -658,7 +802,11 @@ def _evaluate_cone(evaluator: dict[str, Any]) -> Check:
         return Check("cone", "FAIL", "cone evaluator requires inequalities and a dependency graph")
     if graph_error := _dependency_graph_error(graph):
         return Check("cone", "FAIL", graph_error)
-    if threshold_error := _threshold_values_error(graph, evaluator.get("threshold_values")):
+    if threshold_error := _threshold_values_error(
+        graph,
+        evaluator.get("threshold_values"),
+        evaluator.get("dependency_relation"),
+    ):
         return Check("cone", "FAIL", threshold_error)
     margins, margin_error = _cone_margins(inequalities)
     if margin_error:
@@ -807,6 +955,8 @@ def verify_source_bindings(manifest: dict[str, Any], lean_root: Path) -> list[Ch
 
 
 def _safe_evidence_path(evidence_root: Path, relative_path: str) -> Path | None:
+    if not _valid_relative_path(relative_path):
+        return None
     root = evidence_root.resolve()
     candidate = (root / relative_path).resolve()
     try:
@@ -826,11 +976,9 @@ def _read_compiled_receipt(
     if actual_hash != str(record.get("receipt_sha256", "")).upper():
         return None, "compiled receipt sha256 mismatch"
     try:
-        from .strict_json import StrictJSONError, load_strict_json
-
-        receipt, _ = load_strict_json(path)
-    except (OSError, StrictJSONError):
-        return None, "compiled receipt is not valid strict JSON"
+        receipt, _ = admit_declared_json(path)
+    except (OSError, ValueError):
+        return None, "compiled receipt failed strict schema admission"
     if not isinstance(receipt, dict):
         return None, "compiled receipt root is not an object"
     return receipt, None
@@ -871,6 +1019,47 @@ def _actual_compiled_fields(
     }
 
 
+def _receipt_input_matches(receipt: dict[str, Any], binding: dict[str, Any]) -> bool:
+    if binding.get("build_request_path") is None:
+        return True
+    return all(
+        (
+            receipt.get("input_bytes_sha256") == binding.get("input_bytes_sha256"),
+            receipt.get("canonical_manifest_sha256")
+            == binding.get("canonical_manifest_sha256"),
+        )
+    )
+
+
+def _live_receipt_authority_matches(receipt: dict[str, Any]) -> bool:
+    command_spec = receipt.get("command_spec")
+    if not isinstance(command_spec, dict):
+        return False
+    return all(
+        (
+            receipt.get("command_spec_id") == "lake-scoped-target-build-v1",
+            command_spec.get("argv") == ["lake", "build", "<declared-target>"],
+            command_spec.get("working_directory_class")
+            == receipt.get("build_cleanliness_class"),
+            receipt.get("dependency_surface_profile") == "NSRW-DEPS-LF-SORTED-V1",
+            receipt.get("canonicalization_profile") == "NSRW-CANONICAL-JSON-1",
+        )
+    )
+
+
+def _live_dependency_binding_matches(
+    target_evidence: dict[str, Any], record: dict[str, Any]
+) -> bool:
+    return all(
+        (
+            target_evidence.get("dependency_surface_path")
+            == record.get("dependency_surface_path"),
+            str(target_evidence.get("dependency_surface_sha256", "")).upper()
+            == str(record.get("dependency_surface_sha256", "")).upper(),
+        )
+    )
+
+
 def _compiled_receipt_matches(
     receipt: dict[str, Any],
     binding: dict[str, Any],
@@ -883,20 +1072,23 @@ def _compiled_receipt_matches(
         return False
     target_evidence = targets[target]
     expected = _expected_compiled_fields(binding, target, record)
+    expected["schema_id"] = (
+        COMPILED_EVIDENCE_SCHEMA_ID_V2
+        if evidence_mode == "LIVE_ARTIFACT"
+        else COMPILED_EVIDENCE_SCHEMA_ID
+    )
     actual = _actual_compiled_fields(receipt, target_evidence)
-    input_ok = True
-    if binding.get("build_request_path") is not None:
-        input_ok = all(
-            (
-                receipt.get("input_bytes_sha256") == binding.get("input_bytes_sha256"),
-                receipt.get("canonical_manifest_sha256")
-                == binding.get("canonical_manifest_sha256"),
-            )
-        )
     mode_ok = evidence_mode is None or receipt.get("compiled_evidence_mode") == evidence_mode
+    live_ok = evidence_mode != "LIVE_ARTIFACT" or all(
+        (
+            _live_receipt_authority_matches(receipt),
+            _live_dependency_binding_matches(target_evidence, record),
+        )
+    )
     return (
         mode_ok
-        and input_ok
+        and _receipt_input_matches(receipt, binding)
+        and live_ok
         and actual == expected
         and _is_sha256(target_evidence.get("dependency_surface_sha256"))
     )
@@ -951,9 +1143,10 @@ def _load_bound_migration(
     if actual_hash != str(binding.get("migration_receipt_sha256", "")).upper():
         return None, "replay migration receipt hash mismatch"
     try:
-        from .strict_json import load_strict_json
-
-        migration, _ = load_strict_json(path)
+        migration, _ = admit_strict_json(
+            path,
+            "flamehaven.nsrw-lean-receipt-migration.v1",
+        )
     except (OSError, ValueError):
         return None, "replay migration receipt is invalid JSON"
     if not isinstance(migration, dict):
@@ -1006,29 +1199,56 @@ def verify_replay_migration(
     )
 
 
-def verify_live_artifacts(manifest: dict[str, Any], lean_root: Path | None) -> list[Check]:
+def _live_digest_check(
+    check_id: str,
+    root: Path | None,
+    relative_path: object,
+    expected_sha256: object,
+    *,
+    missing_root_detail: str,
+    pass_detail: str,
+    fail_detail: str,
+) -> Check:
+    if root is None:
+        return Check(check_id, "FAIL", missing_root_detail)
+    path = _safe_evidence_path(root, str(relative_path))
+    actual = _sha256_file(path) if path is not None and path.is_file() else ""
+    matches = bool(actual) and actual == str(expected_sha256).upper()
+    return Check(check_id, "PASS" if matches else "FAIL", pass_detail if matches else fail_detail)
+
+
+def verify_live_artifacts(
+    manifest: dict[str, Any],
+    lean_root: Path | None,
+    evidence_root: Path | None,
+) -> list[Check]:
     """Verify bytes in the declared live Lean checkout; replay has no local-artifact claim."""
 
     if manifest.get("compiled_evidence_mode") != "LIVE_ARTIFACT":
         return []
-    binding = manifest.get("source_binding", {})
     checks: list[Check] = []
-    for target, record in binding.get("compiled_targets", {}).items():
-        check_id = f"live_artifact:{target}"
-        if lean_root is None:
-            checks.append(Check(check_id, "FAIL", "live evidence requires a Lean source root"))
-            continue
-        path = _safe_evidence_path(lean_root, str(record.get("olean_path", "")))
-        actual_hash = hashlib.sha256(path.read_bytes()).hexdigest().upper() if path and path.is_file() else ""
-        expected_hash = str(record.get("olean_sha256", "")).upper()
-        matches = bool(actual_hash) and actual_hash == expected_hash
+    targets = manifest.get("source_binding", {}).get("compiled_targets", {})
+    for target, record in targets.items():
         checks.append(
-            Check(
-                check_id,
-                "PASS" if matches else "FAIL",
-                "declared same-run artifact bytes match"
-                if matches
-                else "declared live .olean is missing or its bytes drifted",
+            _live_digest_check(
+                f"live_artifact:{target}",
+                lean_root,
+                record.get("olean_path"),
+                record.get("olean_sha256"),
+                missing_root_detail="live evidence requires a Lean source root",
+                pass_detail="declared same-run artifact bytes match",
+                fail_detail="declared live .olean is missing or its bytes drifted",
+            )
+        )
+        checks.append(
+            _live_digest_check(
+                f"live_dependency:{target}",
+                evidence_root,
+                record.get("dependency_surface_path"),
+                record.get("dependency_surface_sha256"),
+                missing_root_detail="live evidence requires an evidence root",
+                pass_detail="declared same-run dependency bytes match",
+                fail_detail="declared live dependency surface is missing or its bytes drifted",
             )
         )
     return checks
@@ -1077,7 +1297,7 @@ def _assessment(
     if migration_check is not None:
         checks.append(migration_check)
     checks.extend(verify_compiled_evidence(manifest, evidence_root))
-    checks.extend(verify_live_artifacts(manifest, lean_root))
+    checks.extend(verify_live_artifacts(manifest, lean_root, evidence_root))
     return checks
 
 
@@ -1201,6 +1421,56 @@ def _direct_mutation_status(
     return passed, "PASS" if passed else "FAIL"
 
 
+def _not_applicable_mutation(
+    mutation_id: str,
+    expected: str,
+    evidence_mode: str,
+    allowed_secondary: tuple[str, ...],
+) -> MutationResult:
+    return MutationResult(
+        mutation_id,
+        None,
+        (),
+        expected,
+        evidence_mode,
+        "NOT_APPLICABLE",
+        "NOT_APPLICABLE",
+        allowed_secondary,
+    )
+
+
+def _bound_golden_candidate(
+    manifest: dict[str, Any],
+    candidate: dict[str, Any],
+    case: dict[str, Any],
+) -> dict[str, Any] | None:
+    corpus_baseline = case.get("_baseline_manifest")
+    if not isinstance(corpus_baseline, dict) or canonical_json_bytes(
+        manifest
+    ) != canonical_json_bytes(corpus_baseline):
+        return candidate
+    golden = case.get("_golden_manifest")
+    if not isinstance(golden, dict) or canonical_json_bytes(candidate) != canonical_json_bytes(
+        golden
+    ):
+        return None
+    return copy.deepcopy(golden)
+
+
+def _new_failure_ids(
+    candidate: dict[str, Any],
+    baseline_failures: set[str],
+    lean_root: Path | None,
+    evidence_root: Path | None,
+) -> tuple[str, ...]:
+    failures = {
+        check.check_id
+        for check in _assessment(candidate, lean_root, evidence_root)
+        if check.check_status == "FAIL"
+    }
+    return tuple(sorted(failures - baseline_failures))
+
+
 def _execute_mutation_case(
     manifest: dict[str, Any],
     mutation_id: str,
@@ -1217,24 +1487,26 @@ def _execute_mutation_case(
     applicable_modes = tuple(case.get("applicable_evidence_modes", (evidence_mode,)))
     allowed_secondary = tuple(case.get("allowed_secondary_detectors", ()))
     if evidence_mode not in applicable_modes:
-        return MutationResult(
-            mutation_id,
-            None,
-            (),
-            expected,
-            evidence_mode,
-            "NOT_APPLICABLE",
-            "NOT_APPLICABLE",
-            allowed_secondary,
+        return _not_applicable_mutation(
+            mutation_id, expected, evidence_mode, allowed_secondary
         )
     candidate = copy.deepcopy(manifest)
     mutate(candidate)
-    mutated_failures = {
-        check.check_id
-        for check in _assessment(candidate, lean_root, evidence_root)
-        if check.check_status == "FAIL"
-    }
-    new_failures = tuple(sorted(mutated_failures - baseline_failures))
+    candidate = _bound_golden_candidate(manifest, candidate, case)
+    if candidate is None:
+        return MutationResult(
+            mutation_id,
+            False,
+            ("golden_fixture_binding",),
+            expected,
+            evidence_mode,
+            "FAIL",
+            "NOT_APPLICABLE",
+            allowed_secondary,
+        )
+    new_failures = _new_failure_ids(
+        candidate, baseline_failures, lean_root, evidence_root
+    )
     admitted_failures = {expected, *allowed_secondary}
     full_ok = expected in new_failures and set(new_failures).issubset(admitted_failures)
     direct_ok, direct_status = _direct_mutation_status(manifest, candidate, case)
@@ -1405,11 +1677,9 @@ def run_m4_audit(
 
 
 def load_manifest(path: Path) -> dict[str, Any]:
-    from .strict_json import StrictJSONError, load_strict_json
-
     try:
-        data, _ = load_strict_json(path)
-    except StrictJSONError as exc:
+        data, _ = admit_declared_json(path)
+    except ValueError as exc:
         raise ValueError(str(exc)) from exc
     if not isinstance(data, dict):
         raise ValueError("manifest root must be an object")

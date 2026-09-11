@@ -161,6 +161,42 @@ def test_p1_support_positive_and_boundaries():
         assert evaluate_obligation(item).check_status == "FAIL"
 
 
+def test_v3_support_boundary_policy_is_explicit_and_executed() -> None:
+    data = load_manifest(ROOT / "fixtures" / "m4-parametric-pilot-v3.json")
+    support = next(item for item in data["obligations"] if item["family"] == "SUPPORT")
+    assert evaluate_obligation(support).check_status == "PASS"
+
+    touching_forbidden = copy.deepcopy(support)
+    touching_forbidden["evaluator"]["boundary_policy"]["allow_touching"] = False
+    assert evaluate_obligation(touching_forbidden).check_status == "FAIL"
+
+    gap_allowed = copy.deepcopy(support)
+    gap_allowed["evaluator"]["intervals"][1]["lower"] = 2.0
+    assert evaluate_obligation(gap_allowed).check_status == "PASS"
+    gap_allowed["evaluator"]["boundary_policy"]["allow_gaps"] = False
+    assert evaluate_obligation(gap_allowed).check_status == "FAIL"
+
+    missing = copy.deepcopy(data)
+    next(item for item in missing["obligations"] if item["family"] == "SUPPORT")[
+        "evaluator"
+    ].pop("boundary_policy")
+    assert validate_manifest(missing)
+
+
+def test_v3_cone_dependency_relation_is_explicit_and_executed() -> None:
+    data = load_manifest(ROOT / "fixtures" / "m4-parametric-pilot-v3.json")
+    cone = next(item for item in data["obligations"] if item["family"] == "CONE")
+    assert evaluate_obligation(cone).check_status == "PASS"
+    unsupported = copy.deepcopy(cone)
+    unsupported["evaluator"]["dependency_relation"] = "GREATER_THAN_OR_EQUAL"
+    assert evaluate_obligation(unsupported).check_status == "FAIL"
+    missing = copy.deepcopy(data)
+    next(item for item in missing["obligations"] if item["family"] == "CONE")[
+        "evaluator"
+    ].pop("dependency_relation")
+    assert validate_manifest(missing)
+
+
 def test_p2_cone_positive_margin_and_cycle_failures():
     assert evaluate_obligation(obligation("CONE")).check_status == "PASS"
     variants = []
@@ -475,6 +511,65 @@ def test_v3_staged_corpus_requires_direct_and_full_oracles() -> None:
         item.full_manifest_check_status == "PASS"
         for item in results
         if item.killed is not None
+    )
+
+
+def test_exact_rational_limits_apply_to_each_component() -> None:
+    assert m4_audit._fraction("9" * 256)
+    assert m4_audit._fraction("-" + "9" * 256)
+    assert m4_audit._fraction(f"{'9' * 256}/{'8' * 256}")
+    for value in (
+        "9" * 257,
+        "-" + "9" * 257,
+        f"{'9' * 257}/2",
+        f"1/{'9' * 257}",
+    ):
+        with pytest.raises(ValueError, match="256 digits"):
+            m4_audit._fraction(value)
+
+
+def test_live_dependency_surfaces_are_rehashed_and_path_bounded(tmp_path: Path) -> None:
+    data = load_manifest(ROOT / "fixtures" / "m4-parametric-pilot-v3.json")
+    data["compiled_evidence_mode"] = "LIVE_ARTIFACT"
+    lean_root = tmp_path / "lean"
+    evidence_root = tmp_path / "evidence"
+    for index, record in enumerate(data["source_binding"]["compiled_targets"].values()):
+        artifact = lean_root / record["olean_path"]
+        artifact.parent.mkdir(parents=True, exist_ok=True)
+        artifact.write_bytes(f"olean-{index}".encode())
+        record["olean_sha256"] = hashlib.sha256(artifact.read_bytes()).hexdigest()
+        dependency_path = f"deps/target-{index}.txt"
+        dependency = evidence_root / dependency_path
+        dependency.parent.mkdir(parents=True, exist_ok=True)
+        dependency.write_bytes(f"dependency-{index}\n".encode())
+        record["dependency_surface_path"] = dependency_path
+        record["dependency_surface_sha256"] = hashlib.sha256(
+            dependency.read_bytes()
+        ).hexdigest()
+
+    checks = m4_audit.verify_live_artifacts(data, lean_root, evidence_root)
+    assert checks and all(item.check_status == "PASS" for item in checks)
+
+    first = next(iter(data["source_binding"]["compiled_targets"].values()))
+    dependency = evidence_root / first["dependency_surface_path"]
+    dependency.write_bytes(b"drift\n")
+    checks = m4_audit.verify_live_artifacts(data, lean_root, evidence_root)
+    assert any(
+        item.check_id.startswith("live_dependency:") and item.check_status == "FAIL"
+        for item in checks
+    )
+    dependency.unlink()
+    checks = m4_audit.verify_live_artifacts(data, lean_root, evidence_root)
+    assert any(
+        item.check_id.startswith("live_dependency:") and item.check_status == "FAIL"
+        for item in checks
+    )
+    first["dependency_surface_path"] = "../escape.txt"
+    assert validate_manifest(data)
+    checks = m4_audit.verify_live_artifacts(data, lean_root, evidence_root)
+    assert any(
+        item.check_id.startswith("live_dependency:") and item.check_status == "FAIL"
+        for item in checks
     )
 
 

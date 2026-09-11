@@ -85,6 +85,11 @@
       "evaluator": {
         "required_assumptions": ["ordered_regions", "positive_cutoff"],
         "cutoff": 8.0,
+        "boundary_policy": {
+          "allow_gaps": true,
+          "allow_touching": true,
+          "endpoint_convention": "CLOSED_CONTROL_INTERVALS"
+        },
         "intervals": [
           {"name": "core", "lower": 0.0, "upper": 1.0},
           {"name": "annulus", "lower": 1.0, "upper": 4.0},
@@ -128,6 +133,7 @@
         "required_assumptions": ["positive_thresholds", "acyclic_dependencies"],
         "threshold_dependencies": {"R_outer": ["R_inner"], "R_inner": []},
         "threshold_values": {"R_inner": "2", "R_outer": "5"},
+        "dependency_relation": "STRICTLY_GREATER_THAN_DEPENDENCIES",
         "inequalities": [
           {"label": "inner-before-outer", "lhs": 2, "relation": "LE", "rhs": 5, "minimum_margin": 2},
           {"label": "positive-cone-margin", "lhs": 7, "relation": "GE", "rhs": 3, "minimum_margin": 1}

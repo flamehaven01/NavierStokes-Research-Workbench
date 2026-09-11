@@ -41,10 +41,10 @@ The goal is not to generate a persuasive narrative. It is to create a chain of
 artifacts from equations to executable checks, with every loss of authority made
 visible.
 
-## What is independently implemented here
+## Implemented now
 
 The pinned OpenAI construction and Lean proof graph provide a valuable compiled
-formal surface. NSRW adds bounded, independently implemented controls that can
+formal surface. NSRW adds bounded controls implemented in this repository that can
 also be reused for later Navier--Stokes candidates:
 
 1. exact scaling and similarity-coordinate algebra;
@@ -53,8 +53,7 @@ also be reused for later Navier--Stokes candidates:
 4. side-by-side comparison of source quantifiers and executable checks;
 5. parametric Support, Cone, and Moment obligation evaluators;
 6. mutation-based tests of the verifier itself;
-7. planned external CFD, spectral, PINN, and neural-operator comparison surfaces;
-8. a typed evidence graph separating papers, formal sources, computations,
+7. a typed evidence graph separating papers, formal sources, computations,
    receipts, hypotheses, and non-claims.
 
 No OpenAI source code, manuscript, or PDF is vendored here. Users obtain those
@@ -70,8 +69,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M2 analytic spine | `PASS[LOCAL]` | Profile interfaces and bounded obligations; no source profile instantiation |
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
 | M4-P fixed pilot | `PASS[SCOPED]` | Manufactured control surface passes its declared bounded checks |
-| M4-P v3 replay pilot | `PASS[LOCAL_REPLAY]` | Hardened contract and 13 applicable staged mutations pass locally; live-only mutation is not applicable |
-| M4-P general verifier | `HELD[HOSTED_LIVE_GATE_PENDING]` | v0.2.2 local hardening is implemented; same-run hosted Lean evidence is not yet confirmed |
+| M4-P v3 replay pilot | `PASS[LOCAL_REPLAY_V0.2.3_RC]` | Schema-first admission, committed golden mutations, and 13 applicable replay cases pass locally; the live-only case is not applicable |
+| M4-P v3 live release candidate | `HELD[V0.2.3_HOSTED_LIVE_PENDING]` | The earlier v0.2.2 checkpoint passed run 34579077366, but the changed v0.2.3 verifier requires a fresh exact-commit run |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
@@ -91,7 +90,7 @@ The project prefers plain descriptions over authority-heavy labels:
 | source/check comparison | recording source and executable quantifiers side by side | formal quantifier equivalence |
 | required validation | a check that must succeed before an artifact is accepted | a mathematical proof |
 | manufactured control | a deliberately constructed test input | the selected Navier--Stokes witness |
-| structural consistency check | a secondary review implemented with the pinned SPAR package | semantic AI review or proof authority |
+| structural consistency check | an optional secondary review supplied by a pinned dependency | semantic AI review or proof authority |
 | research direction | a planned investigation or comparator track | a completed independent solution |
 
 This wording is intentional. The lab's role is governance, reproducibility, and
@@ -126,7 +125,7 @@ Primary papers / datasets / formal repositories
 ```
 
 The required NSRW checks determine whether an artifact is accepted. A secondary
-structural consistency check, implemented with the pinned SPAR package, can
+structural consistency check, supplied by an optional pinned dependency, can
 flag suspicious wording or structure. Its score cannot override a missing
 source hash, failed scope check, missing compiled target, or other required
 condition. It is not an AI semantic engine and does not establish theorem truth.
@@ -163,9 +162,10 @@ The active v3 M4 contract hashes each normalized Lean declaration signature,
 checks ordered source fragments under the declared
 `NAMED_BINDERS_AND_DATA_EXISTENTIALS` projection, and reads structured compiled
 evidence rather than trusting a handwritten `PASS`. Version 3 also separates
-historical replay from same-run live evidence and uses a 14-case staged negative
-control corpus. The v1 and v2 fixtures remain historical compatibility inputs
-and cannot be promoted to v3 authority.
+historical replay from same-run live evidence and uses 14 committed, hashed
+negative-control manifests with stage-specific expected detectors. The v1 and
+v2 fixtures remain historical compatibility inputs and cannot be promoted to
+v3 authority.
 
 Checking one fixture and a finite grid remains
 `SAMPLED_PARAMETRIC_DIAGNOSTIC`. It cannot be promoted to a source statement
@@ -248,7 +248,7 @@ python -m ruff check src tests
 python -m compileall -q src
 ```
 
-## External experiments
+## Future research directions
 
 The first planned external artifact is a pinned 2-D periodic-vorticity comparator:
 spectral velocity reconstruction, divergence, vorticity consistency, energy,
@@ -266,7 +266,7 @@ finite-time singularity and not part of the current proof authority. See
 - Classical or noncomputable existence may be formally valid while exposing no
   concrete numerical instance through the current interface.
 - External datasets, PINNs, FNOs, and CFD solvers are comparators and
-  falsification surfaces, not proof authorities.
+  numerical or negative-control surfaces, not proof authorities.
 
 The governing principle is simple: do not invent missing evidence. Missing
 equations, source witnesses, parameters, or evidence remain explicitly unknown
@@ -282,9 +282,13 @@ or held.
 - [M4-P verifier hardening](docs/M4P_VERIFIER_HARDENING_2026-09-11.md)
 - [M4-P v0.2.1 evidence-integrity patch plan](docs/M4P_V0.2.1_EVIDENCE_INTEGRITY_PATCH_PLAN.md)
 - [v0.2.2 audit-alignment implementation addendum](docs/V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md)
+- [v0.2.3 post-implementation audit closure](docs/V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md)
 - [M3 historical execution-assertion tombstone](docs/stage_receipts/M3_HISTORICAL_INVALIDATION.md)
+- [M4-P v0.2.3 local closure receipt](docs/stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md)
 - [M4-P v0.2.2 local implementation receipt](docs/stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md)
+- [M4-P v0.2.2 hosted live receipt](docs/stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
+- [v0.2.3 release candidate notes](docs/releases/v0.2.3.md)
 - [v0.2.2 release notes](docs/releases/v0.2.2.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)
