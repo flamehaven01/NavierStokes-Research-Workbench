@@ -16,6 +16,9 @@ artifacts. Research claims retain their separate evidence statuses.
 - M4-P obligation manifest schema, portable pilot fixture, CLI, and receipts.
 - Hosted scoped Lean evidence for OutgoingDilation, OutgoingCone, and
   NominalConeAssembly, including `.olean` hashes and dependency artifacts.
+- M4 contract v2 with source-signature quantifier binding, structured compiled
+  receipt verification, baseline-delta mutation verdicts, and fail-closed Cone
+  relation/dependency validation. Contract v1 remains retained for replay.
 - External 2-D vorticity experiment contract and Colab design surface.
 
 ### Changed

@@ -13,9 +13,15 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--lean-root", type=Path)
+    parser.add_argument(
+        "--evidence-root",
+        type=Path,
+        help="root used to resolve compiled receipt paths (defaults to repository root)",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    receipt = run_m4_audit(load_manifest(args.manifest), args.lean_root)
+    evidence_root = args.evidence_root or args.manifest.resolve().parents[1]
+    receipt = run_m4_audit(load_manifest(args.manifest), args.lean_root, evidence_root)
     rendered = json.dumps(receipt, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

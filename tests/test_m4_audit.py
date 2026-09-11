@@ -7,8 +7,10 @@ from pathlib import Path
 
 import pytest
 
+import nsrw.m4_audit as m4_audit
 from nsrw.m4_audit import (
     REQUIRED_MUTATIONS,
+    _normalized_declaration_signature,
     check_quantifier_custody,
     evaluate_obligation,
     inspect_spar_identity,
@@ -17,12 +19,13 @@ from nsrw.m4_audit import (
     run_mutations,
     run_spar_diagnostic,
     validate_manifest,
+    verify_compiled_evidence,
     verify_source_bindings,
 )
 from nsrw.m4_cli import main
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "fixtures" / "m4-parametric-pilot-v1.json"
+MANIFEST = ROOT / "fixtures" / "m4-parametric-pilot-v2.json"
 
 
 def fixture() -> dict:
@@ -46,6 +49,7 @@ def test_p0_manifest_and_quantifier_custody_pass():
         (lambda data: data.update(stage="M4-S"), "stage"),
         (lambda data: data.update(source_binding=[]), "source_binding"),
         (lambda data: data["source_binding"].update(formal_source_commit="bad"), "commit"),
+        (lambda data: data["source_binding"].update(formal_source_commit="z" * 40), "commit"),
         (lambda data: data["source_binding"].update(compiled_targets=[]), "compiled_targets"),
         (lambda data: data.update(obligations=[]), "non-empty"),
         (lambda data: data.update(required_mutations=[]), "mutation bank"),
@@ -93,9 +97,30 @@ def test_p0_rejects_invalid_compiled_target_records():
     targets["+NavierStokes.OutgoingDilation"]["receipt_sha256"] = "bad"
     targets["+NavierStokes.OutgoingCone"]["check_status"] = "UNKNOWN"
     targets["+NavierStokes.NominalConeAssembly"]["olean_sha256"] = "bad"
+    targets["+NavierStokes.OutgoingDilation"].pop("receipt_path")
     targets[""] = []
     errors = validate_manifest(data)
-    assert sum("compiled target" in error for error in errors) >= 3
+    assert sum("compiled target" in error for error in errors) >= 4
+
+
+def test_p0_requires_source_bound_quantifier_fragments():
+    data = fixture()
+    data["obligations"][0]["source_quantifiers"][0].pop("source_fragment")
+    assert any("source_fragment" in error for error in validate_manifest(data))
+    data = fixture()
+    data["obligations"][0]["source_quantifiers"][0]["quantifier"] = "ONE_FIXTURE"
+    assert any("source_fragment" in error for error in validate_manifest(data))
+
+
+def test_p0_rejects_paths_that_escape_their_roots():
+    data = fixture()
+    data["obligations"][0]["source_locator"]["relative_path"] = "../source.lean"
+    data["source_binding"]["compiled_targets"]["+NavierStokes.OutgoingDilation"][
+        "receipt_path"
+    ] = "../receipt.json"
+    errors = validate_manifest(data)
+    assert any("source_locator.relative_path" in error for error in errors)
+    assert any("receipt path" in error for error in errors)
 
 
 def test_quantifier_promotion_rules_fail_closed():
@@ -140,6 +165,7 @@ def test_p2_cone_positive_margin_and_cycle_failures():
     variants.append(weak)
     relation = obligation("CONE")
     relation["evaluator"]["inequalities"][0]["relation"] = "EQ"
+    relation["evaluator"]["inequalities"][0]["minimum_margin"] = -2
     variants.append(relation)
     nonfinite = obligation("CONE")
     nonfinite["evaluator"]["inequalities"][0]["lhs"] = float("nan")
@@ -147,6 +173,9 @@ def test_p2_cone_positive_margin_and_cycle_failures():
     bad_graph = obligation("CONE")
     bad_graph["evaluator"]["threshold_dependencies"] = {"A": "B"}
     variants.append(bad_graph)
+    dangling = obligation("CONE")
+    dangling["evaluator"]["threshold_dependencies"] = {"A": ["MISSING"]}
+    variants.append(dangling)
     for item in variants:
         assert evaluate_obligation(item).check_status == "FAIL"
 
@@ -177,11 +206,24 @@ def _make_lean_root(tmp_path: Path, data: dict) -> Path:
         path = lean_root / locator["relative_path"]
         path.parent.mkdir(parents=True, exist_ok=True)
         declaration = locator["declaration"]
+        fragments = " ".join(
+            quantifier["source_fragment"] for quantifier in item["source_quantifiers"]
+        )
         existing = path.read_text(encoding="utf-8") if path.exists() else ""
-        path.write_text(existing + declaration + "\n", encoding="utf-8")
+        path.write_text(
+            existing + f"{declaration} {fragments} : True := by trivial\n",
+            encoding="utf-8",
+        )
     for item in data["obligations"]:
         path = lean_root / item["source_locator"]["relative_path"]
         item["source_locator"]["sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        signature = _normalized_declaration_signature(
+            path.read_text(encoding="utf-8"), item["source_locator"]["declaration"]
+        )
+        assert signature is not None
+        item["source_locator"]["signature_sha256"] = hashlib.sha256(
+            signature.encode("utf-8")
+        ).hexdigest()
     return lean_root
 
 
@@ -195,10 +237,104 @@ def test_source_binding_verification(monkeypatch: pytest.MonkeyPatch, tmp_path: 
     assert any(item.check_status == "FAIL" for item in verify_source_bindings(data, lean_root))
 
 
+def test_source_quantifier_binding_rejects_signature_and_fragment_drift(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+):
+    data = fixture()
+    lean_root = _make_lean_root(tmp_path, data)
+    process = type(
+        "Process",
+        (),
+        {"returncode": 0, "stdout": data["source_binding"]["formal_source_commit"]},
+    )()
+    monkeypatch.setattr("nsrw.m4_audit.subprocess.run", lambda *args, **kwargs: process)
+
+    signature_drift = copy.deepcopy(data)
+    signature_drift["obligations"][0]["source_locator"]["signature_sha256"] = "0" * 64
+    checks = verify_source_bindings(signature_drift, lean_root)
+    assert any(
+        item.check_id == "source_quantifier_binding:M4P-SUPPORT-001"
+        and item.check_status == "FAIL"
+        for item in checks
+    )
+
+    fragment_drift = copy.deepcopy(data)
+    fragment_drift["obligations"][0]["source_quantifiers"][0][
+        "source_fragment"
+    ] = "{invented : Profile}"
+    checks = verify_source_bindings(fragment_drift, lean_root)
+    assert any(
+        item.check_id == "source_quantifier_binding:M4P-SUPPORT-001"
+        and item.check_status == "FAIL"
+        for item in checks
+    )
+
+
+def test_compiled_receipt_cross_binding_and_tamper_detection(tmp_path: Path):
+    data = fixture()
+    assert all(item.check_status == "PASS" for item in verify_compiled_evidence(data, ROOT))
+    assert all(item.check_status == "SKIPPED" for item in verify_compiled_evidence(data, None))
+
+    receipt_path = ROOT / data["source_binding"]["compiled_targets"][
+        "+NavierStokes.OutgoingCone"
+    ]["receipt_path"]
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["targets"]["+NavierStokes.OutgoingCone"]["exit_code"] = 1
+    tampered = tmp_path / "receipt.json"
+    tampered.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    tampered_hash = hashlib.sha256(tampered.read_bytes()).hexdigest()
+    for record in data["source_binding"]["compiled_targets"].values():
+        record["receipt_path"] = "receipt.json"
+        record["receipt_sha256"] = tampered_hash
+    checks = {item.check_id: item for item in verify_compiled_evidence(data, tmp_path)}
+    assert checks["compiled_receipt:+NavierStokes.OutgoingCone"].check_status == "FAIL"
+
+
+def test_compiled_receipt_rejects_missing_file_hash_and_manifest_drift(tmp_path: Path):
+    data = fixture()
+    target = "+NavierStokes.OutgoingDilation"
+    record = data["source_binding"]["compiled_targets"][target]
+
+    record["receipt_path"] = "missing.json"
+    assert verify_compiled_evidence(data, tmp_path)[0].check_status == "FAIL"
+
+    record["receipt_path"] = "receipt.json"
+    (tmp_path / "receipt.json").write_text("{}\n", encoding="utf-8")
+    record["receipt_sha256"] = "0" * 64
+    assert verify_compiled_evidence(data, tmp_path)[0].check_status == "FAIL"
+
+    receipt = json.loads(
+        (ROOT / "fixtures" / "evidence" / "lean-scoped-targets-v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    (tmp_path / "receipt.json").write_text(
+        json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    record["receipt_sha256"] = hashlib.sha256(
+        (tmp_path / "receipt.json").read_bytes()
+    ).hexdigest()
+    record["olean_sha256"] = "0" * 64
+    assert verify_compiled_evidence(data, tmp_path)[0].check_status == "FAIL"
+
+
 def test_p4_all_required_mutations_are_killed():
     results = run_mutations(fixture())
     assert tuple(item.mutation_id for item in results) == REQUIRED_MUTATIONS
     assert all(item.killed for item in results)
+
+
+def test_p4_noop_is_not_killed_by_preexisting_baseline_failure(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    data = fixture()
+    data["source_binding"]["compiled_targets"]["+NavierStokes.OutgoingCone"][
+        "check_status"
+    ] = "HELD"
+    monkeypatch.setattr(m4_audit, "MUTATIONS", (("swap_quantifier_order", lambda _: None),))
+    result = run_mutations(data)
+    assert result[0].killed is False
+    assert result[0].reasons == ()
 
 
 def test_full_audit_passes_parametric_lane_and_holds_source_lane(
@@ -218,7 +354,7 @@ def test_full_audit_passes_parametric_lane_and_holds_source_lane(
         "nsrw.m4_audit.inspect_spar_identity",
         lambda expected_version="0.6.0": {"check_status": "PASS", "expected_version": expected_version},
     )
-    receipt = run_m4_audit(data, lean_root)
+    receipt = run_m4_audit(data, lean_root, ROOT)
     assert receipt["check_status"] == "PASS"
     assert receipt["lane_status"]["M4-P"] == "OPEN[PARAMETRIC_ONLY]"
     assert receipt["lane_status"]["M4-S"] == "HELD[NONCOMPUTABLE_SOURCE_INSTANCE]"
@@ -268,7 +404,7 @@ def test_spar_identity_is_explicit_and_diagnostic_cannot_override_failure():
 
 
 def test_load_manifest_and_cli_output(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
-    assert load_manifest(MANIFEST)["manifest_id"] == "nsrw-m4-parametric-pilot-v1"
+    assert load_manifest(MANIFEST)["manifest_id"] == "nsrw-m4-parametric-pilot-v2"
     invalid = tmp_path / "invalid.json"
     invalid.write_text("[]", encoding="utf-8")
     with pytest.raises(ValueError):

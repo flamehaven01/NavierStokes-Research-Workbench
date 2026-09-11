@@ -11,39 +11,44 @@ audit. It is not an M4 mathematical closure receipt and does not change M4-S.
 
 | Phase | Implementation | Current gate |
 |---|---|---|
-| P0 contract and quantifier custody | `PASS[CODE/TEST]` | `PASS[HOSTED_SPAR_PIN]` |
-| P1 Support | `PASS[CODE/TEST/SOURCE_BINDING]` | `PASS[SCOPED:OutgoingDilation]` |
-| P2 Cone | `PASS[CODE/TEST]` | `PASS[SCOPED:OutgoingCone]` |
-| P3 Moment | `PASS[CODE/TEST]` | `PASS[SCOPED:NominalConeAssembly]` |
-| P4 mutations | `PASS[6/6_KILLED]` | Critical mutations all rejected |
+| P0 contract and quantifier custody | `PASS[SOURCE_SIGNATURE_BOUND]` | Four declaration signatures and ordered fragment projections match |
+| P1 Support | `PASS[MANUFACTURED_SUPPORT_FIXTURE]` | `PASS[SCOPED:OutgoingDilation]` |
+| P2 Cone | `PASS[PARAMETRIC_CONE_EVALUATOR]` | `PASS[SCOPED:OutgoingCone]` |
+| P3 Moment | `PASS[EXACT_FIXTURE_ARITHMETIC]` | `PASS[SCOPED:NominalConeAssembly]` |
+| P4 mutations | `PASS[6/6_BASELINE_DELTA]` | Each expected detector is a new failure |
 
 `PASS[CODE/TEST]` means the bounded evaluator and its negative tests execute as
 designed. It is not evidence that the paper's analytic obligation is true.
 
 ## Implemented surfaces
 
-- versioned M4 obligation JSON schema and pilot manifest;
-- source and executable quantifier prefixes;
+- additive M4 obligation JSON schema v2 and pilot manifest; v1 is retained;
+- normalized Lean signature hashes and ordered source-fragment projections;
 - evidence-class, claim-scope, and constructibility custody;
-- target-specific compiled receipt mapping;
+- structured target-specific compiled receipt cross-verification;
 - ordered Support interval and cutoff checks;
 - Cone inequality margins and threshold dependency-cycle checks;
 - exact-rational Moment cancellation and normalization checks;
-- six deterministic claim/evidence mutations;
+- six deterministic claim/evidence mutations evaluated against baseline deltas;
 - SPAR `ReviewRuntime` adapter with a separate NSRW hard gate;
 - fail-closed CLI and deterministic held receipt;
 - CI contract/mutation replay.
 
 ## Verification
 
-- `PASS[FOCUSED]`: 24 M4 tests passed.
-- `PASS[FULL]`: 175 tests passed.
-- `PASS[COVERAGE]`: 94.44%, above the 90% gate.
+- `PASS[FOCUSED]`: 31 M4 tests passed.
+- `PASS[FULL]`: 182 tests passed.
+- `PASS[COVERAGE]`: 94.27%, above the 90% gate.
 - `PASS[RUFF]`: `python -m ruff check .`.
 - `PASS[COMPILE]`: `python -m compileall -q src tests`.
 - `PASS[REPLAY]`: two source-bound M4 receipts were byte-identical.
-- `PASS[MUTATIONS]`: 6/6 required mutations killed.
-- `PASS[SOURCE_BYTES]`: pinned commit and four obligation locators/hashes matched.
+- `PASS[MUTATIONS]`: 6/6 expected detectors appeared only in the mutation delta.
+- `PASS[SOURCE_BYTES]`: pinned commit and four obligation file hashes matched.
+- `PASS[SOURCE_SIGNATURES]`: 4/4 normalized declaration signatures and ordered
+  named-binder/data-existential fragments matched the pinned Lean source.
+- `PASS[COMPILED_RECEIPTS]`: 3/3 targets matched the structured receipt across
+  receipt hash, source commit, toolchain, target, exit code, `.olean`, and
+  dependency-surface fields.
 - `PASS[SLOP:M4_CHANGED_RUNTIME]`: zero pattern findings in `m4_audit.py` and
   `m4_cli.py` after refactoring.
 - `PASS[SLOP:COVERAGE]`: 25 runtime Python files analyzed.
@@ -66,26 +71,31 @@ NominalConeAssembly.olean
   1E7049B2B8A6BE3B802EE42C856A06DEE40F4331E14E161A495A8A9B6D515A3D
 ```
 
-The combined target-hash receipt has SHA-256
+The original combined text target-hash receipt has SHA-256
 `C5989003C8C7621C51329B03CA4D257A2DAF62F4332961362D3987D937AD2D03`.
-This closes the target-specific compilation gate only. It does not close
-paper--Lean semantic equivalence or the full M4 analytic research lane.
+The structured receipt consumed by contract v2 has SHA-256
+`DD8B248947CAD63804788EC3063E3ED4B8E587BD6D4BFD7029A580B74333E073`.
+CI regenerates the structured receipt from the compiled artifacts and requires
+byte equality. This closes the scoped compilation evidence binding only; it
+does not close paper--Lean semantic equivalence or the M4 analytic lane.
 
 ## Artifact digests
 
 ```text
 m4_audit.py
-  E573556C6062C4C1DD15ADFBCDDC8DA7B50F736200DA2C4C9273E3BD88264C55
+  3B09D54F4DCF7136F2B2C7833619DDB53720FFAFE2BFDF44D7D1E3FAEC73AF9B
 m4_cli.py
-  D72B83FA8DD6D57D2B5A45D18572BFBFB2FB37F20EC3CDA0422FEB6D977FE535
-m4-obligation-manifest-v1.schema.json
-  88728D4CD65A8CF123BFDF30F87ADC4F5A550564A41C980A50838CA05965AE65
-m4-parametric-pilot-v1.json
-  B25EB45CC381005609D77890D3C520813BF78A461C82CEDF7596A84FD7C4EBE6
-m4-parametric-pilot-receipt.json
-  E6A90913EEA3EE6AF832BE4DBC3C873A18D542620CD20F4EA5FDE88DDC66E856
-public-release-slop-report-2.json
-  730A9346D69F31D8A1B0409DF5D52DE9FB661B69FEC4A704A838E6753EC21137
+  6A0AF6F5036FFE9E1C3CCD2155B8A05FB680FC2A601D8C40A6AACA473CE3FE24
+m4-obligation-manifest-v2.schema.json
+  48440F1AD1F8B35B04A30A714CA855A884B7A010ED89EB199CB6312A5266E3FF
+m4-parametric-pilot-v2.json
+  3B0B74F9DDC86C79B36B4E58EC8EEAAAE9F1BE1124D2772668B129127CA763D9
+lean-scoped-targets-v1.json
+  DD8B248947CAD63804788EC3063E3ED4B8E587BD6D4BFD7029A580B74333E073
+m4-parametric-pilot-v2-a.json
+  C2771F39BF19A7362685359502B84EEF477BDDA3208012FF63A8E5E892718CBE
+m4p-hardening-slop-report.json
+  76C4B0C4584BC2E9A540B1C01942BC322683EAB87A1694B41B7379083AF9E1A9
 ```
 
 ## Claim boundary

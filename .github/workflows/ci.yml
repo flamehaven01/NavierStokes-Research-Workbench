@@ -76,9 +76,10 @@ jobs:
           cmp outputs/m3-a.json outputs/m3-b.json
       - name: Verify M4 hard gate, SPAR identity, and mutations
         run: >-
-          python -c "from pathlib import Path; from nsrw.m4_audit import inspect_spar_identity,load_manifest,run_m4_audit;
-          m=load_manifest(Path('fixtures/m4-parametric-pilot-v1.json')); r=run_m4_audit(m);
+          python -c "from pathlib import Path; from nsrw.m4_audit import inspect_spar_identity,load_manifest,run_m4_audit,verify_compiled_evidence;
+          m=load_manifest(Path('fixtures/m4-parametric-pilot-v2.json')); r=run_m4_audit(m,evidence_root=Path('.'));
           assert inspect_spar_identity()['check_status']=='PASS';
+          assert all(x.check_status=='PASS' for x in verify_compiled_evidence(m,Path('.')));
           assert r['task_status']=='HELD';
           assert all(x['killed'] for x in r['mutations']);
           assert r['lane_status']['M4-S']=='HELD[NONCOMPUTABLE_SOURCE_INSTANCE]'"
@@ -102,6 +103,10 @@ jobs:
       - name: Verify formal-source revision
         shell: bash
         run: test "$(git rev-parse HEAD)" = "$OPENAI_NS_REVISION"
+      - name: Check out NSRW verifier
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          path: nsrw
       - name: Install pinned Lean toolchain and build scoped targets
         uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596 # v1
         with:
@@ -126,6 +131,50 @@ jobs:
           lake env lean --deps NavierStokes/OutgoingDilation.lean > outgoing-dilation-deps.txt
           lake env lean --deps NavierStokes/OutgoingCone.lean > outgoing-cone-deps.txt
           lake env lean --deps NavierStokes/NominalConeAssembly.lean > nominal-cone-deps.txt
+      - name: Build and cross-check structured Lean receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          targets = {
+              "+NavierStokes.OutgoingDilation": (
+                  ".lake/build/lib/lean/NavierStokes/OutgoingDilation.olean",
+                  "outgoing-dilation-deps.txt",
+              ),
+              "+NavierStokes.OutgoingCone": (
+                  ".lake/build/lib/lean/NavierStokes/OutgoingCone.olean",
+                  "outgoing-cone-deps.txt",
+              ),
+              "+NavierStokes.NominalConeAssembly": (
+                  ".lake/build/lib/lean/NavierStokes/NominalConeAssembly.olean",
+                  "nominal-cone-deps.txt",
+              ),
+          }
+          receipt = {
+              "formal_source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+              "schema_id": "flamehaven.nsrw-lean-compiled-evidence.v1",
+              "targets": {},
+              "toolchain": "leanprover/lean4:v4.34.0-rc2",
+          }
+          for target, (olean_path, deps_path) in targets.items():
+              receipt["targets"][target] = {
+                  "dependency_surface_sha256": hashlib.sha256(Path(deps_path).read_bytes()).hexdigest().upper(),
+                  "exit_code": 0,
+                  "olean_path": olean_path,
+                  "olean_sha256": hashlib.sha256(Path(olean_path).read_bytes()).hexdigest().upper(),
+                  "target": target,
+              }
+          Path("lean-compiled-receipt.json").write_text(
+              json.dumps(receipt, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          PY
+          cmp lean-compiled-receipt.json nsrw/fixtures/evidence/lean-scoped-targets-v1.json
+          PYTHONPATH=nsrw/src python -c "from pathlib import Path; from nsrw.m4_audit import load_manifest,run_m4_audit; m=load_manifest(Path('nsrw/fixtures/m4-parametric-pilot-v2.json')); r=run_m4_audit(m,lean_root=Path('.'),evidence_root=Path('nsrw')); assert r['check_status']=='PASS'; assert r['task_status']=='COMPLETED'; assert all(x['killed'] for x in r['mutations']); assert all(x['check_status']=='PASS' for x in r['checks'] if x['check_id'].startswith(('source_quantifier_binding:','compiled_receipt:')))"
       - name: Upload scoped Lean evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
@@ -135,5 +184,6 @@ jobs:
             outgoing-dilation-deps.txt
             outgoing-cone-deps.txt
             nominal-cone-deps.txt
+            lean-compiled-receipt.json
           if-no-files-found: error
           retention-days: 30

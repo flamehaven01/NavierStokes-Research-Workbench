@@ -15,9 +15,10 @@ from dataclasses import asdict, dataclass
 from fractions import Fraction
 from math import isfinite
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
-SCHEMA_ID = "flamehaven.nsrw-m4-obligation-manifest.v1"
+SCHEMA_ID = "flamehaven.nsrw-m4-obligation-manifest.v2"
+COMPILED_EVIDENCE_SCHEMA_ID = "flamehaven.nsrw-lean-compiled-evidence.v1"
 FAMILIES = frozenset({"SUPPORT", "CONE", "MOMENT", "FALSIFICATION"})
 EVIDENCE_CLASSES = frozenset(
     {"FINITE_GRID", "EXACT_SYMBOLIC", "COMPILED_TARGET", "MANUFACTURED_FALSIFIER"}
@@ -41,6 +42,15 @@ REQUIRED_MUTATIONS = (
     "malformed_source_hash",
     "compiled_target_drift",
 )
+EXPECTED_MUTATION_DETECTORS = {
+    "swap_quantifier_order": "M4P-CONE-001:quantifier_custody",
+    "drop_required_assumption": "manifest_contract",
+    "finite_grid_to_symbolic": "M4P-SUPPORT-001:quantifier_custody",
+    "parametric_to_source_instance": "M4P-SUPPORT-001:quantifier_custody",
+    "malformed_source_hash": "manifest_contract",
+    "compiled_target_drift": "manifest_contract",
+}
+SOURCE_QUANTIFIER_PROJECTION = "NAMED_BINDERS_AND_DATA_EXISTENTIALS"
 
 
 class Serializable:
@@ -84,18 +94,52 @@ def _quantifier_signature(items: object) -> tuple[tuple[str, str], ...] | None:
     return tuple(signature)
 
 
+def _valid_relative_path(value: object) -> bool:
+    if not isinstance(value, str) or not value:
+        return False
+    path = Path(value)
+    return not path.is_absolute() and ".." not in path.parts
+
+
+def _has_bound_compiled_fields(record: dict[str, Any]) -> bool:
+    return all(
+        (
+            _valid_relative_path(record.get("receipt_path")),
+            _is_sha256(record.get("receipt_sha256")),
+            _is_sha256(record.get("olean_sha256")),
+        )
+    )
+
+
+def _valid_compiled_record_header(target: object, record: object) -> bool:
+    return all((isinstance(target, str), bool(target), isinstance(record, dict)))
+
+
+def _validate_optional_hash(
+    target: str,
+    label: str,
+    value: object,
+    errors: list[str],
+) -> None:
+    if value is not None and not _is_sha256(value):
+        errors.append(f"compiled target {target} {label} sha256 is invalid")
+
+
 def _validate_compiled_target(target: object, record: object, errors: list[str]) -> None:
-    if not isinstance(target, str) or not target or not isinstance(record, dict):
+    if not _valid_compiled_record_header(target, record):
         errors.append("compiled target record is invalid")
         return
-    if record.get("check_status") not in {"PASS", "HELD"}:
+    assert isinstance(target, str) and isinstance(record, dict)
+    status = record.get("check_status")
+    if status not in {"PASS", "HELD"}:
         errors.append(f"compiled target {target} has an invalid status")
-    receipt_hash = record.get("receipt_sha256")
-    if receipt_hash is not None and not _is_sha256(receipt_hash):
-        errors.append(f"compiled target {target} receipt sha256 is invalid")
-    olean_hash = record.get("olean_sha256")
-    if olean_hash is not None and not _is_sha256(olean_hash):
-        errors.append(f"compiled target {target} olean sha256 is invalid")
+    _validate_optional_hash(target, "receipt", record.get("receipt_sha256"), errors)
+    _validate_optional_hash(target, "olean", record.get("olean_sha256"), errors)
+    receipt_path = record.get("receipt_path")
+    if receipt_path is not None and not _valid_relative_path(receipt_path):
+        errors.append(f"compiled target {target} receipt path is invalid")
+    if status == "PASS" and not _has_bound_compiled_fields(record):
+        errors.append(f"compiled target {target} PASS lacks bound receipt evidence")
 
 
 def _validate_source_binding(binding: object, errors: list[str]) -> dict[str, Any]:
@@ -103,8 +147,15 @@ def _validate_source_binding(binding: object, errors: list[str]) -> dict[str, An
         errors.append("source_binding must be an object")
         binding = {}
     commit = binding.get("formal_source_commit")
-    if not isinstance(commit, str) or len(commit) != 40:
+    if (
+        not isinstance(commit, str)
+        or len(commit) != 40
+        or any(character not in "0123456789abcdefABCDEF" for character in commit)
+    ):
         errors.append("formal source commit is invalid")
+    toolchain = binding.get("formal_source_toolchain")
+    if not isinstance(toolchain, str) or not toolchain:
+        errors.append("formal source toolchain is invalid")
     targets = binding.get("compiled_targets")
     if not isinstance(targets, dict) or not targets:
         errors.append("source_binding.compiled_targets must be a non-empty object")
@@ -134,10 +185,31 @@ def _validate_locator(prefix: str, locator: object, errors: list[str]) -> None:
     if not isinstance(locator, dict):
         errors.append(f"{prefix}.source_locator must be an object")
         return
-    if not locator.get("relative_path") or not locator.get("declaration"):
+    relative_path = locator.get("relative_path")
+    if not relative_path or not locator.get("declaration"):
         errors.append(f"{prefix}.source_locator is incomplete")
+    elif not _valid_relative_path(relative_path):
+        errors.append(f"{prefix}.source_locator.relative_path is invalid")
     if not _is_sha256(locator.get("sha256")):
         errors.append(f"{prefix}.source_locator.sha256 is invalid")
+    if not _is_sha256(locator.get("signature_sha256")):
+        errors.append(f"{prefix}.source_locator.signature_sha256 is invalid")
+    if locator.get("quantifier_projection") != SOURCE_QUANTIFIER_PROJECTION:
+        errors.append(f"{prefix}.source_locator.quantifier_projection is invalid")
+
+
+def _validate_source_quantifiers(prefix: str, items: object, errors: list[str]) -> None:
+    if not isinstance(items, list):
+        return
+    for item in items:
+        if (
+            not isinstance(item, dict)
+            or item.get("quantifier") not in {"FORALL", "EXISTS"}
+            or not isinstance(item.get("source_fragment"), str)
+            or not item["source_fragment"]
+        ):
+            errors.append(f"{prefix}.source_quantifiers require ordered source_fragment bindings")
+            return
 
 
 def _validate_obligation(
@@ -170,6 +242,7 @@ def _validate_obligation(
     for field in ("source_quantifiers", "artifact_quantifiers"):
         if _quantifier_signature(obligation.get(field)) is None:
             errors.append(f"{prefix}.{field} is invalid")
+    _validate_source_quantifiers(prefix, obligation.get("source_quantifiers"), errors)
     _validate_assumptions(prefix, obligation, errors)
     _validate_locator(prefix, obligation.get("source_locator"), errors)
     if obligation.get("compiled_target") not in targets:
@@ -263,7 +336,22 @@ def _evaluate_support(evaluator: dict[str, Any]) -> Check:
     return Check("support", "PASS", "declared support intervals are ordered and lie below the cutoff")
 
 
-def _has_dependency_cycle(graph: dict[str, object]) -> bool:
+def _dependency_shape_error(graph: dict[str, object]) -> str | None:
+    nodes = set(graph)
+    for node, dependencies in graph.items():
+        if not isinstance(node, str) or not node:
+            return "threshold dependency graph has an invalid node"
+        if not isinstance(dependencies, list) or any(
+            not isinstance(item, str) or not item for item in dependencies
+        ):
+            return "threshold dependency graph is malformed"
+        if any(item not in nodes for item in dependencies):
+            return "threshold dependency graph has a dangling dependency"
+    return None
+
+
+def _has_dependency_cycle(graph: dict[str, list[str]]) -> bool:
+
     visiting: set[str] = set()
     visited: set[str] = set()
 
@@ -273,10 +361,7 @@ def _has_dependency_cycle(graph: dict[str, object]) -> bool:
         if node in visited:
             return False
         visiting.add(node)
-        dependencies = graph.get(node, [])
-        if not isinstance(dependencies, list) or any(not isinstance(item, str) for item in dependencies):
-            return True
-        if any(visit(item) for item in dependencies):
+        if any(visit(item) for item in graph[node]):
             return True
         visiting.remove(node)
         visited.add(node)
@@ -285,26 +370,45 @@ def _has_dependency_cycle(graph: dict[str, object]) -> bool:
     return any(visit(node) for node in graph)
 
 
+def _dependency_graph_error(graph: dict[str, object]) -> str | None:
+    if shape_error := _dependency_shape_error(graph):
+        return shape_error
+    valid_graph = cast(dict[str, list[str]], graph)
+    if _has_dependency_cycle(valid_graph):
+        return "threshold dependency graph is cyclic"
+    return None
+
+
+def _cone_margin(item: object) -> tuple[float | None, str | None]:
+    if not isinstance(item, dict):
+        return None, "cone inequality is malformed"
+    lhs, rhs, minimum = item.get("lhs"), item.get("rhs"), item.get("minimum_margin", 0)
+    relation = item.get("relation")
+    if relation not in {"LE", "GE"}:
+        return None, "cone relation must be LE or GE"
+    if not all(isinstance(value, (int, float)) for value in (lhs, rhs, minimum)):
+        return None, "cone values must be numeric"
+    if not all(isfinite(float(value)) for value in (lhs, rhs, minimum)):
+        return None, "cone values must be finite"
+    margin = float(rhs - lhs) if relation == "LE" else float(lhs - rhs)
+    if margin < float(minimum):
+        return None, "a cone inequality lacks its declared margin"
+    return margin, None
+
+
 def _evaluate_cone(evaluator: dict[str, Any]) -> Check:
     inequalities = evaluator.get("inequalities")
     graph = evaluator.get("threshold_dependencies", {})
     if not isinstance(inequalities, list) or not inequalities or not isinstance(graph, dict):
         return Check("cone", "FAIL", "cone evaluator requires inequalities and a dependency graph")
-    if _has_dependency_cycle(graph):
-        return Check("cone", "FAIL", "threshold dependency graph is cyclic or malformed")
+    if graph_error := _dependency_graph_error(graph):
+        return Check("cone", "FAIL", graph_error)
     margins: list[float] = []
     for item in inequalities:
-        if not isinstance(item, dict):
-            return Check("cone", "FAIL", "cone inequality is malformed")
-        lhs, rhs, minimum = item.get("lhs"), item.get("rhs"), item.get("minimum_margin", 0)
-        relation = item.get("relation")
-        if not all(isinstance(value, (int, float)) for value in (lhs, rhs, minimum)):
-            return Check("cone", "FAIL", "cone values must be numeric")
-        if not all(isfinite(float(value)) for value in (lhs, rhs, minimum)):
-            return Check("cone", "FAIL", "cone values must be finite")
-        margin = float(rhs - lhs) if relation == "LE" else float(lhs - rhs) if relation == "GE" else -1.0
-        if margin < float(minimum):
-            return Check("cone", "FAIL", "a cone inequality lacks its declared margin")
+        margin, error = _cone_margin(item)
+        if error:
+            return Check("cone", "FAIL", error)
+        assert margin is not None
         margins.append(margin)
     return Check("cone", "PASS", f"cone inequalities pass; minimum observed margin={min(margins):.12g}")
 
@@ -340,6 +444,76 @@ def evaluate_obligation(obligation: dict[str, Any]) -> Check:
     return function(evaluator) if function else Check("evaluator", "FAIL", "unsupported family")
 
 
+def _normalized_declaration_signature(text: str, declaration: str) -> str | None:
+    start = text.find(declaration)
+    if start < 0:
+        return None
+    tail = text[start:]
+    endings = [
+        position
+        for marker in (":= by", " where")
+        if (position := tail.find(marker)) >= 0
+    ]
+    if not endings:
+        return None
+    return " ".join(tail[: min(endings)].split())
+
+
+def _source_fragments_are_ordered(signature: str, obligation: dict[str, Any]) -> bool:
+    cursor = 0
+    for item in obligation.get("source_quantifiers", []):
+        fragment = " ".join(str(item.get("source_fragment", "")).split())
+        position = signature.find(fragment, cursor)
+        if not fragment or position < 0:
+            return False
+        cursor = position + len(fragment)
+    return True
+
+
+def _verify_source_obligation(obligation: dict[str, Any], lean_root: Path) -> list[Check]:
+    locator = obligation.get("source_locator", {})
+    path = lean_root / str(locator.get("relative_path", ""))
+    actual = hashlib.sha256(path.read_bytes()).hexdigest().upper() if path.is_file() else ""
+    expected = str(locator.get("sha256", "")).upper()
+    declaration = str(locator.get("declaration", ""))
+    text = path.read_text(encoding="utf-8") if path.is_file() else ""
+    locator_ok = actual == expected and declaration in text
+    obligation_id = obligation.get("obligation_id", "UNKNOWN")
+    locator_check = Check(
+        f"source_locator:{obligation_id}",
+        "PASS" if locator_ok else "FAIL",
+        (
+            "source bytes and declaration match"
+            if locator_ok
+            else "source locator, hash, or declaration mismatch"
+        ),
+    )
+    signature = _normalized_declaration_signature(text, declaration)
+    actual_signature_hash = (
+        hashlib.sha256(signature.encode("utf-8")).hexdigest().upper()
+        if signature is not None
+        else ""
+    )
+    signature_ok = all(
+        (
+            locator_ok,
+            actual_signature_hash == str(locator.get("signature_sha256", "")).upper(),
+            signature is not None,
+            signature is not None and _source_fragments_are_ordered(signature, obligation),
+        )
+    )
+    signature_check = Check(
+        f"source_quantifier_binding:{obligation_id}",
+        "PASS" if signature_ok else "FAIL",
+        (
+            "normalized declaration signature and ordered quantifier fragments match"
+            if signature_ok
+            else "declaration signature hash or ordered quantifier fragments mismatch"
+        ),
+    )
+    return [locator_check, signature_check]
+
+
 def verify_source_bindings(manifest: dict[str, Any], lean_root: Path) -> list[Check]:
     """Verify current source identity and locator bytes; this is not semantic equivalence."""
 
@@ -360,24 +534,111 @@ def verify_source_bindings(manifest: dict[str, Any], lean_root: Path) -> list[Ch
         )
     ]
     for obligation in manifest.get("obligations", []):
-        locator = obligation.get("source_locator", {})
-        path = lean_root / str(locator.get("relative_path", ""))
-        actual = hashlib.sha256(path.read_bytes()).hexdigest().upper() if path.is_file() else ""
-        expected = str(locator.get("sha256", "")).upper()
-        declaration = str(locator.get("declaration", ""))
-        text = path.read_text(encoding="utf-8") if path.is_file() else ""
-        ok = actual == expected and declaration in text
-        checks.append(
-            Check(
-                f"source_locator:{obligation.get('obligation_id', 'UNKNOWN')}",
-                "PASS" if ok else "FAIL",
-                "source bytes and declaration match" if ok else "source locator, hash, or declaration mismatch",
-            )
-        )
+        checks.extend(_verify_source_obligation(obligation, lean_root))
     return checks
 
 
-def _assessment(manifest: dict[str, Any], lean_root: Path | None) -> list[Check]:
+def _safe_evidence_path(evidence_root: Path, relative_path: str) -> Path | None:
+    root = evidence_root.resolve()
+    candidate = (root / relative_path).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError:
+        return None
+    return candidate
+
+
+def _read_compiled_receipt(
+    record: dict[str, Any], evidence_root: Path
+) -> tuple[dict[str, Any] | None, str | None]:
+    path = _safe_evidence_path(evidence_root, str(record.get("receipt_path", "")))
+    if path is None or not path.is_file():
+        return None, "compiled receipt path is missing or escapes evidence root"
+    actual_hash = hashlib.sha256(path.read_bytes()).hexdigest().upper()
+    if actual_hash != str(record.get("receipt_sha256", "")).upper():
+        return None, "compiled receipt sha256 mismatch"
+    try:
+        receipt = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None, "compiled receipt is not valid JSON"
+    if not isinstance(receipt, dict):
+        return None, "compiled receipt root is not an object"
+    return receipt, None
+
+
+def _compiled_receipt_matches(
+    receipt: dict[str, Any],
+    binding: dict[str, Any],
+    target: str,
+    record: dict[str, Any],
+) -> bool:
+    targets = receipt.get("targets")
+    if not isinstance(targets, dict) or not isinstance(targets.get(target), dict):
+        return False
+    target_evidence = targets[target]
+    expected = {
+        "schema_id": COMPILED_EVIDENCE_SCHEMA_ID,
+        "formal_source_commit": binding.get("formal_source_commit"),
+        "toolchain": binding.get("formal_source_toolchain"),
+        "target": target,
+        "exit_code": 0,
+        "olean_path": ".lake/build/lib/lean/"
+        + target.removeprefix("+").replace(".", "/")
+        + ".olean",
+        "olean_sha256": str(record.get("olean_sha256", "")).upper(),
+    }
+    actual = {
+        "schema_id": receipt.get("schema_id"),
+        "formal_source_commit": receipt.get("formal_source_commit"),
+        "toolchain": receipt.get("toolchain"),
+        "target": target_evidence.get("target"),
+        "exit_code": target_evidence.get("exit_code"),
+        "olean_path": target_evidence.get("olean_path"),
+        "olean_sha256": str(target_evidence.get("olean_sha256", "")).upper(),
+    }
+    return actual == expected and _is_sha256(target_evidence.get("dependency_surface_sha256"))
+
+
+def _compiled_target_evidence_check(
+    target: str,
+    record: dict[str, Any],
+    binding: dict[str, Any],
+    evidence_root: Path | None,
+) -> Check:
+    check_id = f"compiled_receipt:{target}"
+    if record.get("check_status") != "PASS":
+        return Check(check_id, "FAIL", f"{target} is not admitted as compiled")
+    if evidence_root is None:
+        return Check(check_id, "SKIPPED", "compiled evidence root was not supplied")
+    receipt, error = _read_compiled_receipt(record, evidence_root)
+    if error or receipt is None:
+        return Check(check_id, "FAIL", error or "compiled receipt is unavailable")
+    matches = _compiled_receipt_matches(receipt, binding, target, record)
+    detail = (
+        "receipt hash, source commit, toolchain, target, exit code, .olean, and dependency hash match"
+        if matches
+        else "compiled receipt fields do not match the manifest target"
+    )
+    return Check(check_id, "PASS" if matches else "FAIL", detail)
+
+
+def verify_compiled_evidence(
+    manifest: dict[str, Any], evidence_root: Path | None
+) -> list[Check]:
+    """Cross-check target PASS records against a pinned structured receipt."""
+
+    binding = manifest.get("source_binding", {})
+    return [
+        _compiled_target_evidence_check(target, record, binding, evidence_root)
+        for target, record in binding.get("compiled_targets", {}).items()
+    ]
+
+
+def _assessment(
+    manifest: dict[str, Any],
+    lean_root: Path | None,
+    evidence_root: Path | None,
+) -> list[Check]:
     errors = validate_manifest(manifest)
     checks = [Check("manifest_contract", "PASS" if not errors else "FAIL", "; ".join(errors) or "manifest contract is valid")]
     if errors:
@@ -402,13 +663,17 @@ def _assessment(manifest: dict[str, Any], lean_root: Path | None) -> list[Check]
         checks.append(Check("source_bindings", "SKIPPED", "no Lean source root supplied"))
     else:
         checks.extend(verify_source_bindings(manifest, lean_root))
+    checks.extend(verify_compiled_evidence(manifest, evidence_root))
     return checks
 
 
 def _swap_quantifiers(candidate: dict[str, Any]) -> None:
-    candidate["obligations"][1]["artifact_quantifiers"] = list(
-        reversed(candidate["obligations"][1]["artifact_quantifiers"])
-    )
+    obligation = candidate["obligations"][1]
+    obligation["claimed_scope"] = "SYMBOLIC_PARAMETRIC_IDENTITY"
+    obligation["artifact_quantifiers"] = [
+        {"quantifier": item["quantifier"], "binder": item["binder"]}
+        for item in reversed(obligation["source_quantifiers"])
+    ]
 
 
 def _drop_assumption(candidate: dict[str, Any]) -> None:
@@ -441,15 +706,28 @@ MUTATIONS: tuple[tuple[str, Callable[[dict[str, Any]], None]], ...] = (
 )
 
 
-def run_mutations(manifest: dict[str, Any], lean_root: Path | None = None) -> list[MutationResult]:
+def run_mutations(
+    manifest: dict[str, Any],
+    lean_root: Path | None = None,
+    evidence_root: Path | None = None,
+) -> list[MutationResult]:
+    baseline_failures = {
+        check.check_id
+        for check in _assessment(manifest, lean_root, evidence_root)
+        if check.check_status == "FAIL"
+    }
     results: list[MutationResult] = []
     for mutation_id, mutate in MUTATIONS:
         candidate = copy.deepcopy(manifest)
         mutate(candidate)
-        failed = tuple(
-            check.check_id for check in _assessment(candidate, lean_root) if check.check_status == "FAIL"
-        )
-        results.append(MutationResult(mutation_id, bool(failed), failed))
+        mutated_failures = {
+            check.check_id
+            for check in _assessment(candidate, lean_root, evidence_root)
+            if check.check_status == "FAIL"
+        }
+        new_failures = tuple(sorted(mutated_failures - baseline_failures))
+        expected = EXPECTED_MUTATION_DETECTORS[mutation_id]
+        results.append(MutationResult(mutation_id, expected in new_failures, new_failures))
     return results
 
 
@@ -523,9 +801,13 @@ def run_spar_diagnostic(checks: list[Check], report_text: str = "") -> dict[str,
     }
 
 
-def run_m4_audit(manifest: dict[str, Any], lean_root: Path | None = None) -> dict[str, Any]:
-    checks = _assessment(manifest, lean_root)
-    mutations = run_mutations(manifest, lean_root)
+def run_m4_audit(
+    manifest: dict[str, Any],
+    lean_root: Path | None = None,
+    evidence_root: Path | None = None,
+) -> dict[str, Any]:
+    checks = _assessment(manifest, lean_root, evidence_root)
+    mutations = run_mutations(manifest, lean_root, evidence_root)
     mutations_ok = all(item.killed for item in mutations)
     checks.append(
         Check(

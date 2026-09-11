@@ -45,10 +45,13 @@ Use this checklist before marking any implementation stage GREEN.
 - [ ] Full paper–Lean semantic equivalence remains an explicit research
   obligation; it is not silently treated as complete or made a hard M4 gate
   unless M4 directly depends on that unresolved equivalence.
-- [ ] Every M4-P obligation records source and executable quantifiers in order.
+- [ ] Every M4-P obligation records source and executable quantifiers in order;
+  the source projection is bound to a normalized declaration-signature hash
+  and ordered source fragments rather than trusted as manifest prose.
 - [ ] Finite-grid evidence can claim only `SAMPLED_PARAMETRIC_DIAGNOSTIC`.
-- [ ] Each consumed Lean file has its own target-specific compiled receipt; an
-  unrelated target build cannot satisfy that gate.
+- [ ] Each consumed Lean target has a structured compiled receipt whose hash,
+  source commit, toolchain, target, exit code, `.olean`, and dependency surface
+  are cross-verified; an unrelated or handwritten PASS cannot satisfy the gate.
 - [ ] `EXISTENTIAL_NONCOMPUTABLE_IN_CURRENT_SOURCE_INTERFACE` is a custody
   classification, not a claim of absolute mathematical nonconstructibility.
 - [ ] SPAR score/verdict is secondary and cannot override any critical M4 hard gate.
@@ -66,13 +69,16 @@ Use this checklist before marking any implementation stage GREEN.
 
 - [ ] Focused positive tests pass.
 - [ ] Missing, malformed, contradictory, weakened, and scope-inflated inputs fail closed.
-- [ ] Required mutations are killed.
+- [ ] Required mutations are killed only by their expected detector in the
+  mutated-minus-baseline failure delta.
 - [ ] The full current pytest suite passes.
 - [ ] Commands, counts, and environment are recorded.
 - [ ] Wrong sign, force, or scaling exponent mutations produce a detectable failure.
 - [ ] A compressible control is rejected by the divergence diagnostic.
 - [ ] M4 quantifier-order, assumption-removal, scope-promotion, source-hash,
   and compiled-target mutations are all killed.
+- [ ] Cone relations are restricted to the declared enum and dependency graphs
+  reject both cycles and references to undeclared nodes.
 
 ## Slop diagnostic
 

@@ -52,18 +52,21 @@ are guardrails: they protect the research engine but are not its destination.
 - M1: exact scaling and similarity-coordinate algebra — local support.
 - M2: source-shaped leading-field interface and local diagnostics — local
   support; source profiles not instantiated.
-- M3: dependent profile closure and paper–Lean crosswalk — **review held**.
-  The (V_0) relation was found in Lean, so that suspected gap is falsified.
-  The source-domain contract (0<h<1/100), explicit (X=0) pressure limit,
-  one-sided endpoint policy, declaration-aware matching, and M3 CI replay are
-  now locally verified. The supplied pressure tail still lacks an independent
-  source-profile witness, and Lean build/semantic equivalence remain open.
-- M3R: closure recovery — **active**. M3R-1 recovers the pinned Lean/Lake
-  compiled dependency graph; M3R-2 evaluates the concrete `TailData` instance
-  against the independent pressure-tail witness. Full paper–Lean semantic
-  equivalence remains an open research obligation, not an invisible gate.
-- M4: stress support, cone margin, and moment identities — held until the
-  remaining Lean/semantic and tail-witness bridges are resolved.
+- M3: dependent profile closure and paper–Lean crosswalk —
+  **closed with a noncomputable source boundary**. The source-domain contract,
+  axis pressure limit, endpoint policy, declaration matching, and scoped Lean
+  compilation are verified. A concrete selected `TailData` evaluator remains
+  unavailable through the current source interface.
+- M3R: closure recovery — **completed for the scoped compiled dependency
+  target**. Its remaining source-instance question is carried by M4-S rather
+  than silently reopening M3 engineering.
+- M4-P: Support, Cone, Moment, and verifier falsification — **active**. The v2
+  pilot gate binds normalized Lean signatures and ordered quantifier fragments,
+  cross-verifies structured build receipts, and uses baseline-delta mutation
+  verdicts. Its evaluators remain manufactured controls, not source theorem
+  reproductions.
+- M4-S: selected source instance — **held** because the current formal source
+  exposes no pinned numerical evaluator for the existential witness.
 - External E2: pinned 2-D vorticity reconstruction — **contract implemented;
   execution held until source revision/file/sample/hash admission**. This is
   an independent numerical observation surface, not theorem evidence.
@@ -76,19 +79,20 @@ are guardrails: they protect the research engine but are not its destination.
 The near-term objective is not “finish reproducing 167 pages.” It is to reduce
 the highest-risk semantic debt surface:
 
-1. repair and freshly verify M3's source-domain and axis-limit contracts;
-2. map each quantitative conjunct of Theorem 4.6 to an inspectable proof
+1. map each quantitative conjunct of Theorem 4.6 to an inspectable proof
    dependency;
+2. replace manufactured M4-P controls one family at a time with source-derived
+   Support, Cone, and Moment obligations without widening their claim scope;
 3. independently test one materially different mechanism (stable/dynamically
    rescaled profile or multiscale cascade) against the same PDE obligations;
-4. promote nothing beyond `UNVERIFIED` until a pinned Lean build and an
+4. promote nothing beyond `UNVERIFIED` until the pinned Lean build and an
    obligation-by-obligation semantic comparison exist.
 
 The external experiment lane is interleaved only where it adds a measurable
 quantity or falsifier: E1 analytic control, E2 dataset-to-field reconstruction,
 E3 learned-rollout drift, and E4 forced/unforced scope custody. It cannot close
-the M3 hold or substitute for the missing pressure-tail witness and Lean
-semantic/build bridges.
+the M4-S hold or substitute for the missing pressure-tail witness and
+paper–Lean semantic bridge.
 
 This keeps the ambitious goal visible while ensuring each stage is cumulative,
 mathematically useful, and able to fail.

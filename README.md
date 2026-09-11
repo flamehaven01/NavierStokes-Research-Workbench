@@ -64,7 +64,7 @@ project is not affiliated with or endorsed by OpenAI.
 | M1 scaling/reconstruction | `PASS[LOCAL]` | Exact algebra and manufactured diagnostics |
 | M2 analytic spine | `PASS[LOCAL]` | Profile interfaces and bounded obligations; no source profile instantiation |
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
-| M4-P parametric lane | `OPEN[PILOT_GATE_PASS]` | Support/Cone/Moment pilot, source bindings, scoped Lean targets, and 6/6 mutations pass |
+| M4-P parametric lane | `OPEN[HARDENED_PILOT_GATE_PASS]` | Manufactured evaluators pass; source signatures, compiled receipts, and 6/6 mutation deltas are bound |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
@@ -132,6 +132,12 @@ The dedicated pipeline is additional to ordinary software CI.
 - `Falsification`: manufactured mutations that must be rejected;
 - `Quantifier custody`: record source and executable quantifiers side by side.
 
+The active v2 M4 contract also hashes each normalized Lean declaration
+signature, checks ordered source fragments under the declared
+`NAMED_BINDERS_AND_DATA_EXISTENTIALS` projection, and opens the structured
+compiled receipt rather than trusting a handwritten `PASS`. The retained v1
+schema and fixture are historical and are not accepted by the v2 runtime.
+
 Checking one fixture and a finite grid remains
 `SAMPLED_PARAMETRIC_DIAGNOSTIC`. It cannot be promoted to a source statement
 of the form `forall F, exists R(F), forall X >= R(F)`.
@@ -181,14 +187,15 @@ For M3, pass `--lean-root` or set `NSRW_LEAN_ROOT`.
 
 ```bash
 python -m nsrw.m3_evidence_cli --lean-root /path/to/NavierStokesAndEuler
-python -m nsrw.m4_cli fixtures/m4-parametric-pilot-v1.json \
+python -m nsrw.m4_cli fixtures/m4-parametric-pilot-v2.json \
   --lean-root /path/to/NavierStokesAndEuler \
   --output outputs/m4-parametric-pilot-receipt.json
 ```
 
-An M4 exit code of `1` is expected while a critical source or target-specific
-compiled receipt is missing. Inspect `check_status`, `task_status`, and
-`lane_status`; do not infer mathematical failure from a held evidence gate.
+The current v2 fixture returns `0` only when the pinned source signatures and
+structured compiled receipt are both available and match. Exit code `1` means
+a critical source, quantifier-fragment, receipt, or target binding is missing
+or invalid. It does not by itself mean the mathematical theorem is false.
 
 ## CI and verification
 
@@ -237,6 +244,7 @@ witnesses, parameters, or evidence remain explicitly unknown or held.
 - [North-star map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
 - [Realistic research design](docs/REALISTIC_RESEARCH_DESIGN.md)
 - [M4-P design](docs/M4_PARAMETRIC_AUDIT_DESIGN.md)
+- [M4-P verifier hardening](docs/M4P_VERIFIER_HARDENING_2026-09-11.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
 - [Changelog](CHANGELOG.md)
 

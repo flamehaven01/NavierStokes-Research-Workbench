@@ -1,6 +1,6 @@
 # M4-P Parametric Stress / Cone / Moment Audit
 
-Status: `OPEN[PILOT_GATE_PASS]`
+Status: `OPEN[HARDENED_PILOT_GATE_PASS]`
 
 ## North-star boundary
 
@@ -50,40 +50,52 @@ binding.
 
 ### P0 -- contract
 
-The versioned manifest binds the formal-source commit, target-specific build
-records, source paths and hashes, ordered quantifier prefixes, assumptions,
-evidence class, claim scope, and constructibility classification.
+The v2 manifest binds the formal-source commit and toolchain, target-specific
+structured build receipt, source paths and file hashes, normalized declaration
+signature hashes, ordered quantifier fragments, assumptions, evidence class,
+claim scope, and constructibility classification. The quantifier projection is
+explicitly limited to named binders and data existentials; this is source
+signature custody, not a general Lean parser or semantic-equivalence proof.
 
 ### P1 -- support
 
 The initial evaluator checks finite ordered intervals, inclusion under the
-declared cutoff, and boundary ordering. The pilot is a manufactured fixture,
-not the source-selected profile.
+declared cutoff, and boundary ordering. Its scoped result is
+`PASS[MANUFACTURED_SUPPORT_FIXTURE]`, not a source-selected profile result.
 
 ### P2 -- cone
 
-The evaluator checks declared inequality direction, minimum margin, and an
-acyclic threshold-dependency graph. Exact agreement of source and artifact
-quantifier prefixes is required for symbolic claims.
+The evaluator admits only `LE` and `GE`, checks minimum margin, and rejects
+cycles, malformed nodes, and dangling dependencies. Its scoped result is
+`PASS[PARAMETRIC_CONE_EVALUATOR]`; it is not a numerical evaluation of
+`CleanOutgoingCone`.
 
 ### P3 -- moment
 
 Moment and normalization identities use exact rational arithmetic. No
-floating tolerance may turn a failed exact cancellation into PASS.
+floating tolerance may turn a failed exact cancellation into PASS. The pilot
+result is `PASS[EXACT_FIXTURE_ARITHMETIC]`, not reproduction of a source moment.
 
 ### P4 -- falsification
 
 The required mutations change quantifier order, remove an assumption, promote
 finite evidence, claim a noncomputable source instance, malform a source hash,
-or drift the compiled target. Every mutation must be killed.
+or drift the compiled target. A mutation is killed only when its expected
+detector appears in `mutated_failures - baseline_failures`; unrelated baseline
+failures cannot kill a mutation.
 
 ## Current scoped result
 
 The P0 contract, P1 Support, P2 Cone, P3 Moment, and P4 mutation bank are
-implemented. GitHub Actions run `34497647700` compiled all three pinned Lean
-targets and uploaded their hashes and direct dependency surfaces. The hosted
-SPAR pin resolved consistently to `0.6.0`; the local editable installation's
-older metadata remains a local environment observation only.
+implemented. GitHub Actions compiled all three pinned Lean targets. The v2
+verifier now opens a deterministic JSON receipt and cross-checks its SHA-256,
+formal-source commit, toolchain, target name, exit code, expected `.olean` path
+and hash, and dependency-surface hash. CI regenerates that receipt from a fresh
+build and compares it byte-for-byte with the admitted receipt.
+
+The hosted SPAR pin resolves consistently to `0.6.0`. A local editable
+installation may still report older distribution metadata; that remains an
+explicit diagnostic and cannot override the NSRW hard gate.
 
 The pilot gate passes. M4-P remains an open research lane because these
 manufactured obligations do not establish the paper's full analytic estimates.
