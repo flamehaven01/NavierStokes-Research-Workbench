@@ -27,8 +27,8 @@ notes.
 - `stage_receipts/M4P_V0.2.3_FINAL_RELEASE_HOSTED.md`: final tagged-commit
   hosted same-run evidence.
 - `releases/v0.2.3.md`: historical verifier evidence-boundary release notes.
-- `releases/v0.3.0.md`: current M5/P1 checkpoint release-candidate notes and
-  held source-atlas boundary.
+- `releases/v0.3.0.md`: current M5/P1 checkpoint release notes and held
+  source-atlas boundary.
 
 ## Research plans and references
 
