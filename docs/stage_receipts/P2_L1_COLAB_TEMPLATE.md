@@ -43,6 +43,7 @@ bootstrap stdout SHA-256: [N/A | RECORD_AFTER_EXECUTION]
 bootstrap stderr SHA-256: [N/A | RECORD_AFTER_EXECUTION]
 post-bootstrap manifest committed Git blob SHA-1: [N/A | f07a8454cb6200d90bcc4371bc9965e9f8f46c7d]
 post-bootstrap manifest runtime raw SHA-256: [N/A | RECORD_AFTER_EXECUTION; observational]
+bootstrap manifest normalization: [N/A | not_required | restored_exact_project_name_normalization]
 post-bootstrap source tracked-tree status: [N/A | clean]
 source target: +NavierStokes.PulseAmplitude
 source-target build exit code: [RECORD_AFTER_EXECUTION]

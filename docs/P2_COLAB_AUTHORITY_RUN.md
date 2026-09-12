@@ -89,10 +89,13 @@ and the pinned OpenAI source commit.
 2. Invoke the committed runner with `--bootstrap-dependencies` only when the
    source dependency directory is absent.
 3. If bootstrap runs, preserve `bootstrap.stdout.log` and
-   `bootstrap.stderr.log`, record their hashes in the dated receipt, verify
-   that `lake-manifest.json` has no working-tree change and still resolves to
-   the pinned committed Git blob, and re-check the pinned source for tracked
-   changes before admitting the compile result.
+   `bootstrap.stderr.log`, record their hashes in the dated receipt, and
+   re-check the pinned source for tracked changes before admitting the compile
+   result. Lake's known one-line project-name normalization is accepted only
+   when its complete Git diff exactly matches the runner's pinned value; the
+   runner immediately restores `lake-manifest.json` from Git and then requires
+   the pinned committed blob and a clean tracked tree. Any other manifest or
+   tracked-source change fails closed.
 4. Let the runner reject a changed manifest, dirty source tree, dirty proof,
    dirty runner, mismatched proof/runner worktrees, or missing toolchain.
 5. Capture `run-metadata.txt`, the bootstrap logs when present, the
@@ -122,8 +125,9 @@ are present and mutually consistent:
 
 1. dependency bootstrap is either `SKIPPED[DEPENDENCIES_PRESENT]` or
    `PASS[EXECUTED_AND_RECORDED]`; when executed, its stdout/stderr hashes are
-   recorded, the manifest remains unchanged, and the source tracked tree is
-   clean after bootstrap;
+   recorded, any observed manifest normalization exactly matches and is
+   restored by the runner, and the source tracked tree is clean after
+   bootstrap;
 2. `lake build +NavierStokes.PulseAmplitude` exited zero;
 3. `lake env lean P2_L1_MainPulsePositivity.lean` exited zero;
 4. `#print axioms` output was captured;

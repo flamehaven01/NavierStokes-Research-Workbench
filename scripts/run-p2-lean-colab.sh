@@ -9,11 +9,13 @@ readonly EXPECTED_TOOLCHAIN="leanprover/lean4:v4.34.0-rc2"
 # The raw SHA-256 is retained below as execution metadata only.
 readonly EXPECTED_MANIFEST_GIT_BLOB_SHA1="f07a8454cb6200d90bcc4371bc9965e9f8f46c7d"
 readonly SOURCE_TARGET="+NavierStokes.PulseAmplitude"
+readonly EXPECTED_BOOTSTRAP_MANIFEST_NORMALIZATION=$'diff --git a/lake-manifest.json b/lake-manifest.json\nindex f07a845..46cd670 100644\n--- a/lake-manifest.json\n+++ b/lake-manifest.json\n@@ -111,6 +111,6 @@\n    "inputRev": "v4.34.0-rc2",\n    "inherited": true,\n    "configFile": "lakefile.toml"}],\n- "name": "fluidEquations",\n+ "name": "NavierStokesAndEuler",\n  "lakeDir": ".lake",\n  "fixedToolchain": false}'
 
 lean_root=""
 proof=""
 output_dir=""
 bootstrap_dependencies=0
+bootstrap_manifest_normalization="not_required"
 
 usage() {
   cat <<'USAGE'
@@ -22,9 +24,11 @@ Usage:
                        [--bootstrap-dependencies]
 
 The source root must be the pinned NavierStokesAndEuler checkout.  The optional
-bootstrap flag runs `lake update` only when dependencies are missing, then
-rejects any manifest working-tree change. The committed manifest Git blob is
-the cross-platform admission identity; the raw SHA-256 is recorded only.
+bootstrap flag runs `lake update` only when dependencies are missing. Lake's
+known project-name normalization is accepted only when it exactly matches the
+pinned diff and is immediately restored from Git; every other tracked change
+is rejected. The committed manifest Git blob is the cross-platform admission
+identity; the raw SHA-256 is recorded only.
 USAGE
 }
 
@@ -144,8 +148,17 @@ if [[ ! -d "$lean_root/.lake/packages/mathlib" ]]; then
     printf 'Dependency bootstrap failed; see %s and %s\n' "$bootstrap_stdout" "$bootstrap_stderr" >&2
     exit "$bootstrap_exit_code"
   fi
+  bootstrap_manifest_diff="$(git -C "$lean_root" diff --no-ext-diff -- lake-manifest.json)"
+  if [[ -n "$bootstrap_manifest_diff" ]]; then
+    [[ "$bootstrap_manifest_diff" == "$EXPECTED_BOOTSTRAP_MANIFEST_NORMALIZATION" ]] || {
+      printf 'Bootstrap changed lake-manifest.json outside the pinned normalization.\n' >&2
+      exit 65
+    }
+    git -C "$lean_root" checkout -- lake-manifest.json
+    bootstrap_manifest_normalization="restored_exact_project_name_normalization"
+  fi
   git -C "$lean_root" diff --quiet -- lake-manifest.json || {
-    printf 'Bootstrap changed lake-manifest.json; refusing to compile.\n' >&2
+    printf 'Bootstrap manifest restoration failed; refusing to compile.\n' >&2
     exit 65
   }
   [[ -z "$(git -C "$lean_root" status --porcelain --untracked-files=no)" ]] || {
@@ -211,6 +224,7 @@ hash_or_not_created() {
   printf 'toolchain=%s\n' "$toolchain"
   printf 'manifest_git_blob_sha1=%s\n' "$manifest_git_blob_sha1"
   printf 'manifest_runtime_raw_sha256=%s\n' "$manifest_runtime_raw_sha256"
+  printf 'bootstrap_manifest_normalization=%s\n' "$bootstrap_manifest_normalization"
   printf 'proof_repository_commit=%s\n' "$proof_commit"
   printf 'proof_repository_path=%s\n' "$proof_relpath"
   printf 'proof_sha256=%s\n' "$(sha256sum "$proof" | awk '{print $1}')"
