@@ -17,8 +17,10 @@ notes.
   self-authorizing-digest closure, and remaining same-raw export gate.
 - `M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md`: active source-located
   mathematical analysis of the `J/(M*H)` candidate: the after-pulse
-  obstruction, ideal-prefix ratio, pre-pulse mass sign, and the open
-  pulse-interval zero-geometry question.
+  obstruction, ideal-prefix ratio, and pre-pulse mass sign. Its
+  positive-small-`eta` first-repair interior zero is supported but remains
+  formalization-open; the remaining non-small/negative-`eta` repair-window
+  zero geometry is the open mathematical question.
 - `../formal/p2/README.md`: minimal external Lean reproduction capsule for
   the active P2 analysis. It uses the pinned OpenAI source environment; it
   is not a separate Lean project or a claim that P2 is formalized.

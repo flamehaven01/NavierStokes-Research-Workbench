@@ -12,7 +12,8 @@ dependency manifest.  The build authority is the pinned
 | Source repository | `https://github.com/openai/NavierStokesAndEuler` |
 | Source commit | `8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538` |
 | Lean toolchain | `leanprover/lean4:v4.34.0-rc2` |
-| `lake-manifest.json` SHA-256 | `d8d5387db4bfe8dcdd867d1c4979d2911f194dfe8dae3012463c620e19c6001f` |
+| `lake-manifest.json` committed Git blob SHA-1 | `f07a8454cb6200d90bcc4371bc9965e9f8f46c7d` |
+| Runtime raw SHA-256 | Observational only; record per executor because Windows CRLF and Linux LF checkouts differ. |
 
 Run a module from the pinned source root, not from this repository:
 
@@ -25,7 +26,9 @@ target-only source build, and captured stdout/stderr.  It builds only
 `+NavierStokes.PulseAmplitude` before compiling the external module.  The
 runner, proof file, and their shared NSRW revision must be tracked and clean.
 It does not run `lake update` unless explicitly asked to bootstrap missing
-dependencies, and it rejects a changed manifest.
+dependencies. It fails closed on an unapproved manifest change; the sole
+bounded bootstrap normalization is restored to the committed Git blob and
+rechecked before compilation.
 
 ## Current scope
 
@@ -36,21 +39,27 @@ dependencies, and it rejects a changed manifest.
 
 Those facts establish a positive point of the pulse.  They do **not** yet
 establish the weighted integral `F1 > 0`; that requires a separate
-integrability and positive-subinterval argument.  Consequently, compiling L1
+integrability and positive-subinterval argument. Consequently, compiling P2-L1
 does not promote the current P2 comparison or first-repair-zero claims.
 
-The intended proof order remains:
+The completed and next formal obligations are deliberately named separately:
 
 ```text
-L1  pulse nonnegativity plus a positive point, then F1 > 0
-L2  normalized main-moment comparison
-L3  template moment-ratio comparison
-L4  small-positive-eta first-repair interior zero
+Completed:
+P2-L1  pulse nonnegativity plus a positive point
+
+Next formal obligations:
+F1      weighted-integral positivity: F1 > 0
+L2      normalized main-moment comparison
+L3      template moment-ratio comparison
+L4      small-positive-eta first-repair interior zero
 ```
 
-L2--L4 source files are intentionally deferred until L1 has a captured
-compiled receipt.  This prevents uncompiled placeholders from being mistaken
-for formalized results.
+The P2-L1 compile gate is satisfied by the dated
+[`P2_L1_COLAB_2026-09-12.md`](../../docs/stage_receipts/P2_L1_COLAB_2026-09-12.md)
+receipt. No L2--L4 proposition is thereby promoted. The next formal obligation
+is `F1`, the weighted-integral positivity step, which still needs its own
+source-bound module and receipt.
 
 ## Proof hygiene
 
