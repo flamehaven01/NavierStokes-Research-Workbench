@@ -2,7 +2,7 @@
 
 `receipt_status: NOT_EXECUTED_TEMPLATE`
 
-This file is a template, not evidence of a Colab run.  Copy it to a dated
+This file is a template, not evidence of a Colab run. Copy it to a dated
 receipt only after `scripts/run-p2-lean-colab.sh` has produced immutable local
 logs and metadata for that execution.
 
@@ -23,8 +23,9 @@ logs and metadata for that execution.
 
 ## Runtime and command
 
-Record the following from `run-metadata.txt`; do not add absolute paths,
-account names, tokens, or other private host details to the committed receipt.
+Record the following from `run-metadata.txt` and, when bootstrap runs, from the
+bootstrap logs themselves. Do not add absolute paths, account names, tokens,
+or other private host details to the committed receipt.
 
 ```text
 UTC timestamp: [RECORD_AFTER_EXECUTION]
@@ -35,6 +36,12 @@ disk-free summary: [RECORD_AFTER_EXECUTION]
 elan --version: [RECORD_AFTER_EXECUTION]
 lean --version: [RECORD_AFTER_EXECUTION]
 lake --version: [RECORD_AFTER_EXECUTION]
+dependency bootstrap: [SKIPPED[DEPENDENCIES_PRESENT] | PASS[EXECUTED_AND_RECORDED]]
+bootstrap exit code: [N/A | RECORD_AFTER_EXECUTION]
+bootstrap stdout SHA-256: [N/A | RECORD_AFTER_EXECUTION]
+bootstrap stderr SHA-256: [N/A | RECORD_AFTER_EXECUTION]
+post-bootstrap manifest SHA-256: [N/A | RECORD_AFTER_EXECUTION]
+post-bootstrap source tracked-tree status: [N/A | clean]
 source target: +NavierStokes.PulseAmplitude
 source-target build exit code: [RECORD_AFTER_EXECUTION]
 source-build stdout SHA-256: [RECORD_AFTER_EXECUTION]
@@ -50,14 +57,19 @@ stderr SHA-256: [RECORD_AFTER_EXECUTION]
 
 ## Scope and boundary
 
-When a dated receipt records exit code zero, it may state only:
+When a dated receipt records exit code zero and the required identity and
+bootstrap admission fields are mutually consistent, it may state only:
 
 ```text
 check_status: PASS[PINNED_SOURCE_TOOLCHAIN:external_P2_L1_module]
 claim_status: CONFIRMED for the two propositions named in P2_L1 only
 ```
 
+Here `PASS` is authority only for the recorded execution of the two named L1
+Lean propositions. It is not mathematical authority over the source theorem
+or manuscript.
+
 It must not promote `F1 > 0`, the normalized main-moment comparison,
 `DeltaM < 0`, the first-repair interior-zero result, the paper's theorem, or
-the Navier--Stokes problem.  Those obligations require their own source-bound
+the Navier--Stokes problem. Those obligations require their own source-bound
 modules and receipts.
