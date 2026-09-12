@@ -1,12 +1,12 @@
+import NavierStokes.PulseAmplitude
+
 /-!
 # P2 L1: main-pulse positivity surface
 
 External module: compile from the pinned NavierStokesAndEuler source root.
-This module is intentionally narrow.  It records two source-bound facts needed
+This module is intentionally narrow. It records two source-bound facts needed
 before any separate weighted-integral positivity proof can be attempted.
 -/
-
-import NavierStokes.PulseAmplitude
 
 namespace NSRW.P2
 
