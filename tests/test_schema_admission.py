@@ -72,6 +72,11 @@ DOCUMENTS: tuple[tuple[str, Callable[[], dict[str, Any]], str], ...] = (
         lambda: _json("fixtures/mutations/m4p-v3/corpus.json"),
         "cases",
     ),
+    (
+        "flamehaven.nsrw-lean-declaration-normalized.v1",
+        lambda: _json("fixtures/m5/h_scaling.normalized.json"),
+        "declaration",
+    ),
 )
 
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "navier-stokes-research-workbench"
-version = "0.2.3"
+version = "0.3.0"
 description = "Research-lab workbench for traceable Navier-Stokes evidence and bounded checks"
 readme = "README.md"
 requires-python = ">=3.10"

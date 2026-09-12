@@ -19,6 +19,7 @@ SCHEMA_FILES = {
     "flamehaven.nsrw-lean-compiled-evidence.v2": "lean-compiled-evidence-v2.schema.json",
     "flamehaven.nsrw-lean-execution-provenance.v1": "lean-execution-provenance-v1.schema.json",
     "flamehaven.nsrw-lean-receipt-migration.v1": "lean-receipt-migration-v1.schema.json",
+    "flamehaven.nsrw-lean-declaration-normalized.v1": "lean-declaration-normalized-v1.schema.json",
 }
 
 

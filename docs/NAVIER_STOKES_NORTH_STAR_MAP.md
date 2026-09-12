@@ -14,6 +14,22 @@ the Clay problem. The immediate product is not a larger collection of receipts
 or a claim of proof; it is a sharper, reproducible understanding of which
 analytic obligations are true, false, or still missing.
 
+## Research lanes
+
+**Verification boundaries constrain claims; they do not constrain mathematical
+investigation.** **Exploratory freedom does not remove mathematical
+obligations.**
+
+The workbench has three complementary research lanes. They are not an
+authority ladder: a source-bound reproduction and an exploratory candidate do
+different work and must keep their respective evidence boundaries.
+
+| Lane | Core question | Legitimate output |
+|---|---|---|
+| Source reproduction | What does the pinned source actually state? | Source-bound executable surface or explicit unresolved loss |
+| Mathematical analysis | Which quantities are invariant, and which obligations are genuine bottlenecks? | Derivation, obstruction, open lemma, or counterexample |
+| Candidate exploration | Can a different mechanism meet the declared PDE obligations? | A candidate that passes a stated check, or a documented failure condition |
+
 ## Map
 
 ```text
@@ -71,6 +87,15 @@ are guardrails: they protect the research engine but are not its destination.
   reproductions.
 - M4-S: selected source instance — **held** because the current formal source
   exposes no pinned numerical evaluator for the existential witness.
+- M5: source-derived mathematical interface — the manifest-pinned Lean4Export
+  compatibility spike is **locally reproducible but large**. The first
+  `H_scaling` normalization and independent reconstruction are a
+  content-hash-bound local source-derived vertical slice. Separately operated
+  pytest replay is `NOT_EXECUTED[RUNTIME_MISMATCH]`; it does not support an
+  independent-replay claim. P1 adds a ten-law reviewed-static scaling atlas
+  and exact exponent algebra, but production source-bound atlas admission is
+  **held** until a complete same-raw export and independently pinned digest
+  ledger exist. Broader source-structure coverage remains open.
 - External E2: pinned 2-D vorticity reconstruction — **contract implemented;
   execution held until source revision/file/sample/hash admission**. This is
   an independent numerical observation surface, not theorem evidence.

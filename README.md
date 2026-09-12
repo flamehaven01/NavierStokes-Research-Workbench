@@ -72,6 +72,9 @@ project is not affiliated with or endorsed by OpenAI.
 | M4-P v3 replay pilot | `PASS[LOCAL_REPLAY_V0.2.3]` | Schema-first admission, committed golden mutations, and 13 applicable replay cases pass locally; the live-only case is not applicable |
 | M4-P v3 hosted live | `PASS[HOSTED_LIVE_V0.2.3]` | Tagged commit `1120b77` passed the full hosted pipeline in [run 34666375341](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34666375341) |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
+| M5 Lean-native source interface | `PASS[LOCAL_SOURCE_DERIVED_VERTICAL_SLICE]` | Pinned `H_scaling` export, 78-node type projection, and bounded independent reconstruction are content-hash-bound locally; separately operated pytest replay is `NOT_EXECUTED[RUNTIME_MISMATCH]` |
+| M5 P1 scaling-atlas analysis | `PASS[LOCAL_REVIEWED_METADATA]` | Ten reviewed static scaling-law entries and exact `Fraction` algebra produce bounded degree-zero candidates, not Lean-derived exponents or theorem claims |
+| M5 P1 source-bound atlas | `HELD[LEDGER_NOT_INDEPENDENTLY_PINNED]` | No complete 4-law/10-law same-raw export or independently pinned ten-law digest ledger exists; production admission fails closed |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
@@ -182,6 +185,7 @@ of the form `forall F, exists R(F), forall X >= R(F)`.
 | `src/nsrw/falsification.py` | Research-contract negative controls |
 | `src/nsrw/graph.py` | Typed proof/evidence graph and authority propagation |
 | `src/nsrw/math_kernel/` | Scaling, operators, profiles, closure, and bounded diagnostics |
+| `src/nsrw/m5/` | Streaming type-only Lean export normalization, bounded `H_scaling` reconstruction, and fail-closed scaling-atlas admission |
 | `src/nsrw/m4_audit.py` | Source/check scope comparison, Support/Cone/Moment checks, secondary diagnostic adapter, and M4 mutations |
 | `src/nsrw/external_experiments/` | Pinned external numerical experiment auditors |
 | `colab/` | Project-owned notebooks; execution evidence is not prefilled |
@@ -278,6 +282,9 @@ or held.
 
 - [Documentation status index](docs/README.md)
 - [Research direction map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
+- [M5 Lean export and `H_scaling` vertical-slice contract](docs/M5_LEAN4EXPORT_H_SCALING_VERTICAL_SLICE.md)
+- [M5 `H_scaling` local receipt](docs/stage_receipts/M5_H_SCALING_LOCAL.md)
+- [M5 P1 `OutgoingDilation` scaling-atlas contract](docs/M5_OUTGOING_DILATION_SCALING_ATLAS_P1.md)
 - [Public research language guide](docs/PUBLIC_RESEARCH_LANGUAGE.md)
 - [Realistic research design](docs/REALISTIC_RESEARCH_DESIGN.md)
 - [M4-P design](docs/M4_PARAMETRIC_AUDIT_DESIGN.md)
@@ -293,6 +300,7 @@ or held.
 - [M4-P v0.2.2 hosted live receipt](docs/stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
 - [v0.2.3 release notes](docs/releases/v0.2.3.md)
+- [v0.3.0 release notes](docs/releases/v0.3.0.md)
 - [v0.2.2 release notes](docs/releases/v0.2.2.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)

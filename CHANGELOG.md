@@ -6,10 +6,45 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-12
+
+### Added
+
+- A narrow M5 contract and local compatibility receipt for exporting the
+  pinned `H_scaling` declaration with the formal source's manifest-pinned
+  Lean4Export revision. The observed export is deterministic but too large to
+  commit; its smaller normalized fixture is committed, while broader M5
+  coverage remains open.
+- A streaming, type-only Lean4Export normalizer; a schema-validated 78-node
+  `H_scaling` fixture; and an 80-digit bounded independent reconstruction with
+  two required mutation checks. The local vertical-slice receipt now binds the
+  implementation, tests, configuration, and runtime by content hash. A
+  separately operated pytest replay remains
+  `NOT_EXECUTED[REVIEWER_RUNTIME_MISMATCH]`; this is not an independent replay
+  claim.
+- A fixed ten-law `OutgoingDilation` scaling-atlas surface with exact
+  `Fraction` exponent algebra and explicit degree-zero *candidates*. The
+  static analysis identifies the next mathematical question without claiming a
+  global invariant, a cone estimate, or a new Navier--Stokes result.
+- A release-scoped P1 atlas contract that distinguishes reviewed static scaling
+  metadata from source-bound normalized declarations. The source-bound atlas
+  remains held until one complete same-raw export and an independently pinned
+  digest ledger exist.
+
 ### Fixed
 
+- Bound the `H_scaling` calculator to the complete schema-admitted normalized
+  declaration and its canonical digest, so a same-name/same-binder theorem-body
+  mutation cannot reach numerical evaluation.
+- Emit normalized fixtures as explicit UTF-8 LF bytes, eliminating Windows
+  text-mode newline drift before physical fixture hashes are recorded.
 - Reconciled public v0.2.3 status with the final tagged commit and hosted run,
   while preserving the earlier release-candidate receipt as historical evidence.
+- Closed the P1-A self-authorizing-digest defect: production atlas admission
+  now loads a separately reviewed ledger whose physical file hash is pinned in
+  code. Until that pin exists, admission fails closed with
+  `HELD[LEDGER_NOT_INDEPENDENTLY_PINNED]`; candidate digests cannot grant
+  authority.
 
 ## [0.2.3] - 2026-09-12
 
@@ -110,7 +145,8 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.0...v0.2.3
 [0.2.2]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/commit/447e86347a150bfa98e3bc5c6a61bc07c1c6223c
 [0.2.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.2.0

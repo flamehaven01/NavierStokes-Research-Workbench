@@ -1,0 +1,719 @@
+{
+  "declaration": {
+    "binders": [
+      {
+        "binder_info": "default",
+        "name": "F",
+        "type_expression_id": 4126865
+      },
+      {
+        "binder_info": "default",
+        "name": "XR",
+        "type_expression_id": 249100
+      },
+      {
+        "binder_info": "default",
+        "name": "hXR",
+        "type_expression_id": 379760
+      },
+      {
+        "binder_info": "default",
+        "name": "p",
+        "type_expression_id": 717340
+      }
+    ],
+    "kind": "thm",
+    "name": "NavierStokes.OutgoingDilation.H_scaling",
+    "type_expression_id": 4127204,
+    "value_expression_id": 4127601
+  },
+  "export": {
+    "exporter_binary_sha256": "a638952892fede28e6b530243dc4f15a5d0fddd988f3f2494ded812249315234",
+    "exporter_commit": "cacf989bd75f608700820f6afc595f32e7a99a4d",
+    "exporter_name": "lean4export",
+    "exporter_version": "3.1.0",
+    "format_version": "3.1.0",
+    "lean_githash": "6a10ac8c22beadecabdbb0919c2b50214762f91d",
+    "lean_version": "4.34.0-rc2",
+    "raw_bytes": 237875864,
+    "raw_sha256": "129f7dee6cf93f3588c4cceb13d55cb88345f39b525bfbbd58031eb0f7cd0148",
+    "record_count": 4408528
+  },
+  "losses": [],
+  "normalization_status": "PASS",
+  "normalizer": "nsrw.m5.lean_export.v1",
+  "schema_id": "flamehaven.nsrw-lean-declaration-normalized.v1",
+  "source": {
+    "declaration": "NavierStokes.OutgoingDilation.H_scaling",
+    "lean_toolchain": "leanprover/lean4:v4.34.0-rc2",
+    "module": "NavierStokes.OutgoingDilation",
+    "repository_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+    "source_file_sha256": "be46401810940d1021c2f2ccf0ce00bdffef82d413f2146742564d15c5516438",
+    "source_manifest_sha256": "d8d5387db4bfe8dcdd867d1c4979d2911f194dfe8dae3012463c620e19c6001f"
+  },
+  "type_projection": {
+    "nodes": [
+      {
+        "children": [],
+        "debruijn_index": 0,
+        "expression_id": 2,
+        "kind": "bvar"
+      },
+      {
+        "children": [],
+        "debruijn_index": 2,
+        "expression_id": 4,
+        "kind": "bvar"
+      },
+      {
+        "children": [],
+        "debruijn_index": 3,
+        "expression_id": 14,
+        "kind": "bvar"
+      },
+      {
+        "children": [],
+        "expression_id": 351,
+        "kind": "natVal",
+        "literal": "0"
+      },
+      {
+        "children": [],
+        "expression_id": 549,
+        "kind": "const",
+        "name": "LT.lt",
+        "universe_level_ids": [
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 889,
+        "kind": "const",
+        "name": "OfNat.ofNat",
+        "universe_level_ids": [
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 2379,
+        "kind": "const",
+        "name": "Eq",
+        "universe_level_ids": [
+          14
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 7313,
+        "kind": "const",
+        "name": "HMul.hMul",
+        "universe_level_ids": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 7317,
+        "kind": "const",
+        "name": "instHMul",
+        "universe_level_ids": [
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 7628,
+        "kind": "const",
+        "name": "HDiv.hDiv",
+        "universe_level_ids": [
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 7632,
+        "kind": "const",
+        "name": "instHDiv",
+        "universe_level_ids": [
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 101298,
+        "kind": "const",
+        "name": "Zero.toOfNat0",
+        "universe_level_ids": [
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 151694,
+        "kind": "const",
+        "name": "Prod",
+        "universe_level_ids": [
+          0,
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 151698,
+        "kind": "const",
+        "name": "Prod.mk",
+        "universe_level_ids": [
+          0,
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 152115,
+        "kind": "const",
+        "name": "Prod.fst",
+        "universe_level_ids": [
+          0,
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 152132,
+        "kind": "const",
+        "name": "Prod.snd",
+        "universe_level_ids": [
+          0,
+          0
+        ]
+      },
+      {
+        "children": [],
+        "expression_id": 249100,
+        "kind": "const",
+        "name": "Real",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          2379,
+          249100
+        ],
+        "expression_id": 340505,
+        "kind": "app"
+      },
+      {
+        "children": [
+          889,
+          249100
+        ],
+        "expression_id": 358766,
+        "kind": "app"
+      },
+      {
+        "children": [
+          358766,
+          351
+        ],
+        "expression_id": 358767,
+        "kind": "app"
+      },
+      {
+        "children": [
+          101298,
+          249100
+        ],
+        "expression_id": 358768,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 358769,
+        "kind": "const",
+        "name": "Real.instZero",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          358768,
+          358769
+        ],
+        "expression_id": 358770,
+        "kind": "app"
+      },
+      {
+        "children": [
+          358767,
+          358770
+        ],
+        "expression_id": 358771,
+        "kind": "app"
+      },
+      {
+        "children": [
+          7313,
+          249100
+        ],
+        "expression_id": 377949,
+        "kind": "app"
+      },
+      {
+        "children": [
+          377949,
+          249100
+        ],
+        "expression_id": 377950,
+        "kind": "app"
+      },
+      {
+        "children": [
+          377950,
+          249100
+        ],
+        "expression_id": 377951,
+        "kind": "app"
+      },
+      {
+        "children": [
+          7317,
+          249100
+        ],
+        "expression_id": 377952,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 377953,
+        "kind": "const",
+        "name": "Real.instMul",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          377952,
+          377953
+        ],
+        "expression_id": 377954,
+        "kind": "app"
+      },
+      {
+        "children": [
+          377951,
+          377954
+        ],
+        "expression_id": 377955,
+        "kind": "app"
+      },
+      {
+        "children": [
+          7628,
+          249100
+        ],
+        "expression_id": 379522,
+        "kind": "app"
+      },
+      {
+        "children": [
+          379522,
+          249100
+        ],
+        "expression_id": 379523,
+        "kind": "app"
+      },
+      {
+        "children": [
+          379523,
+          249100
+        ],
+        "expression_id": 379524,
+        "kind": "app"
+      },
+      {
+        "children": [
+          7632,
+          249100
+        ],
+        "expression_id": 379525,
+        "kind": "app"
+      },
+      {
+        "children": [
+          549,
+          249100
+        ],
+        "expression_id": 379667,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 379668,
+        "kind": "const",
+        "name": "Real.instLT",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          379667,
+          379668
+        ],
+        "expression_id": 379669,
+        "kind": "app"
+      },
+      {
+        "children": [
+          379669,
+          358771
+        ],
+        "expression_id": 379670,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 379673,
+        "kind": "const",
+        "name": "DivInvMonoid.toDiv",
+        "universe_level_ids": [
+          0
+        ]
+      },
+      {
+        "children": [
+          379673,
+          249100
+        ],
+        "expression_id": 379674,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 379675,
+        "kind": "const",
+        "name": "Real.instDivInvMonoid",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          379674,
+          379675
+        ],
+        "expression_id": 379676,
+        "kind": "app"
+      },
+      {
+        "children": [
+          379525,
+          379676
+        ],
+        "expression_id": 379677,
+        "kind": "app"
+      },
+      {
+        "children": [
+          379524,
+          379677
+        ],
+        "expression_id": 379678,
+        "kind": "app"
+      },
+      {
+        "children": [
+          379670,
+          2
+        ],
+        "expression_id": 379760,
+        "kind": "app"
+      },
+      {
+        "children": [
+          151694,
+          249100
+        ],
+        "expression_id": 717339,
+        "kind": "app"
+      },
+      {
+        "children": [
+          717339,
+          249100
+        ],
+        "expression_id": 717340,
+        "kind": "app"
+      },
+      {
+        "children": [
+          152115,
+          249100
+        ],
+        "expression_id": 717365,
+        "kind": "app"
+      },
+      {
+        "children": [
+          717365,
+          249100
+        ],
+        "expression_id": 717366,
+        "kind": "app"
+      },
+      {
+        "children": [
+          717366,
+          2
+        ],
+        "expression_id": 717367,
+        "kind": "app"
+      },
+      {
+        "children": [
+          152132,
+          249100
+        ],
+        "expression_id": 717369,
+        "kind": "app"
+      },
+      {
+        "children": [
+          717369,
+          249100
+        ],
+        "expression_id": 717370,
+        "kind": "app"
+      },
+      {
+        "children": [
+          717370,
+          2
+        ],
+        "expression_id": 717371,
+        "kind": "app"
+      },
+      {
+        "children": [
+          151698,
+          249100
+        ],
+        "expression_id": 723623,
+        "kind": "app"
+      },
+      {
+        "children": [
+          723623,
+          249100
+        ],
+        "expression_id": 723624,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 1402200,
+        "kind": "const",
+        "name": "Real.sqrt",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          1402200,
+          4
+        ],
+        "expression_id": 1403736,
+        "kind": "app"
+      },
+      {
+        "children": [
+          377955,
+          1403736
+        ],
+        "expression_id": 1406976,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 4126865,
+        "kind": "const",
+        "name": "NavierStokes.OutgoingProfile.Profile",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          379678,
+          717367
+        ],
+        "expression_id": 4127153,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 4127188,
+        "kind": "const",
+        "name": "NavierStokes.OutgoingDilation.H",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          4127188,
+          14
+        ],
+        "expression_id": 4127189,
+        "kind": "app"
+      },
+      {
+        "children": [
+          4127189,
+          4
+        ],
+        "expression_id": 4127190,
+        "kind": "app"
+      },
+      {
+        "children": [
+          4127190,
+          2
+        ],
+        "expression_id": 4127191,
+        "kind": "app"
+      },
+      {
+        "children": [
+          340505,
+          4127191
+        ],
+        "expression_id": 4127192,
+        "kind": "app"
+      },
+      {
+        "children": [],
+        "expression_id": 4127193,
+        "kind": "const",
+        "name": "NavierStokes.OutgoingProfile.Profile.H",
+        "universe_level_ids": []
+      },
+      {
+        "children": [
+          4127193,
+          14
+        ],
+        "expression_id": 4127194,
+        "kind": "app"
+      },
+      {
+        "children": [
+          4127153,
+          4
+        ],
+        "expression_id": 4127195,
+        "kind": "app"
+      },
+      {
+        "children": [
+          723624,
+          4127195
+        ],
+        "expression_id": 4127196,
+        "kind": "app"
+      },
+      {
+        "children": [
+          4127196,
+          717371
+        ],
+        "expression_id": 4127197,
+        "kind": "app"
+      },
+      {
+        "children": [
+          4127194,
+          4127197
+        ],
+        "expression_id": 4127198,
+        "kind": "app"
+      },
+      {
+        "children": [
+          1406976,
+          4127198
+        ],
+        "expression_id": 4127199,
+        "kind": "app"
+      },
+      {
+        "children": [
+          4127192,
+          4127199
+        ],
+        "expression_id": 4127200,
+        "kind": "app"
+      },
+      {
+        "binder_info": "default",
+        "children": [
+          717340,
+          4127200
+        ],
+        "expression_id": 4127201,
+        "kind": "forallE",
+        "name": "p"
+      },
+      {
+        "binder_info": "default",
+        "children": [
+          379760,
+          4127201
+        ],
+        "expression_id": 4127202,
+        "kind": "forallE",
+        "name": "hXR"
+      },
+      {
+        "binder_info": "default",
+        "children": [
+          249100,
+          4127202
+        ],
+        "expression_id": 4127203,
+        "kind": "forallE",
+        "name": "XR"
+      },
+      {
+        "binder_info": "default",
+        "children": [
+          4126865,
+          4127203
+        ],
+        "expression_id": 4127204,
+        "kind": "forallE",
+        "name": "F"
+      }
+    ],
+    "referenced_constants": [
+      "DivInvMonoid.toDiv",
+      "Eq",
+      "HDiv.hDiv",
+      "HMul.hMul",
+      "LT.lt",
+      "NavierStokes.OutgoingDilation.H",
+      "NavierStokes.OutgoingProfile.Profile",
+      "NavierStokes.OutgoingProfile.Profile.H",
+      "OfNat.ofNat",
+      "Prod",
+      "Prod.fst",
+      "Prod.mk",
+      "Prod.snd",
+      "Real",
+      "Real.instDivInvMonoid",
+      "Real.instLT",
+      "Real.instMul",
+      "Real.instZero",
+      "Real.sqrt",
+      "Zero.toOfNat0",
+      "instHDiv",
+      "instHMul"
+    ],
+    "root_expression_id": 4127204
+  }
+}

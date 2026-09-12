@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "flamehaven.nsrw-lean-declaration-normalized.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_id", "normalizer", "source", "export", "declaration", "type_projection", "losses", "normalization_status"],
+  "properties": {
+    "schema_id": {"const": "flamehaven.nsrw-lean-declaration-normalized.v1"},
+    "normalizer": {"const": "nsrw.m5.lean_export.v1"},
+    "source": {"$ref": "#/$defs/source"},
+    "export": {"$ref": "#/$defs/export"},
+    "declaration": {"$ref": "#/$defs/declaration"},
+    "type_projection": {"$ref": "#/$defs/type_projection"},
+    "losses": {"type": "array", "items": {"$ref": "#/$defs/loss"}},
+    "normalization_status": {"enum": ["PASS", "HELD[OPAQUE_CRITICAL_EXPR]"]}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_commit", "module", "declaration", "source_file_sha256", "source_manifest_sha256", "lean_toolchain"],
+      "properties": {
+        "repository_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "module": {"type": "string", "minLength": 1},
+        "declaration": {"type": "string", "minLength": 1},
+        "source_file_sha256": {"$ref": "#/$defs/sha256"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "lean_toolchain": {"type": "string", "minLength": 1}
+      }
+    },
+    "export": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lean_version", "lean_githash", "exporter_name", "exporter_version", "exporter_commit", "exporter_binary_sha256", "format_version", "raw_sha256", "raw_bytes", "record_count"],
+      "properties": {
+        "lean_version": {"type": "string", "minLength": 1},
+        "lean_githash": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "exporter_name": {"type": "string", "minLength": 1},
+        "exporter_version": {"type": "string", "minLength": 1},
+        "exporter_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "exporter_binary_sha256": {"$ref": "#/$defs/sha256"},
+        "format_version": {"type": "string", "minLength": 1},
+        "raw_sha256": {"$ref": "#/$defs/sha256"},
+        "raw_bytes": {"type": "integer", "minimum": 1},
+        "record_count": {"type": "integer", "minimum": 2}
+      }
+    },
+    "binder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "binder_info", "type_expression_id"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "binder_info": {"enum": ["default", "implicit", "strictImplicit", "instImplicit"]},
+        "type_expression_id": {"type": "integer", "minimum": 0}
+      }
+    },
+    "declaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "name", "type_expression_id", "value_expression_id", "binders"],
+      "properties": {
+        "kind": {"const": "thm"},
+        "name": {"type": "string", "minLength": 1},
+        "type_expression_id": {"type": "integer", "minimum": 0},
+        "value_expression_id": {"type": "integer", "minimum": 0},
+        "binders": {"type": "array", "items": {"$ref": "#/$defs/binder"}}
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expression_id", "kind", "children"],
+      "properties": {
+        "expression_id": {"type": "integer", "minimum": 0},
+        "kind": {"enum": ["bvar", "sort", "const", "app", "lam", "forallE", "letE", "proj", "natVal", "strVal", "OPAQUE_EXPR"]},
+        "children": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "name": {"type": "string", "minLength": 1},
+        "binder_info": {"enum": ["default", "implicit", "strictImplicit", "instImplicit"]},
+        "debruijn_index": {"type": "integer", "minimum": 0},
+        "level_id": {"type": "integer", "minimum": 0},
+        "universe_level_ids": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+        "nondependent": {"type": "boolean"},
+        "type_name": {"type": "string", "minLength": 1},
+        "projection_index": {"type": "integer", "minimum": 0},
+        "literal": {"type": "string"}
+      }
+    },
+    "type_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_expression_id", "nodes", "referenced_constants"],
+      "properties": {
+        "root_expression_id": {"type": "integer", "minimum": 0},
+        "nodes": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/node"}},
+        "referenced_constants": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+      }
+    },
+    "loss": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expression_id", "constructor"],
+      "properties": {
+        "expression_id": {"type": "integer", "minimum": 0},
+        "constructor": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
