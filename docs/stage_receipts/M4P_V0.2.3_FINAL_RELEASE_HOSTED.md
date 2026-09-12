@@ -1,21 +1,16 @@
-# M4-P v0.2.3 hosted live evidence
+# M4-P v0.2.3 final release hosted evidence
 
-Date: `2026-09-11`
+Date: `2026-09-12`
 
-Implementation commit: `30047196b2a4b9ca55b8364e7faa8c4363b0c39c`
+Tagged commit: `1120b77c5533f012a31fadd3a9185e68d939f3e0`
 
-Workflow run: [GitHub Actions 34617896806](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34617896806)
+Tag: `v0.2.3`
 
-Check status: `PASS[HOSTED_LIVE_SCOPED]`
+Workflow run: [GitHub Actions 34666375341](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34666375341)
+
+Check status: `PASS[FINAL_RELEASE_HOSTED_LIVE_SCOPED]`
 
 Claim status: `UNVERIFIED[NAVIER_STOKES_THEOREM]`
-
-Receipt role: `HISTORICAL[RELEASE_CANDIDATE]`
-
-This receipt remains valid for release-candidate commit `3004719`. Final
-v0.2.3 release authority is recorded separately in
-`M4P_V0.2.3_FINAL_RELEASE_HOSTED.md` for tagged commit `1120b77` and run
-`34666375341`. This historical receipt is not overwritten or promoted.
 
 ## Observed execution
 
@@ -30,22 +25,22 @@ live mutations rejected        PASS[14/14]
 artifact upload                PASS
 ```
 
-The workflow checked out formal source commit
+The run checked out formal source commit
 `8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538`, installed
 `leanprover/lean4:v4.34.0-rc2`, and built the three declared targets in the
-same clean hosted job that issued the receipt. The provenance envelope records
-provider `GITHUB_ACTIONS`, workflow `CI`, run `34617896806`, attempt `1`, and
-platform `Linux`.
+same clean hosted job that generated and consumed the LIVE evidence. The
+provenance envelope records provider `GITHUB_ACTIONS`, workflow `CI`, run
+`34666375341`, attempt `1`, and platform `Linux`.
 
 ## Downloaded artifact identities
 
 GitHub artifact `scoped-lean-target-evidence`:
 
 ```text
-artifact id                    10270469181
-artifact archive SHA-256       A4C878E9AE506F63C005C6FC2058B667224F1E735EBF9E5E8B1A4F519482CD46
+artifact id                    10288683221
+artifact archive SHA-256       FD4C2D1B14851DAFCD9BEF7C365DB8F6F679757569A7158E14A97CCDBC8E7AAC
 canonical compiled receipt     CD95D66A9396A067168F2748A68A4C0D6FE14DFB2DA9F0B08B1604E0AA4DB391
-execution provenance           CE16D0F51B555BC20AB40C381C378142076112ACCC4E6B4AF0570B172EBB2D4F
+execution provenance           90FDFC8ACD04C1597EF4384C2DAC4F99048BAB4C9BFA858F7078A7CE9CBD1212
 live v3 manifest               230080690DEF05FD6D07926B1A276567CC5292DAA63A86515FFD73B2185958BD
 live M4 receipt                F42B15ACC3BC6130B0B23DD5CD925FF6EB10231CBE8741752E33C4CDE717E84D
 ```
@@ -61,11 +56,13 @@ Target-specific compiled and dependency identities:
 After download, the compiled receipt, provenance envelope, and live manifest
 were independently admitted through their declared JSON Schemas. Each uploaded
 dependency file was re-hashed and matched its receipt record. The provenance
-receipt digest also matched the downloaded canonical receipt bytes.
+receipt digest matched the downloaded canonical receipt bytes. The canonical
+compiled receipt and mathematical-control artifacts were byte-identical to the
+preceding release-candidate run; only run-specific provenance changed.
 
 ## Boundary
 
-This is direct hosted evidence for the declared software, source-binding, and
+This is direct hosted evidence for the tagged software, source-binding, and
 three Lean target surfaces. It does not establish the manuscript's correctness,
 paper--Lean semantic equivalence, a computable selected-source witness, or a
 solution to the Navier--Stokes Millennium problem. M4-P remains parametric;

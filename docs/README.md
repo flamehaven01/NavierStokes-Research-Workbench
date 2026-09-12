@@ -16,7 +16,8 @@ notes.
   closure and release boundary.
 - `stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md`: local release-candidate
   evidence.
-- `stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md`: hosted same-run evidence.
+- `stage_receipts/M4P_V0.2.3_FINAL_RELEASE_HOSTED.md`: final tagged-commit
+  hosted same-run evidence.
 - `releases/v0.2.3.md`: current release notes and research boundary.
 
 ## Research plans and references
@@ -54,6 +55,7 @@ provenance; a current document may instead add a supersession notice.
 - `releases/v0.2.2.md`
 - `stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md`
 - `stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md`
+- `stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md` (release-candidate evidence)
 
 ## Reading rule
 

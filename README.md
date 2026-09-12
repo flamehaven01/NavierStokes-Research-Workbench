@@ -69,8 +69,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M2 analytic spine | `PASS[LOCAL]` | Profile interfaces and bounded obligations; no source profile instantiation |
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
 | M4-P fixed pilot | `PASS[SCOPED]` | Manufactured control surface passes its declared bounded checks |
-| M4-P v3 replay pilot | `PASS[LOCAL_REPLAY_V0.2.3_RC]` | Schema-first admission, committed golden mutations, and 13 applicable replay cases pass locally; the live-only case is not applicable |
-| M4-P v3 hosted live | `PASS[HOSTED_LIVE_V0.2.3_RC]` | Release-candidate commit `3004719` passed the full hosted pipeline in [run 34617896806](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34617896806) |
+| M4-P v3 replay pilot | `PASS[LOCAL_REPLAY_V0.2.3]` | Schema-first admission, committed golden mutations, and 13 applicable replay cases pass locally; the live-only case is not applicable |
+| M4-P v3 hosted live | `PASS[HOSTED_LIVE_V0.2.3]` | Tagged commit `1120b77` passed the full hosted pipeline in [run 34666375341](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34666375341) |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
@@ -93,9 +93,9 @@ The project prefers plain descriptions over authority-heavy labels:
 | structural consistency check | an optional secondary review supplied by a pinned dependency | semantic AI review or proof authority |
 | research direction | a planned investigation or comparator track | a completed independent solution |
 
-This wording is intentional. The lab's role is governance, reproducibility, and
-guardrails around mathematical research. It does not use verification language
-to imply a stronger result than the recorded artifact supports.
+This wording is intentional. The lab's role here is Navier--Stokes research.
+Reproducibility and evidence controls constrain how far each mathematical or
+computational result may be interpreted; they are not the research subject.
 
 ## Architecture
 
@@ -163,9 +163,10 @@ checks ordered source fragments under the declared
 `NAMED_BINDERS_AND_DATA_EXISTENTIALS` projection, and reads structured compiled
 evidence rather than trusting a handwritten `PASS`. Version 3 also separates
 historical replay from same-run live evidence and uses 14 committed, hashed
-negative-control manifests with stage-specific expected detectors. The v1 and
-v2 fixtures remain historical compatibility inputs and cannot be promoted to
-v3 authority.
+negative-control manifests with stage-specific expected detectors. The v1
+schema and fixture are retained as historical artifacts but are not admitted by
+the current M4 evaluator. Version 2 remains runnable historical replay only.
+Neither version can be promoted to v3 authority.
 
 Checking one fixture and a finite grid remains
 `SAMPLED_PARAMETRIC_DIAGNOSTIC`. It cannot be promoted to a source statement
@@ -250,11 +251,12 @@ python -m compileall -q src
 
 ## Future research directions
 
-The first planned external artifact is a pinned 2-D periodic-vorticity comparator:
+The bounded E2 auditor for a 2-D periodic-vorticity comparator is implemented:
 spectral velocity reconstruction, divergence, vorticity consistency, energy,
-and enstrophy. It is a numerical/control surface, not evidence of a 3-D
-finite-time singularity and not part of the current proof authority. See
-`docs/COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md`.
+and enstrophy. A pinned, admitted execution against the external dataset remains
+a future research experiment. Even when run, it is a numerical control surface,
+not evidence of a 3-D finite-time singularity and not part of the current proof
+authority. See `docs/COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md`.
 
 ## Limits and non-claims
 
@@ -285,7 +287,8 @@ or held.
 - [v0.2.3 post-implementation audit closure](docs/V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md)
 - [M3 historical execution-assertion tombstone](docs/stage_receipts/M3_HISTORICAL_INVALIDATION.md)
 - [M4-P v0.2.3 local closure receipt](docs/stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md)
-- [M4-P v0.2.3 hosted live receipt](docs/stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md)
+- [M4-P v0.2.3 release-candidate hosted receipt](docs/stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md)
+- [M4-P v0.2.3 final release hosted receipt](docs/stage_receipts/M4P_V0.2.3_FINAL_RELEASE_HOSTED.md)
 - [M4-P v0.2.2 local implementation receipt](docs/stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md)
 - [M4-P v0.2.2 hosted live receipt](docs/stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)

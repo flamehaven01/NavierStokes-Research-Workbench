@@ -6,6 +6,11 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+### Fixed
+
+- Reconciled public v0.2.3 status with the final tagged commit and hosted run,
+  while preserving the earlier release-candidate receipt as historical evidence.
+
 ## [0.2.3] - 2026-09-12
 
 ### Added
@@ -17,7 +22,7 @@ artifacts. Research claims retain their separate evidence statuses.
   and generated dependency file by safe relative path and SHA-256.
 - Fourteen committed, hashed pre-mutated M4 JSON manifests, consumed by the
   Python verifier and available to future independent implementations.
-- A hosted LIVE receipt from run `34617896806`, including runtime-derived
+- A final hosted LIVE receipt from run `34666375341`, including runtime-derived
   provenance, three target-specific Lean records, three dependency-file
   digests, and a 14/14 applicable mutation result.
 
