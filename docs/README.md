@@ -15,6 +15,10 @@ notes.
   slice.
 - `M5_OUTGOING_DILATION_SCALING_ATLAS_P1.md`: P1 scaling-atlas scope,
   self-authorizing-digest closure, and remaining same-raw export gate.
+- `M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md`: active source-located
+  mathematical analysis of the `J/(M*H)` candidate: the after-pulse
+  obstruction, ideal-prefix ratio, pre-pulse mass sign, and the open
+  pulse-interval zero-geometry question.
 - `stage_receipts/M5_H_SCALING_LOCAL.md`: content-hash-bound local
   `H_scaling` vertical-slice receipt; separately operated pytest replay was
   not executed because that reviewer runtime lacked pytest.

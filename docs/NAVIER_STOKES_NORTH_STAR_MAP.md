@@ -96,6 +96,13 @@ are guardrails: they protect the research engine but are not its destination.
   and exact exponent algebra, but production source-bound atlas admission is
   **held** until a complete same-raw export and independently pinned digest
   ledger exist. Broader source-structure coverage remains open.
+- M5-P2: dilation-ratio obstruction study — **active mathematical analysis**.
+  P2-A establishes the global after-pulse obstruction (`M=0`); P2-B1 derives
+  the ideal-prefix value `Q=5/8`; P2-B2 establishes pre-pulse mass-sign
+  preservation for `eta != 0`. The primary open question, P2-C, is the
+  pulse-interval zero-set geometry of `M` and whether the ideal ratio remains
+  useful before terminal cancellation. P1 source-atlas closure remains
+  parallel and non-blocking for this work.
 - External E2: pinned 2-D vorticity reconstruction — **contract implemented;
   execution held until source revision/file/sample/hash admission**. This is
   an independent numerical observation surface, not theorem evidence.
