@@ -62,6 +62,27 @@ P2-B2  PRE-PULSE MASS SIGN
 P2-C   PULSE-INTERVAL ZERO GEOMETRY
        OPEN[PRIMARY_MATHEMATICAL_QUESTION]
 
+P2-C1  EARLY-PULSE NO-ZERO REGION
+        ESTABLISHED[SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE]
+
+P2-C2  "ENDPOINT IS FIRST ZERO"
+        REJECTED_AS_STATED[SOURCE_SUPPORT_CONTRADICTION]
+
+P2-C3  TERMINAL ZERO PLATEAU
+        ESTABLISHED[SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE]
+
+P2-C4  ACTIVE REPAIR-WINDOW ZERO GEOMETRY
+        ACTIVE[POSITIVE_SMALL_ETA_FIRST_WINDOW_ZERO_SUPPORTED;
+        FULL_GEOMETRY_OPEN]
+
+P2-C4a MAIN-PULSE COMPONENT OF SECOND REPAIR COEFFICIENT
+        SUPPORTED[PINNED_DEFINITIONS_NEW_COMPARISON_ARGUMENT;
+        FORMALIZATION_OPEN]
+
+P2-C4b POSITIVE-SMALL-ETA FIRST-REPAIR ZERO
+        SUPPORTED[PINNED_DEFINITIONS_AND_TAIL_ARGUMENT;
+        FORMALIZATION_OPEN]
+
 P2-D   CONE / MOMENT USEFULNESS
        OPEN
 
@@ -178,14 +199,327 @@ cancellation `M = 0`
 ([OutgoingSchedule 749--761](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L749-L761),
 [846--878](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L846-L878)).
 
+For local pulse radius `r = exp(y - pulseStart)`, write
+
+```text
+M_pulse(eta, r) = M(eta, exp(pulseStart + log(r))).
+```
+
+The local notation is used below whenever `r`, `lower(i)`, `upper(i)`, or
+`R = exp(pulseLength)` appears. It prevents a local repair radius from being
+silently identified with the base profile's global radial coordinate.
+
+### C1: source-located early-pulse exclusion
+
+There is a limited, source-located exclusion zone before the first repair
+window. Write `s = y - pulseStart` and restrict to the specification range
+`eta^2 <= 1`. The specification supplies `amp(eta) > 9/10`
+([OutgoingProfile 564--566](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingProfile.lean#L564-L566)).
+
+The main pulse is supported before `11 / lam`; each correction interval begins
+strictly after that endpoint
+([OutgoingSchedule 282--285](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L282-L285),
+[368--375](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L368-L375)).
+The correction has support only in its two declared open intervals
+([422--423](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L422-L423),
+[447--455](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L447-L455)).
+
+Thus, up to the lower endpoint of the first repair interval, `radialPulse` is
+the positive-amplitude multiple of `eta * mainPulse`, followed by a zero gap.
+From the nonnegative cutoff factors in the definition of `mainPulse`, its
+contribution has the sign of `eta`. Combined with the nonzero, same-signed
+pre-pulse value, this gives:
+
+```text
+eta^2 <= 1 and eta != 0
+and pulseStart <= y <= firstRepairStart
+    => sign(M(eta, exp(y))) = sign(eta)
+       and M(eta, exp(y)) != 0.
+```
+
+This is again a source-located algebraic consequence, not a theorem name from
+the source. It is deliberately restricted to the specified angular range and
+does not extend across either repair interval.
+
+### C2: endpoint-first-zero condition rejected
+
+The previously proposed condition
+
+```text
+eta * integral(r, R, x^a * radialPulse(eta, x) dx) < 0
+for every 1 <= r < R
+```
+
+is **rejected as stated**. It would assert that the endpoint is the first zero
+of `M`, but the source support geometry rules this out.
+
+### C3: terminal zero plateau
+
+Let `u1 = upper(1)` and `R = exp(pulseLength)`. The source gives
+`u1 < R`. For `u1 < r < R`, both summands in `radialPulse` vanish:
+
+```text
+mainPulse(lam * log(r)) = 0
+correction(eta, r) = 0
+radialPulse(eta, r) = 0.
+```
+
+The first follows because the main pulse ends before every repair interval;
+the second follows because the repair is supported in the two separated open
+intervals, both below `u1`
+([OutgoingSchedule 363--375](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L363-L375),
+[347--352](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L347-L352),
+[447--455](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L447-L455),
+[543--544](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L543-L544)).
+
+The full-pulse cancellation gives `M(R) = 0`. Hence the radial primitive is
+already zero on this terminal inactive interval:
+
+```text
+u1 < r < R
+  => integral(r, R, x^a * radialPulse(eta, x) dx) = 0
+  => M_pulse(eta, r) = 0.
+```
+
+This passage uses the source bridge from `massMoment` to the profile mass at
+positive log radii
+([OutgoingProfile 436--449](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingProfile.lean#L436-L449)).
+
+This is an `ESTABLISHED[SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE]`, not a direct
+source theorem with this statement. It strengthens P2-A: `Q` is already
+undefined on a nonempty terminal interval before the after-pulse theorem's
+endpoint regime begins. The interval above is safe rather than sharp; the
+actual bump supports end strictly inside their declared repair intervals.
+
+### C4: repair-coefficient and partial-tail problem
+
+The remaining question is not whether the endpoint is the first zero. It is:
+
+```text
+Does M_pulse retain sign(eta) throughout the active repair support,
+until it enters the inevitable terminal zero plateau?
+
+Or does it cross zero earlier inside a repair window?
+```
+
+The repair has the exact two-bump form
+
+```text
+correction(eta, x) = c0(eta) * b0(x) + c1(eta) * b1(x),
+```
+
+where each `bj` is nonnegative and its support lies in its corresponding,
+separated repair interval
+([LocalizedMomentRepair 25--35](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/LocalizedMomentRepair.lean#L25-L35),
+[111--115](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/LocalizedMomentRepair.lean#L111-L115)).
+Thus the second repair window reduces first to the sign of `c1`: where its
+remaining weighted bump tail is positive, sign preservation requires
+`eta * c1 < 0`. The first repair window additionally requires a comparison of
+the partial `c0` tail with the future `c1` tail.
+
+The source's normalized system makes this sign question explicit. Set
+`Ai = rowMoment(exponents(i))`, `rho_i = exp(2 * beta(i))`,
+`Di = normalizedDebt(i)`, and `zi = Di / Ai`. For the actual coefficients,
+the source gives:
+
+```text
+A0 * (c0 + rho_0 * c1) = D0
+A1 * (c0 + rho_1 * c1) = D1
+rho_0 > rho_1.
+
+c1 = (z0 - z1) / (rho_0 - rho_1)
+c0 = (rho_0 * z1 - rho_1 * z0) / (rho_0 - rho_1).
+```
+
+([OutgoingPulseBounds 577--608](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L577-L608),
+[727--750](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L727-L750)).
+
+Therefore absolute coefficient bounds alone are insufficient. The remaining
+questions are the full `eta`-dependent ordering of `z0 - z1` and
+`rho_0 * z1 - rho_1 * z0`, followed in the first window by a partial-tail
+domination estimate. The source's named correction-jet bounds remain absolute
+bounds only; they do not themselves state these signs.
+
+#### C4a: small-eta main-pulse falsifier
+
+The second coefficient has a particularly sharp adversarial test. Let
+
+```text
+q(eta) = eta * (1 + eta^2)
+alpha_i = exp(-beta(i) * center(0)) / Ai > 0
+
+DeltaP = alpha_0 * prefixCoefficient(0) - alpha_1 * prefixCoefficient(1)
+DeltaM = alpha_0 * mainMoment(0) - alpha_1 * mainMoment(1).
+```
+
+The source definitions of `debt`, `normalizedDebt`, and `affineCoefficients`
+then give the algebraic identity:
+
+```text
+z0 - z1 = -q(eta) * DeltaP - amp(eta) * DeltaM.
+```
+
+Equivalently, for the main-pulse-only affine input,
+
+```text
+affineCoefficients(c, 0, 1, 1) = -DeltaM / (rho_0 - rho_1).
+```
+
+([OutgoingSchedule 407--423](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L407-L423),
+[OutgoingPulseBounds 727--750](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L727-L750),
+[875--880](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L875-L880)).
+
+Within the specification range, `amp` is continuous and remains positive at
+`eta = 0`, while `q(eta)` vanishes there. If `DeltaM != 0`, then `c1` has a
+fixed nonzero sign in a two-sided neighbourhood of zero. Consequently the
+necessary second-window condition `eta * c1 < 0` cannot hold for both small
+positive and small negative `eta`.
+
+This makes the following a necessary-condition falsifier for any uniform
+two-sided sign-preservation claim:
+
+```text
+DeltaM = 0
+
+equivalently:
+affineCoefficients(c, 0, 1, 1) = 0.
+```
+
+The normalizers cannot be discarded. However, the pinned definitions supply a
+comparison that is stronger than the available absolute bounds. Put
+
+```text
+Fi = exp(-beta(i) * center(0)) * mainMoment(i).
+```
+
+The `mainMoment_log_short` representation and `beta_0 - beta_1 = lam` give
+
+```text
+F0 = integral(0, 11 / lam,
+              exp(beta_1 * (y - center(0)))
+              * exp(lam * (y - center(0)))
+              * mainPulse(lam * y)).
+```
+
+On this integration interval, `y - center(0) <= -2 / lam + 3`, so, from
+`lam < 1/10`,
+
+```text
+F0 / F1 <= exp(-2 + 3 * lam) < exp(-(3 / 20) * lam).
+```
+
+Here `F1 > 0`: the cutoff definition makes `mainPulse` nonnegative on its
+positive support and nonzero on a subinterval. This is an elementary
+positivity consequence of the pinned definition, not a separately located
+source theorem. The needed ingredients are the cutoff bounds
+([OutgoingSchedule 52--55](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L52-L55)),
+the definitions of `pulseRamp` and `mainPulse`
+([260--262](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L260-L262)),
+and the compact-support representation of `mainMoment`
+([OutgoingPulseBounds 786--841](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L786-L841)).
+
+Independently, `exponents(0) - exponents(1) = lam`. Since `rowMoment` is the
+positive integral of the nonnegative template supported in
+`(exp(-3/20), exp(3/20))`, its two normalizers obey
+
+```text
+A0 / A1 >= exp(-(3 / 20) * lam).
+```
+
+This uses the template support and nonnegativity facts
+([OutgoingPulseBounds 409--430](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L409-L430))
+with the definition of `rowMoment`; it is not inferred from the much coarser
+uniform `rowMoment_bounds` theorem.
+
+Combining the strict first comparison with the weak second comparison yields
+
+```text
+F0 / A0 < F1 / A1
+DeltaM = F0 / A0 - F1 / A1 < 0
+affineCoefficients(c, 0, 1, 1) > 0.
+```
+
+This is a new analytic comparison assembled from pinned definitions and
+elementary integral monotonicity. It is **not** a source theorem and has not
+yet been encoded or compiled as a Lean lemma; accordingly its claim status is
+`SUPPORTED`, not `ESTABLISHED`.
+
+The amplitude component of `c1` is consequently positive. Since `amp(0) > 0`
+and `q(0) = 0`, continuity gives `c1(eta) > 0` for all sufficiently small
+`|eta|`. For sufficiently small positive `eta`, the necessary second-window
+sign-preservation condition `eta * c1 < 0` therefore fails.
+
+This also locates an interior zero more precisely than the initial
+obstruction. Let `a0 = exponents(0)`, choose sufficiently small positive
+`eta`, and write
+
+```text
+K(eta) = momentScale(0) * shape(eta) > 0.
+```
+
+At `r = upper(0)`, and throughout the gap after the first repair support,
+the main pulse and the first bump vanish. The future pulse contribution is
+therefore only the second bump. Exact endpoint cancellation and the mass
+integrand identity give the tail representation
+
+```text
+M_pulse(eta, r) = -K(eta) * c1(eta)
+                  * integral(lower(1), upper(1), x^a0 * b1(x) dx) < 0.
+```
+
+The weighted second-bump integral is strictly positive: `b1` is nonnegative,
+equals one at its center, and the radial weight is positive. On the other
+hand C1 gives `M_pulse(eta, lower(0)) > 0`. Continuity of the mass primitive now
+forces
+
+```text
+exists r_* in (lower(0), upper(0)), M_pulse(eta, r_*) = 0.
+```
+
+Thus, for sufficiently small positive `eta`, the zero is not merely somewhere
+in the union of repair supports: it lies in the **first repair window**. This
+is a source-definition tail argument, not a source theorem or compiled Lean
+result. It is consequently `SUPPORTED`, with formalization still required.
+The relevant source identities are `mass_integrand_pulse`
+([OutgoingSchedule 695--713](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L695-L713)),
+endpoint cancellation
+([846--878](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L846-L878)),
+and the strict interior support/nonnegativity of the repair bumps
+([LocalizedMomentRepair 25--68](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/LocalizedMomentRepair.lean#L25-L68)).
+
+The promotion obligation is narrow and has four components:
+
+```text
+L1  main-pulse positivity: F1 > 0
+L2  normalized main-pulse comparison: F0 / F1 < exp(-(3/20) * lam)
+L3  template moment-ratio comparison: exp(-(3/20) * lam) <= A0 / A1
+L4  second-tail and first-window zero:
+    c1 > 0 -> M_pulse(eta, upper(0)) < 0
+           -> exists r in (lower(0), upper(0)), M_pulse(eta, r) = 0.
+```
+
+Their composition proves `DeltaM < 0` and then the positive-small-`eta`
+first-window zero. No numerical `TailData` witness or new verifier framework
+is needed for this proof obligation.
+
+The source provides exact full moments and uniform absolute correction-jet
+bounds under a small-`lam` hypothesis
+([OutgoingPulseBounds 1134--1146](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L1134-L1146)).
+The source does not provide a named theorem for the comparison above, nor does
+it settle the full `eta`-dependent coefficient signs or partial-tail
+domination. Those are the current analytic boundary.
+
 The primary open question is the geometry of the zero set between these two
 facts:
 
 ```text
-- Is the endpoint the first zero of M?
-- Can M cross zero earlier and return?
-- Is sign(M) preserved on [pulseStart, endpoint)?
-- Is |M| bounded away from zero on a useful subinterval?
+- For negative or non-small `eta`, does M retain sign(eta) until it reaches
+  the terminal zero plateau?
+- For negative or non-small `eta`, can the mass retain its sign through both
+  repair supports, and what is the complete zero set?
+- What ordering of `DeltaP` and the full `eta`-dependent `z0 - z1` determines
+  the signs of `c0` and `c1` away from the small-eta obstruction?
+- What partial-tail domination is needed in the first repair window?
 - What bound, if any, follows for Q - 5/8?
 ```
 
@@ -200,11 +534,11 @@ axial_pulse
   -> massMoment_endpoint
 ```
 
-The inspected source gives exact endpoint cancellation, but it has not yet
-supplied a partial-pulse integral monotonicity or sign lemma sufficient to
-settle this interior zero-set question. Endpoint cancellation alone cannot
-exclude an earlier zero followed by a return. P2-C is therefore the first new
-analysis question in this lane, rather than a closure claim.
+The inspected source gives exact endpoint cancellation and the stronger
+terminal-zero plateau derived above, but it has not supplied a one-sided
+coefficient ordering or partial-tail domination lemma sufficient to settle
+the active repair windows. P2-C is therefore the first new analysis question
+in this lane, rather than a closure claim.
 
 ## P2-D: Cone and Moment usefulness
 

@@ -19,6 +19,11 @@ notes.
   mathematical analysis of the `J/(M*H)` candidate: the after-pulse
   obstruction, ideal-prefix ratio, pre-pulse mass sign, and the open
   pulse-interval zero-geometry question.
+- `../formal/p2/README.md`: minimal external Lean reproduction capsule for
+  the active P2 analysis.  It uses the pinned OpenAI source environment; it
+  is not a separate Lean project or a claim that P2 is formalized.
+- `stage_receipts/P2_L1_COLAB_TEMPLATE.md`: non-execution template for the
+  first external P2 Lean compile receipt.
 - `stage_receipts/M5_H_SCALING_LOCAL.md`: content-hash-bound local
   `H_scaling` vertical-slice receipt; separately operated pytest replay was
   not executed because that reviewer runtime lacked pytest.
