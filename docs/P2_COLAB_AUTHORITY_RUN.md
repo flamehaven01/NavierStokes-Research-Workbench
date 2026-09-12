@@ -38,15 +38,25 @@ The authority boundary is deliberately narrow:
 ```text
 pinned OpenAI source checkout
   + exact Lean toolchain
-  + unchanged Lake manifest
+  + unchanged committed Lake manifest Git blob
   + target build: +NavierStokes.PulseAmplitude
   + NSRW commit-bound external module: P2_L1_MainPulsePositivity.lean
 ```
 
 The runner is
-`scripts/run-p2-lean-colab.sh`. It verifies source identity, manifest,
+`scripts/run-p2-lean-colab.sh`. It verifies source identity, the committed
+manifest Git blob,
 proof-file custody, runner custody, and the shared NSRW Git revision before
 building the source target and compiling L1.
+
+The committed manifest identity is Git blob SHA-1
+`f07a8454cb6200d90bcc4371bc9965e9f8f46c7d`. The runner records a raw
+SHA-256 of the runtime file for observation, but does not use it as an
+admission gate: a byte-level raw hash changes when the same Git content is
+checked out with Windows CRLF versus Linux LF line endings. The previously
+recorded Windows CRLF SHA-256
+`d8d5387db4bfe8dcdd867d1c4979d2911f194dfe8dae3012463c620e19c6001f`
+is therefore historical runtime metadata, not a portable source identity.
 
 The target is intentionally not a full-library build. L1 needs the
 `PulseAmplitude` surface; compiling unrelated Navier--Stokes or Euler targets
@@ -80,8 +90,9 @@ and the pinned OpenAI source commit.
    source dependency directory is absent.
 3. If bootstrap runs, preserve `bootstrap.stdout.log` and
    `bootstrap.stderr.log`, record their hashes in the dated receipt, verify
-   that `lake-manifest.json` is unchanged, and re-check the pinned source for
-   tracked changes before admitting the compile result.
+   that `lake-manifest.json` has no working-tree change and still resolves to
+   the pinned committed Git blob, and re-check the pinned source for tracked
+   changes before admitting the compile result.
 4. Let the runner reject a changed manifest, dirty source tree, dirty proof,
    dirty runner, mismatched proof/runner worktrees, or missing toolchain.
 5. Capture `run-metadata.txt`, the bootstrap logs when present, the
@@ -116,7 +127,7 @@ are present and mutually consistent:
 2. `lake build +NavierStokes.PulseAmplitude` exited zero;
 3. `lake env lean P2_L1_MainPulsePositivity.lean` exited zero;
 4. `#print axioms` output was captured;
-5. source commit, manifest hash, declared and observed toolchain identity,
+5. source commit, manifest committed Git blob identity, declared and observed toolchain identity,
    NSRW commit, proof hash, and runner hash match the dated receipt.
 
 A failure or unavailable runtime is evidence about this execution route, not a

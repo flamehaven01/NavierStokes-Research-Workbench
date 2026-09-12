@@ -5,7 +5,9 @@ set -euo pipefail
 
 readonly EXPECTED_SOURCE_COMMIT="8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538"
 readonly EXPECTED_TOOLCHAIN="leanprover/lean4:v4.34.0-rc2"
-readonly EXPECTED_MANIFEST_SHA256="d8d5387db4bfe8dcdd867d1c4979d2911f194dfe8dae3012463c620e19c6001f"
+# Git blob identity is invariant across Windows CRLF and Linux LF checkouts.
+# The raw SHA-256 is retained below as execution metadata only.
+readonly EXPECTED_MANIFEST_GIT_BLOB_SHA1="f07a8454cb6200d90bcc4371bc9965e9f8f46c7d"
 readonly SOURCE_TARGET="+NavierStokes.PulseAmplitude"
 
 lean_root=""
@@ -21,7 +23,8 @@ Usage:
 
 The source root must be the pinned NavierStokesAndEuler checkout.  The optional
 bootstrap flag runs `lake update` only when dependencies are missing, then
-rejects any manifest hash change.
+rejects any manifest working-tree change. The committed manifest Git blob is
+the cross-platform admission identity; the raw SHA-256 is recorded only.
 USAGE
 }
 
@@ -114,11 +117,16 @@ toolchain="$(tr -d '\r\n' < "$lean_root/lean-toolchain")"
   exit 65
 }
 
-manifest_sha256="$(sha256sum "$lean_root/lake-manifest.json" | awk '{print $1}')"
-[[ "$manifest_sha256" == "$EXPECTED_MANIFEST_SHA256" ]] || {
-  printf 'Pinned manifest hash mismatch: %s\n' "$manifest_sha256" >&2
+git -C "$lean_root" diff --quiet -- lake-manifest.json || {
+  printf 'Pinned manifest has working-tree changes.\n' >&2
   exit 65
 }
+manifest_git_blob_sha1="$(git -C "$lean_root" rev-parse 'HEAD:lake-manifest.json')"
+[[ "$manifest_git_blob_sha1" == "$EXPECTED_MANIFEST_GIT_BLOB_SHA1" ]] || {
+  printf 'Pinned manifest Git blob mismatch: %s\n' "$manifest_git_blob_sha1" >&2
+  exit 65
+}
+manifest_runtime_raw_sha256="$(sha256sum "$lean_root/lake-manifest.json" | awk '{print $1}')"
 
 if [[ ! -d "$lean_root/.lake/packages/mathlib" ]]; then
   (( bootstrap_dependencies == 1 )) || {
@@ -136,11 +144,20 @@ if [[ ! -d "$lean_root/.lake/packages/mathlib" ]]; then
     printf 'Dependency bootstrap failed; see %s and %s\n' "$bootstrap_stdout" "$bootstrap_stderr" >&2
     exit "$bootstrap_exit_code"
   fi
-  manifest_sha256="$(sha256sum "$lean_root/lake-manifest.json" | awk '{print $1}')"
-  [[ "$manifest_sha256" == "$EXPECTED_MANIFEST_SHA256" ]] || {
+  git -C "$lean_root" diff --quiet -- lake-manifest.json || {
     printf 'Bootstrap changed lake-manifest.json; refusing to compile.\n' >&2
     exit 65
   }
+  [[ -z "$(git -C "$lean_root" status --porcelain --untracked-files=no)" ]] || {
+    printf 'Pinned source checkout has tracked changes after bootstrap.\n' >&2
+    exit 65
+  }
+  manifest_git_blob_sha1="$(git -C "$lean_root" rev-parse 'HEAD:lake-manifest.json')"
+  [[ "$manifest_git_blob_sha1" == "$EXPECTED_MANIFEST_GIT_BLOB_SHA1" ]] || {
+    printf 'Pinned manifest Git blob mismatch after bootstrap: %s\n' "$manifest_git_blob_sha1" >&2
+    exit 65
+  }
+  manifest_runtime_raw_sha256="$(sha256sum "$lean_root/lake-manifest.json" | awk '{print $1}')"
 fi
 
 if grep -nE '\b(sorry|admit|axiom)\b' "$proof"; then
@@ -192,7 +209,8 @@ hash_or_not_created() {
   printf 'source_commit=%s\n' "$source_commit"
   printf 'source_tree_status=clean_tracked\n'
   printf 'toolchain=%s\n' "$toolchain"
-  printf 'manifest_sha256=%s\n' "$manifest_sha256"
+  printf 'manifest_git_blob_sha1=%s\n' "$manifest_git_blob_sha1"
+  printf 'manifest_runtime_raw_sha256=%s\n' "$manifest_runtime_raw_sha256"
   printf 'proof_repository_commit=%s\n' "$proof_commit"
   printf 'proof_repository_path=%s\n' "$proof_relpath"
   printf 'proof_sha256=%s\n' "$(sha256sum "$proof" | awk '{print $1}')"

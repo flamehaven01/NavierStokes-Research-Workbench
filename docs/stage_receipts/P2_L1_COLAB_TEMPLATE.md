@@ -14,7 +14,8 @@ logs and metadata for that execution.
 | Source commit | `8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538` |
 | Source tracked-tree status | `clean` |
 | Lean toolchain | `leanprover/lean4:v4.34.0-rc2` |
-| `lake-manifest.json` SHA-256 | `d8d5387db4bfe8dcdd867d1c4979d2911f194dfe8dae3012463c620e19c6001f` |
+| `lake-manifest.json` committed Git blob SHA-1 | `f07a8454cb6200d90bcc4371bc9965e9f8f46c7d` |
+| `lake-manifest.json` runtime raw SHA-256 | `[RECORD_AFTER_EXECUTION; observational and platform-specific]` |
 | NSRW commit | `[RECORD_AFTER_EXECUTION]` |
 | Proof module | `formal/p2/P2_L1_MainPulsePositivity.lean` |
 | Proof-module SHA-256 | `[RECORD_AFTER_EXECUTION]` |
@@ -40,7 +41,8 @@ dependency bootstrap: [SKIPPED[DEPENDENCIES_PRESENT] | PASS[EXECUTED_AND_RECORDE
 bootstrap exit code: [N/A | RECORD_AFTER_EXECUTION]
 bootstrap stdout SHA-256: [N/A | RECORD_AFTER_EXECUTION]
 bootstrap stderr SHA-256: [N/A | RECORD_AFTER_EXECUTION]
-post-bootstrap manifest SHA-256: [N/A | RECORD_AFTER_EXECUTION]
+post-bootstrap manifest committed Git blob SHA-1: [N/A | f07a8454cb6200d90bcc4371bc9965e9f8f46c7d]
+post-bootstrap manifest runtime raw SHA-256: [N/A | RECORD_AFTER_EXECUTION; observational]
 post-bootstrap source tracked-tree status: [N/A | clean]
 source target: +NavierStokes.PulseAmplitude
 source-target build exit code: [RECORD_AFTER_EXECUTION]
@@ -68,6 +70,11 @@ claim_status: CONFIRMED for the two propositions named in P2_L1 only
 Here `PASS` is authority only for the recorded execution of the two named L1
 Lean propositions. It is not mathematical authority over the source theorem
 or manuscript.
+
+The runtime raw SHA-256 is recorded to identify the bytes observed by that
+executor. It is not a cross-platform admission identity: a Windows CRLF
+checkout of the same pinned Git blob has raw SHA-256
+`d8d5387db4bfe8dcdd867d1c4979d2911f194dfe8dae3012463c620e19c6001f`.
 
 It must not promote `F1 > 0`, the normalized main-moment comparison,
 `DeltaM < 0`, the first-repair interior-zero result, the paper's theorem, or
