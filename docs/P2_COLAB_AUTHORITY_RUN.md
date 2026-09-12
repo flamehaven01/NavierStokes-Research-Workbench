@@ -1,6 +1,6 @@
 # P2 Colab authority-run rationale and method
 
-`task_status: READY[COLAB_AUTHORITY_RUN]`
+`task_status: COMPLETED[P2_L1_AUTHORITY_RUN]`
 
 ## Decision
 
@@ -14,6 +14,15 @@ Here, `authority run` means authority only for the recorded execution of the
 named Lean propositions under the pinned source, toolchain, manifest, proof,
 and runner identities. It does not mean mathematical authority over the source
 theorem or the manuscript.
+
+## Latest recorded result
+
+The authority run recorded in
+[`stage_receipts/P2_L1_COLAB_2026-09-12.md`](stage_receipts/P2_L1_COLAB_2026-09-12.md)
+completed under NSRW commit `9f374f928e57a8955f6795d1cc6360549ed5b75b`.
+It compiled `+NavierStokes.PulseAmplitude` and the external P2-L1 module with
+exit code zero. Its confirmation scope is limited to the two L1 propositions
+listed in the receipt; it does not close the broader P2 obligations.
 
 This choice is driven by the shape of the work:
 

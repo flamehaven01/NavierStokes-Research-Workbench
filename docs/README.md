@@ -26,6 +26,8 @@ notes.
   custody, and admission rule for the P2-L1 external Linux authority run.
 - `stage_receipts/P2_L1_COLAB_TEMPLATE.md`: non-execution template for the
   first external P2 Lean compile receipt.
+- `stage_receipts/P2_L1_COLAB_2026-09-12.md`: recorded external P2-L1 Lean
+  execution; confirmation is limited to the two named L1 propositions.
 - `stage_receipts/M5_H_SCALING_LOCAL.md`: content-hash-bound local
   `H_scaling` vertical-slice receipt; separately operated pytest replay was
   not executed because that reviewer runtime lacked pytest.
