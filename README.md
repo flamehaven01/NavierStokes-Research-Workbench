@@ -70,7 +70,7 @@ project is not affiliated with or endorsed by OpenAI.
 | M3 engineering | `CLOSED_WITH_NONCOMPUTABLE_SOURCE_BOUNDARY` | Scoped compiled evidence is separated from witness extraction |
 | M4-P fixed pilot | `PASS[SCOPED]` | Manufactured control surface passes its declared bounded checks |
 | M4-P v3 replay pilot | `PASS[LOCAL_REPLAY_V0.2.3_RC]` | Schema-first admission, committed golden mutations, and 13 applicable replay cases pass locally; the live-only case is not applicable |
-| M4-P v3 live release candidate | `HELD[V0.2.3_HOSTED_LIVE_PENDING]` | The earlier v0.2.2 checkpoint passed run 34579077366, but the changed v0.2.3 verifier requires a fresh exact-commit run |
+| M4-P v3 hosted live | `PASS[HOSTED_LIVE_V0.2.3_RC]` | Release-candidate commit `3004719` passed the full hosted pipeline in [run 34617896806](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34617896806) |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
@@ -285,10 +285,11 @@ or held.
 - [v0.2.3 post-implementation audit closure](docs/V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md)
 - [M3 historical execution-assertion tombstone](docs/stage_receipts/M3_HISTORICAL_INVALIDATION.md)
 - [M4-P v0.2.3 local closure receipt](docs/stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md)
+- [M4-P v0.2.3 hosted live receipt](docs/stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md)
 - [M4-P v0.2.2 local implementation receipt](docs/stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md)
 - [M4-P v0.2.2 hosted live receipt](docs/stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md)
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
-- [v0.2.3 release candidate notes](docs/releases/v0.2.3.md)
+- [v0.2.3 release notes](docs/releases/v0.2.3.md)
 - [v0.2.2 release notes](docs/releases/v0.2.2.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)

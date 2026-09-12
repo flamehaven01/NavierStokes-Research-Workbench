@@ -12,10 +12,12 @@ notes.
   current research position.
 - `STAGE_CHECKLIST.md`: checks required before a stage transition.
 - `M4_PARAMETRIC_AUDIT_DESIGN.md`: active M4-P scope and limits.
-- `V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md`: active v0.2.3 audit closure
-  and exact-commit hosted gate.
-- `stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md`: current local evidence.
-- `releases/v0.2.3.md`: current release candidate and release boundary.
+- `V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md`: completed v0.2.3 audit
+  closure and release boundary.
+- `stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md`: local release-candidate
+  evidence.
+- `stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md`: hosted same-run evidence.
+- `releases/v0.2.3.md`: current release notes and research boundary.
 
 ## Research plans and references
 

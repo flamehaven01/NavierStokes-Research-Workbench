@@ -6,6 +6,8 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-09-12
+
 ### Added
 
 - A shared strict-JSON and JSON-Schema admission path for M4 manifests, Lean
@@ -15,6 +17,9 @@ artifacts. Research claims retain their separate evidence statuses.
   and generated dependency file by safe relative path and SHA-256.
 - Fourteen committed, hashed pre-mutated M4 JSON manifests, consumed by the
   Python verifier and available to future independent implementations.
+- A hosted LIVE receipt from run `34617896806`, including runtime-derived
+  provenance, three target-specific Lean records, three dependency-file
+  digests, and a 14/14 applicable mutation result.
 
 ### Changed
 
@@ -29,6 +34,8 @@ artifacts. Research claims retain their separate evidence statuses.
 - LIVE verification re-reads and hashes dependency files as well as `.olean`
   files; replay does not claim current local artifact presence.
 - README now separates implemented capability from future research directions.
+- The post-implementation closure audit is recorded in
+  `docs/V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md`.
 
 ## [0.2.2] - 2026-09-11 [NOT RELEASED]
 
@@ -98,6 +105,7 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.0...v0.2.3
 [0.2.2]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/commit/447e86347a150bfa98e3bc5c6a61bc07c1c6223c
 [0.2.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.2.0

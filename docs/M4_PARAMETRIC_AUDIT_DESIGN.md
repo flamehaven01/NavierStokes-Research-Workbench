@@ -1,6 +1,6 @@
 # M4-P Parametric Stress / Cone / Moment Audit
 
-Status: `OPEN[V0.2.3_LOCAL_REPLAY_PASS__HOSTED_LIVE_PENDING]`
+Status: `OPEN[PARAMETRIC_ONLY]__PASS[V0.2.3_HOSTED_LIVE_SCOPED]`
 
 ## Research boundary
 

@@ -9,6 +9,17 @@ import pytest
 import nsrw.lean_receipt as lean_receipt
 
 
+def _clear_hosted_runtime(monkeypatch: pytest.MonkeyPatch) -> None:
+    for name in (
+        "GITHUB_ACTIONS",
+        "GITHUB_WORKFLOW",
+        "GITHUB_RUN_ID",
+        "GITHUB_RUN_ATTEMPT",
+        "RUNNER_OS",
+    ):
+        monkeypatch.delenv(name, raising=False)
+
+
 def test_compiled_receipt_record_and_atomic_publication(tmp_path: Path) -> None:
     olean = tmp_path / "target.olean"
     deps = tmp_path / "deps.txt"
@@ -62,14 +73,7 @@ def test_live_target_build_uses_declared_root_and_timeout(monkeypatch, tmp_path:
 def test_execute_build_request_discovers_artifact_and_canonicalizes_deps(
     monkeypatch, tmp_path: Path
 ) -> None:
-    for name in (
-        "GITHUB_ACTIONS",
-        "GITHUB_WORKFLOW",
-        "GITHUB_RUN_ID",
-        "GITHUB_RUN_ATTEMPT",
-        "RUNNER_OS",
-    ):
-        monkeypatch.delenv(name, raising=False)
+    _clear_hosted_runtime(monkeypatch)
     source_root = tmp_path / "lean"
     source = source_root / "Example" / "Target.lean"
     source.parent.mkdir(parents=True)

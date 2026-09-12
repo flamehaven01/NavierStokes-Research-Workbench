@@ -30,7 +30,8 @@ designed. It is not evidence that the paper's analytic obligation is true.
 - Cone inequality margins and threshold dependency-cycle checks;
 - exact-rational Moment cancellation and normalization checks;
 - six deterministic claim/evidence mutations evaluated against baseline deltas;
-- SPAR `ReviewRuntime` adapter with a separate NSRW hard gate;
+- optional `ReviewRuntime` structural-check adapter, kept separate from
+  required NSRW validation;
 - fail-closed CLI and deterministic held receipt;
 - CI contract/mutation replay.
 

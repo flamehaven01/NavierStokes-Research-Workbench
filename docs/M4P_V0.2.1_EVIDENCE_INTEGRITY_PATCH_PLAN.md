@@ -16,6 +16,14 @@ the audit-alignment defects are executed under the v0.2.2 addendum in
 `docs/V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md`. This parent
 contract remains authoritative for its P0--P5 requirements.
 
+Closure note: this is the preserved historical plan, not the current status
+ledger. Its requirements were implemented through v0.2.3 and exercised by
+hosted run `34617896806`; current results are recorded in
+`docs/V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md` and
+`docs/stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md`. The unchecked boxes below are
+the original acceptance checklist and must not be read as the current release
+state.
+
 ## 0. Threat Model and Trust Anchors
 
 `v0.2.1` distinguishes four different properties that must not be collapsed into one another:
@@ -1127,9 +1135,9 @@ guardrails around Navier--Stokes research. It is not presented as an AI theorem
 prover, CFD solver, neural-operator training system, or completed independent
 solution program.
 
-The README must use plain-language labels for claim custody, scope ledgers,
-manufactured controls, and SPAR's secondary structural diagnostic role. Future
-mathematical, numerical, CFD, and SciML lanes remain research directions and
+The README must use plain-language labels for evidence traceability, scope
+records, manufactured controls, and the optional secondary structural check.
+Future mathematical, numerical, CFD, and SciML lanes remain research directions and
 must not be described as current proof authority.
 
 The contract amendments have been re-reviewed and implementation is authorized
