@@ -49,9 +49,10 @@ The completed and next formal obligations are deliberately named separately:
 Completed:
 P2-L1  pulse nonnegativity plus a positive point
 P2-F1  weighted main-moment positivity: `0 < mainMoment c (1 : Fin 2)`
+P2-L2-A normalized source representation plus normalized `i = 1` positivity
 
 Next formal obligations:
-L2      normalized main-moment comparison
+L2      strict normalized main-moment comparison
 L3      template moment-ratio comparison
 L4      small-positive-eta first-repair interior zero
 ```
@@ -63,10 +64,12 @@ receipt. The separate P2-F1 gate is satisfied by the clean local Windows
 receipt. P2-F1 confirms only the named `mainMoment c 1` positivity
 proposition; it does not promote L2--L4.
 
-`P2_L2_NormalizedMainMomentComparison.lean` is an included scaffold, not a
-compiled L2 result. It has not yet received a successful external-module
-compile receipt. The next execution obligation is to compile the exact L2-A
-bytes against a freshly generated P2-F1 `.olean` in the same pinned executor.
+The dated external [`P2_L2A_COLAB_2026-09-13.md`](../../docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md)
+receipt compiles the exact L2-A module against a freshly generated P2-F1
+`.olean` in the same pinned executor. It confirms only
+`normalizedMainMoment_log_short` and `normalizedMainMoment_one_pos`. The
+strict normalized comparison remains the next formal obligation; this receipt
+does not close L2 or promote L3--L4.
 
 ## Proof hygiene
 

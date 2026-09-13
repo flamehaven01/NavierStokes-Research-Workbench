@@ -27,6 +27,10 @@ notes.
 - `stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md`: clean local compilation
   receipt for the single source-bound proposition `0 < mainMoment c 1`.
   It does not promote the L2 comparison or the later P2-C conclusions.
+- `stage_receipts/P2_L2A_COLAB_2026-09-13.md`: external compilation receipt
+  for only the normalized source representation and normalized `i = 1`
+  positivity wrapper. The strict L2 comparison and later P2-C conclusions
+  remain unpromoted.
 - `P2_COLAB_AUTHORITY_RUN.md`: rationale, narrow execution method, bootstrap
   custody, and admission rule for the P2-L1 external Linux authority run.
 - `stage_receipts/P2_L1_COLAB_TEMPLATE.md`: non-execution template for the

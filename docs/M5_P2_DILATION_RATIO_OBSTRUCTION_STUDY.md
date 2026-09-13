@@ -101,6 +101,9 @@ P2-L1  mainPulse nonnegativity and mainPulse(1/25) positivity
 
 P2-F1  0 < mainMoment c (1 : Fin 2)
        CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-L2-A normalizedMainMoment_log_short and normalizedMainMoment_one_pos
+       PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
 ```
 
 The P2-F1 receipt is
@@ -108,9 +111,10 @@ The P2-F1 receipt is
 Its stronger compiled lower bound is an implementation aid; the study promotes
 only the positivity proposition above.
 
-`P2_L2_NormalizedMainMomentComparison.lean` currently supplies source-bound
-normalization identities and a normalized `i = 1` positivity wrapper. It is
-an **uncompiled scaffold**, not a formal L2 result. In particular, the strict
+The P2-L2-A receipt is
+[`P2_L2A_COLAB_2026-09-13.md`](stage_receipts/P2_L2A_COLAB_2026-09-13.md).
+It compiles the source-bound normalization identity and normalized `i = 1`
+positivity wrapper, not a formal L2 comparison. In particular, the strict
 normalized comparison, `DeltaM < 0`, repair-coefficient signs, and the
 first-repair zero remain outside this formal receipt surface.
 

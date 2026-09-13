@@ -109,11 +109,12 @@ are guardrails: they protect the research engine but are not its destination.
   formalization-open source-definition result, not a source theorem. The
   active question is the remaining negative/non-small-`eta` zero geometry and
   first-window partial-tail behavior; only then assess whether `Q-5/8` has a
-  useful bound. P2-L1 is externally compiled for two pulse facts, and P2-F1
-  is cleanly compiled for `0 < mainMoment c 1`; neither result establishes the
-  L2 normalized comparison. The included L2-A source scaffold remains
-  **uncompiled** pending a same-run external-module dependency build. P1
-  source-atlas closure remains parallel and non-blocking for this work.
+  useful bound. P2-L1 is externally compiled for two pulse facts, P2-F1 is
+  cleanly compiled for `0 < mainMoment c 1`, and P2-L2-A is externally
+  compiled for the normalized source representation and normalized `i = 1`
+  positivity wrapper. None establishes the strict L2 normalized comparison.
+  The next formal target is that comparison itself. P1 source-atlas closure
+  remains parallel and non-blocking for this work.
 - External E2: pinned 2-D vorticity reconstruction — **contract implemented;
   execution held until source revision/file/sample/hash admission**. This is
   an independent numerical observation surface, not theorem evidence.
