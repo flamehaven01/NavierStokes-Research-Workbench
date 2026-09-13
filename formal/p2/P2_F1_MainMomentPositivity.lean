@@ -14,7 +14,7 @@ open NavierStokes.OutgoingPulseBounds
 
 namespace NSRW.P2
 
-private def f1Integrand (c : Parameters) (y : ℝ) : ℝ :=
+private noncomputable def f1Integrand (c : Parameters) (y : ℝ) : ℝ :=
   Real.exp (beta c 1 * y) * mainPulse (c.lam * y)
 
 private theorem f1Integrand_continuous (c : Parameters) :
@@ -27,11 +27,13 @@ private theorem f1_interval_order (c : Parameters) :
       1 / (25 * c.lam) ≤ 1 / (20 * c.lam) ∧
       1 / (20 * c.lam) ≤ 11 / c.lam := by
   constructor
-  · positivity
+  · exact div_nonneg (by norm_num) (mul_nonneg (by norm_num) c.lam_pos.le)
   constructor
   · exact one_div_le_one_div_of_le (mul_pos (by norm_num) c.lam_pos)
       (by nlinarith [c.lam_pos])
-  · field_simp [c.lam_pos.ne']
+  · rw [show (1 / (20 * c.lam) : ℝ) = (1 / 20) / c.lam by
+      field_simp [c.lam_pos.ne']]
+    apply (div_le_div_iff₀ c.lam_pos c.lam_pos).mpr
     nlinarith [c.lam_pos]
 
 private theorem f1_integrand_nonnegative_on_short_interval (c : Parameters)
@@ -45,12 +47,10 @@ private theorem f1_integrand_nonnegative_on_short_interval (c : Parameters)
 private theorem f1_integrand_lower_on_witness_interval (c : Parameters)
     {y : ℝ} (hy : y ∈ Icc (1 / (25 * c.lam)) (1 / (20 * c.lam))) :
     (1 / 50 : ℝ) ≤ f1Integrand c y := by
-  have harg_lower : (1 / 50 : ℝ) ≤ c.lam * y := by
+  have harg_lower : (1 / 25 : ℝ) ≤ c.lam * y := by
     calc
-      (1 / 50 : ℝ) ≤ 1 / 25 := by norm_num
-      _ = c.lam * (1 / (25 * c.lam)) := by
+      (1 / 25 : ℝ) = c.lam * (1 / (25 * c.lam)) := by
         field_simp [c.lam_pos.ne']
-        ring
       _ ≤ c.lam * y := mul_le_mul_of_nonneg_left hy.1 c.lam_pos.le
   have harg_upper : c.lam * y ≤ 10 := by
     calc
@@ -58,9 +58,11 @@ private theorem f1_integrand_lower_on_witness_interval (c : Parameters)
         mul_le_mul_of_nonneg_left hy.2 c.lam_pos.le
       _ = 1 / 20 := by
         field_simp [c.lam_pos.ne']
-        ring
       _ ≤ 10 := by norm_num
-  have hpulse := NavierStokes.PulseAmplitude.mainPulse_lower harg_lower harg_upper
+  have hpulse_base := NavierStokes.PulseAmplitude.mainPulse_lower
+    ((by norm_num : (1 / 50 : ℝ) ≤ 1 / 25).trans harg_lower) harg_upper
+  have hpulse : (1 / 50 : ℝ) ≤ mainPulse (c.lam * y) := by
+    nlinarith [hpulse_base, harg_lower]
   have hy_nonneg : 0 ≤ y := (f1_interval_order c).1.trans hy.1
   have hexp : (1 : ℝ) ≤ Real.exp (beta c 1 * y) :=
     Real.one_le_exp_iff.mpr
@@ -93,7 +95,7 @@ theorem mainMoment_one_lower (c : Parameters) :
   have hsub_value :
       (∫ _y in (1 / (25 * c.lam) : ℝ)..1 / (20 * c.lam), (1 / 50 : ℝ)) =
         1 / (5000 * c.lam) := by
-    simp only [intervalIntegral.integral_const, sub_zero, smul_eq_mul]
+    simp only [intervalIntegral.integral_const, smul_eq_mul]
     field_simp [c.lam_pos.ne']
     ring
   rw [hsub_value] at hsub
