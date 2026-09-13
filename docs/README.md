@@ -24,6 +24,9 @@ notes.
 - `../formal/p2/README.md`: minimal external Lean reproduction capsule for
   the active P2 analysis. It uses the pinned OpenAI source environment; it
   is not a separate Lean project or a claim that P2 is formalized.
+- `stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md`: clean local compilation
+  receipt for the single source-bound proposition `0 < mainMoment c 1`.
+  It does not promote the L2 comparison or the later P2-C conclusions.
 - `P2_COLAB_AUTHORITY_RUN.md`: rationale, narrow execution method, bootstrap
   custody, and admission rule for the P2-L1 external Linux authority run.
 - `stage_receipts/P2_L1_COLAB_TEMPLATE.md`: non-execution template for the
@@ -44,6 +47,8 @@ notes.
 - `releases/v0.2.3.md`: historical verifier evidence-boundary release notes.
 - `releases/v0.3.0.md`: current M5/P1 checkpoint release notes and held
   source-atlas boundary.
+- `releases/v0.3.1.md`: P2-F1 compiled checkpoint and explicitly uncompiled
+  L2-A scaffold.
 
 ## Research plans and references
 

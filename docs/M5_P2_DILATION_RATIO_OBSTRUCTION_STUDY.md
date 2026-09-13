@@ -90,6 +90,30 @@ P2-E   CANONICAL-KERNEL COMPARATOR
        OPEN
 ```
 
+## Formal reproduction status
+
+The following narrow parts of this study have compiled external Lean receipts
+under the pinned source and toolchain:
+
+```text
+P2-L1  mainPulse nonnegativity and mainPulse(1/25) positivity
+       CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-F1  0 < mainMoment c (1 : Fin 2)
+       CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+```
+
+The P2-F1 receipt is
+[`P2_F1_LOCAL_WINDOWS_2026-09-13.md`](stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md).
+Its stronger compiled lower bound is an implementation aid; the study promotes
+only the positivity proposition above.
+
+`P2_L2_NormalizedMainMomentComparison.lean` currently supplies source-bound
+normalization identities and a normalized `i = 1` positivity wrapper. It is
+an **uncompiled scaffold**, not a formal L2 result. In particular, the strict
+normalized comparison, `DeltaM < 0`, repair-coefficient signs, and the
+first-repair zero remain outside this formal receipt surface.
+
 `SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE` is deliberately narrower than a source
 theorem: the result follows by combining pinned definitions and lemmas, but is
 not asserted here to be a declaration already proved in the Lean source.

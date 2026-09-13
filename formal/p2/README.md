@@ -37,19 +37,20 @@ rechecked before compilation.
 1. `mainPulse z >= 0` for `z >= 0`.
 2. `mainPulse (1 / 25) > 0`.
 
-Those facts establish a positive point of the pulse.  They do **not** yet
-establish the weighted integral `F1 > 0`; that requires a separate
-integrability and positive-subinterval argument. Consequently, compiling P2-L1
-does not promote the current P2 comparison or first-repair-zero claims.
+Those facts establish a positive point of the pulse. They do **not by
+themselves** establish the weighted integral `F1 > 0`; that required a
+separate integrability and positive-subinterval argument in P2-F1.
+Consequently, compiling P2-L1 does not promote the current P2 comparison or
+first-repair-zero claims.
 
 The completed and next formal obligations are deliberately named separately:
 
 ```text
 Completed:
 P2-L1  pulse nonnegativity plus a positive point
+P2-F1  weighted main-moment positivity: `0 < mainMoment c (1 : Fin 2)`
 
 Next formal obligations:
-F1      weighted-integral positivity: F1 > 0
 L2      normalized main-moment comparison
 L3      template moment-ratio comparison
 L4      small-positive-eta first-repair interior zero
@@ -57,9 +58,15 @@ L4      small-positive-eta first-repair interior zero
 
 The P2-L1 compile gate is satisfied by the dated
 [`P2_L1_COLAB_2026-09-12.md`](../../docs/stage_receipts/P2_L1_COLAB_2026-09-12.md)
-receipt. No L2--L4 proposition is thereby promoted. The next formal obligation
-is `F1`, the weighted-integral positivity step, which still needs its own
-source-bound module and receipt.
+receipt. The separate P2-F1 gate is satisfied by the clean local Windows
+[`P2_F1_LOCAL_WINDOWS_2026-09-13.md`](../../docs/stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md)
+receipt. P2-F1 confirms only the named `mainMoment c 1` positivity
+proposition; it does not promote L2--L4.
+
+`P2_L2_NormalizedMainMomentComparison.lean` is an included scaffold, not a
+compiled L2 result. It has not yet received a successful external-module
+compile receipt. The next execution obligation is to compile the exact L2-A
+bytes against a freshly generated P2-F1 `.olean` in the same pinned executor.
 
 ## Proof hygiene
 

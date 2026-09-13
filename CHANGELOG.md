@@ -6,6 +6,35 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-09-13
+
+### Added
+
+- A dated clean local Windows receipt for the narrow external P2-F1 Lean
+  module. Under the pinned OpenAI source commit and Lean 4.34.0-rc2, it
+  compiles the named source-bound proposition
+  `0 < mainMoment c (1 : Fin 2)`. The receipt records the exact proof bytes,
+  source/proof output hashes, clean-tree checks, and the observed axiom
+  surface.
+- The first L2 source scaffold, which defines normalized main moments, rewrites
+  them to the source short-log integral, and carries the already compiled F1
+  positivity into the normalized `i = 1` term.
+
+### Changed
+
+- The P2 capsule and research-map documentation now distinguish completed
+  P2-L1 pulse facts, completed P2-F1 weighted main-moment positivity, and the
+  still-open L2 normalized comparison.
+
+### Held / not promoted
+
+- The new L2 scaffold is tracked but has no successful external-module compile
+  receipt yet. Its strict normalized comparison, `DeltaM < 0`, repair
+  coefficient signs, and the first-repair interior-zero consequence remain
+  unpromoted.
+- This checkpoint does not claim a paper-level result, full formalization, or
+  a solution of the Navier--Stokes problem.
+
 ## [0.3.0] - 2026-09-12
 
 ### Added

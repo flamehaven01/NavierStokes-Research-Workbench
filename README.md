@@ -75,6 +75,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M5 Lean-native source interface | `PASS[LOCAL_SOURCE_DERIVED_VERTICAL_SLICE]` | Pinned `H_scaling` export, 78-node type projection, and bounded independent reconstruction are content-hash-bound locally; separately operated pytest replay is `NOT_EXECUTED[RUNTIME_MISMATCH]` |
 | M5 P1 scaling-atlas analysis | `PASS[LOCAL_REVIEWED_METADATA]` | Ten reviewed static scaling-law entries and exact `Fraction` algebra produce bounded degree-zero candidates, not Lean-derived exponents or theorem claims |
 | M5 P1 source-bound atlas | `HELD[LEDGER_NOT_INDEPENDENTLY_PINNED]` | No complete 4-law/10-law same-raw export or independently pinned ten-law digest ledger exists; production admission fails closed |
+| M5 P2 F1 main-moment positivity | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | A clean pinned-toolchain external Lean run compiles only `0 < mainMoment c (1 : Fin 2)`; it does not establish the L2 comparison or a P2-C conclusion |
+| M5 P2 L2-A scaffold | `UNVERIFIED[EXTERNAL_MODULE_COMPILE_PENDING]` | Normalized source representation and normalized F1 wrapper are included, but no L2 module receipt exists yet |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
