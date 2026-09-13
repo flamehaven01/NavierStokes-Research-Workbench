@@ -28,6 +28,7 @@ theorem normalizedMainMoment_log_short (c : Parameters) (i : Fin 2) :
   rw [mainMoment_log_short, ← intervalIntegral.integral_const_mul]
   apply intervalIntegral.integral_congr
   intro y _
+  dsimp
   rw [show beta c i * (y - center c 0) =
     -(beta c i * center c 0) + beta c i * y by ring, Real.exp_add]
   ring
