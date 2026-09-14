@@ -76,7 +76,7 @@ project is not affiliated with or endorsed by OpenAI.
 | M5 P1 scaling-atlas analysis | `PASS[LOCAL_REVIEWED_METADATA]` | Ten reviewed static scaling-law entries and exact `Fraction` algebra produce bounded degree-zero candidates, not Lean-derived exponents or theorem claims |
 | M5 P1 source-bound atlas | `HELD[LEDGER_NOT_INDEPENDENTLY_PINNED]` | No complete 4-law/10-law same-raw export or independently pinned ten-law digest ledger exists; production admission fails closed |
 | M5 P2 F1 main-moment positivity | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | A clean pinned-toolchain external Lean run compiles only `0 < mainMoment c (1 : Fin 2)`; it does not establish the L2 comparison or a P2-C conclusion |
-| M5 P2 L2-A scaffold | `PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | An external pinned-toolchain run compiles only the normalized source representation and normalized `i = 1` positivity wrapper; the strict L2 comparison remains open |
+| M5 P2 L2-A representation/positivity bridge | `PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The completed [P2-L2-A receipt](docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md) compiles only the normalized source representation and normalized `i = 1` positivity wrapper. It is **not** a receipt for the separately named strict-L2 comparison, which has no compiled-module receipt yet. |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
@@ -84,6 +84,16 @@ project is not affiliated with or endorsed by OpenAI.
 Status words are scoped. `PASS[LOCAL_TESTS]` is not a proof claim.
 `PASS[COMPILED_TARGET]` does not mean a paper is correct, that all library
 targets compile, or that two mathematical statements are equivalent.
+
+### P2 L2 receipt boundary
+
+`P2-L2-A` and **strict L2** are different scopes. P2-L2-A is the completed
+external-module bridge for a normalized source identity and positivity of the
+normalized `i = 1` quantity. **Strict L2** is the subsequent comparison
+proposition between the normalized `i = 0` and `i = 1` quantities. It remains
+open until those strict-comparison proof bytes have their own pinned-toolchain
+compiled receipt. A completed P2-L2-A receipt must not be read as strict-L2
+compile evidence.
 
 ## Public vocabulary and research posture
 
