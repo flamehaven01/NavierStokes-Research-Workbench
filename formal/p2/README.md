@@ -13,7 +13,7 @@ dependency manifest.  The build authority is the pinned
 | Source commit | `8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538` |
 | Lean toolchain | `leanprover/lean4:v4.34.0-rc2` |
 | `lake-manifest.json` committed Git blob SHA-1 | `f07a8454cb6200d90bcc4371bc9965e9f8f46c7d` |
-| Runtime raw SHA-256 | Observational only; record per executor because Windows CRLF and Linux LF checkouts differ. |
+| Runtime raw SHA-256 | Record actual bytes per executor; do not assume either line-ending equality or difference. |
 
 Run a module from the pinned source root, not from this repository:
 
@@ -50,9 +50,9 @@ Completed:
 P2-L1  pulse nonnegativity plus a positive point
 P2-F1  weighted main-moment positivity: `0 < mainMoment c (1 : Fin 2)`
 P2-L2-A normalized source representation plus normalized `i = 1` positivity
+P2-L2   strict normalized main-moment comparison
 
 Next formal obligations:
-L2      strict normalized main-moment comparison
 L3      template moment-ratio comparison
 L4      small-positive-eta first-repair interior zero
 ```
@@ -68,8 +68,16 @@ The dated external [`P2_L2A_COLAB_2026-09-13.md`](../../docs/stage_receipts/P2_L
 receipt compiles the exact L2-A module against a freshly generated P2-F1
 `.olean` in the same pinned executor. It confirms only
 `normalizedMainMoment_log_short` and `normalizedMainMoment_one_pos`. The
-strict normalized comparison remains the next formal obligation; this receipt
-does not close L2 or promote L3--L4.
+strict normalized comparison is outside that historical receipt; it does not
+close L2 or promote L3--L4.
+
+The separate [`P2_L2_COLAB_2026-10-06.md`](../../docs/stage_receipts/P2_L2_COLAB_2026-10-06.md)
+receipt closes strict L2 at NSRW commit `b02002b1ab954e34e7017a45e3afb338b21abfc5`.
+For the F1-to-L2 import chain, use `scripts/run-p2-l2-replay.py` from a clean
+checkout. It records the source build, freshly generates the external F1
+`.olean`, and compiles the L2 module with that dependency in one execution.
+It does not install or update dependencies. Source cache reuse is explicit.
+L3 is the next formal obligation; `DeltaM` and repair geometry are not promoted.
 
 ## Proof hygiene
 

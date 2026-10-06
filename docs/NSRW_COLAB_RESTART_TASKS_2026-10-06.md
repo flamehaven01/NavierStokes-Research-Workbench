@@ -3,9 +3,10 @@
 최초 재점검: `2026-10-05` / 문서 갱신·실제 재작업 시작: `2026-10-06`
 
 이 문서는 내부 실행 계획이다. 정식 연구 보고서나 새 execution receipt가 아니다.
-기준 snapshot은 [CURRENT_POSITION_2026-10-05.md](CURRENT_POSITION_2026-10-05.md)이며,
-이번 갱신은 수학 claim을 승격하지 않는다. 작성과 문서 점검은 같은 신뢰영역에서
-수행했으므로 독립적인 수학 검수로 표현하지 않는다.
+기준 snapshot은 로컬 planning draft `CURRENT_POSITION_2026-10-05.md`이며,
+10/5 snapshot은 보존한다. 10/6의 별도 strict-L2 실행 receipt 검수에 따라 해당
+proposition만 승격했다. 작성과 문서 점검은 같은 신뢰영역에서 수행했으므로
+독립적인 수학 검수로 표현하지 않는다.
 
 ## 1. 지금 닫아야 할 한 가지
 
@@ -17,9 +18,9 @@ P2-L1 / P2-F1 / P2-L2-A
   historical compiled receipts: named propositions only
 
 strict-L2
-  claim_status: SUPPORTED
-  check_status: PASS[DEVELOPMENT_COMPILE_ONLY]
-  commit-bound compiled receipt: pending clean replay
+  claim_status: CONFIRMED (named pinned-source proposition only)
+  check_status: PASS[COMMIT_BOUND_EXTERNAL_F1_STRICT_L2_REPLAY]
+  commit-bound compiled receipt: reviewed, 2026-10-06
 
 L3 / DeltaM / coefficient sign / first-repair zero
   not promoted by this document
@@ -61,7 +62,7 @@ L2-A receipt는 `a0d42a8...` / `9766f9ab...f919`의 representation/positivity br
 기존 receipt는 기록된 commit/bytes에 대해 그대로 보존한다.
 
 초기 문서 작성에서는 Colab runtime·cache·실행 셀·프로세스를 관측하지 않았다.
-10/6 재작업의 실제 관측과 성공한 개발 실행은 §7에 별도로 기록한다.
+10/6 재작업의 실제 관측과 개발/clean replay 실행은 §7에 별도로 기록한다.
 10/5 접근 차단 기록은 과거 관측이지 현재 runtime이 없거나 멈췄다는 증거가 아니다.
 새 관측 전에는 `claim_status: UNVERIFIED`로 두고 `RUNNING`으로 쓰지 않는다.
 10/5 focused Python 결과 `27 passed, 3 skipped` 및 공개 HEAD CI 성공은 당시의
@@ -95,7 +96,7 @@ notebook은 launcher이고 source/proof/runner identity와 로그가 실행 증�
   같은 module을 유지한다. historical L2-A receipt의 commit/bytes와 새 strict receipt를
   명시적으로 구분한다. 이 항목의 완료는 파일 분리 구현이 아니라 검토·처리 결정이다.
 
-- [ ] **T2 — 얇은 dependency runner.** 범용 framework를 만들지 않는다.
+- [x] **T2 — 얇은 dependency runner.** 범용 framework를 만들지 않는다.
   `scripts/run-p2-l2-replay.py`로 `lake build +NavierStokes.PulseAmplitude` → exact F1의
   fresh `.olean` → bridge와 strict theorem을 담은 L2 module compile을 같은 run에서
   연결한다. 별도 bridge module이 없으므로 존재하지 않는 bridge `.olean` gate를 만들지
@@ -112,14 +113,14 @@ notebook은 launcher이고 source/proof/runner identity와 로그가 실행 증�
   bytes를 먼저 보존하고 필요한 부분만 고친다. 개발 compile 성공은 commit-bound
   최종 receipt가 아니다. compile 실패 자체를 부등식의 수학적 반례로 기록하지 않는다.
 
-- [ ] **T4 — exact bytes 고정과 clean replay.** commit/push는 별도 명시적 승인 뒤에만
+- [x] **T4 — exact bytes 고정과 clean replay.** commit/push는 별도 명시적 승인 뒤에만
   한다. 성공한 proof/runner의 pinned commit을 clean checkout으로 재실행한다.
   source/F1/L2의 모든 필수 단계가 같은 run에서 exit 0이어야 한다.
   strict theorem의 `#print axioms`를 포착하고 `sorryAx` 및 예상 밖 axiom을 검수한다.
   stderr가 있으면 내용과 원인을 검수한다. stderr가 비었다는 사실만으로 성공을 판정하지
   않는다. pre/post identity와 로그 hash까지 일치해야 새 receipt admission이 가능하다.
 
-- [ ] **T5 — 성공 run 하나의 receipt.** T4의 단일 실행으로 dated receipt를 작성한다.
+- [x] **T5 — 성공 run 하나의 receipt.** T4의 단일 실행으로 dated receipt를 작성한다.
   claim ledger, current snapshot, root/capsule README, P2 note의 해당 범위만 동기화한다.
   안정적인 direction map은 정책이 달라질 때만 수정한다. 새 strict proposition만
   `claim_status: CONFIRMED`로 승격한다. 다른 run의 source PASS와 proof PASS를 합치지
@@ -131,7 +132,8 @@ notebook은 launcher이고 source/proof/runner identity와 로그가 실행 증�
   second-bump tail 및 first-window IVT bridge도 각각 닫아야 한다.
 
 완료 기준은 문서 수나 theorem 파일 존재가 아니라 **exact strict theorem의 검수된
-compiled receipt**다. T2/T4/T5/T6는 아직 닫히지 않았다.
+compiled receipt**다. T0–T5는 해당 범위에서 닫혔다. T6는 다음 작업이며,
+L3 proof를 작성하거나 compile했다는 뜻이 아니다.
 
 ## 5. 별도 안전보수: 주 연구선을 대체하지 않는다
 
@@ -153,13 +155,15 @@ ledger는 증거를 찾는 색인이지 새로운 proof authority가 아니다. 
 
 수학적 반례, compile/identity admission 실패, 재개 조건은 별도로 기록한다.
 `Q`의 global obstruction과 endpoint-first-zero 가설 기각은
-[negative register](NEGATIVE_RESULT_REGISTER.md)에 보존한다. 이는 OpenAI theorem의
+로컬 draft `NEGATIVE_RESULT_REGISTER.md`에 보존한다. 이 두 draft는 아직 Git에
+포함되지 않았으므로 공개 실행 근거로 사용하지 않는다. 이는 OpenAI theorem의
 오류가 아니라 우리가 선택한 ratio 후보와 가설의 한계다.
 
 초기 문서 갱신은 docs-only였다. 그 갱신에서 proof·runner·기존 receipt·Git index/commit/remote는
-변경하지 않으며, Colab 실행이나 새 Lean compile을 수행했다는 claim도 하지 않는다.
+변경하지 않았으며, 그 초기 갱신 자체로 Colab 실행이나 새 Lean compile을 수행했다는
+claim도 하지 않았다. 아래 실행 기록은 별도의 후속 작업이다.
 
-## 7. 10/6 재작업: 실제 관측과 다음 admission
+## 7. 10/6 재작업: 실제 관측과 strict-L2 closure
 
 - Colab source checkout, toolchain, 11개 dependency revision 및 cache bootstrap을 확인했다.
   관측 Lean은 `4.34.0-rc2`, CPU 2개, RAM 약 12 GiB이다. source target probe는
@@ -175,14 +179,20 @@ ledger는 증거를 찾는 색인이지 새로운 proof authority가 아니다. 
 - proof-only checkpoint `70456c53a2d132cac3a1529b98413a4f686953f6`를 커밋·푸시했고
   remote main SHA를 대조했다. 다른 수정 중 문서는 이 checkpoint에 포함하지 않았다.
 - 현재 runner negative controls: `unittest` 6 tests PASS. 확인된 기존
-  `D:/Sanctum/venv`에서 전체 pytest: `258 passed, 3 skipped, 3 subtests passed`,
+  프로젝트 외부의 기존 venv에서 전체 pytest: `258 passed, 3 skipped, 3 subtests passed`,
   src coverage `90.29%`. replay runner는 coverage 대상 `src/nsrw` 밖이므로 이 수치는
-  runner coverage를 의미하지 않는다. Ruff와 Python syntax compile도 별도 확인한다.
-- 다음은 proof와 runner가 함께 고정된 revision의 fresh clean checkout으로 T4를
-  실행하는 것이다. 기존 개발 source PASS를 조립해 새 authority를 만들지 않는다.
-- `.gitattributes`가 LF를 강제한다. Windows 개발 proof raw SHA `624f1aa...`와
-  clean Linux checkout raw SHA가 다를 수 있다. commit Git blob 및 각 실행의 raw hash를
-  별도 기록한다. LF 재실행 성공을 확인하기 전에는 line-ending 동등성만으로 PASS를
-  상속하지 않는다.
+  runner coverage를 의미하지 않는다. Ruff와 Python syntax compile도 통과했다.
+- proof와 runner를 함께 고정한 `b02002b1ab954e34e7017a45e3afb338b21abfc5`를
+  fresh clean checkout으로 실행했다. run `nsrw-l2-clean-replay.Bmph8w`에서 source,
+  fresh F1, strict-L2가 모두 exit 0이고 pre/post identity와 axiom surface가 통과했다.
+  기존 개발 PASS를 조립하지 않았다.
+- launcher가 실제 checkout bytes와 committed Git blob bytes를 직접 비교했다.
+  이번 Linux proof raw SHA는 Windows 개발 bytes와 동일한 `624f1aa...`였다.
+  line-ending 동등성을 가정하지 않고 실제 bytes 및 compile 결과로 확인했다.
+- 단일 run의 metadata/logs/inputs/fresh F1 artifact를 로컬 evidence store로 보존하고
+  hashes를 대조했다. archive SHA-256:
+  `ef825f4b1d45df191455cb155516558c135e156f62d500c20cc9de6cb7203699`.
+  [strict-L2 dated receipt](stage_receipts/P2_L2_COLAB_2026-10-06.md)로 T4/T5를 닫았다.
+  다음은 L3이며, downstream claim은 승격하지 않았다.
 - 독립된 executor/verifier 신뢰영역이나 hosted attestation은 없다. receipt는 같은
   작업 세션의 기록된 실행과 로컬 archive 대조이며 독립적 인증으로 표현하지 않는다.

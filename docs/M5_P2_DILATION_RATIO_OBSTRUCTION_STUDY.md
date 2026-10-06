@@ -1,7 +1,8 @@
 # M5 P2 dilation-ratio obstruction study
 
-Status: active mathematical analysis; no new theorem, numerical witness, or
-source-bound ten-law atlas is claimed.
+Status: active mathematical analysis with narrowly compiled auxiliary results;
+no new Navier--Stokes solution, numerical witness, or source-bound ten-law atlas
+is claimed.
 
 This note studies one question created by the reviewed-static P1 scaling
 metadata. It is deliberately independent of the held same-raw export/ledger
@@ -104,6 +105,9 @@ P2-F1  0 < mainMoment c (1 : Fin 2)
 
 P2-L2-A normalizedMainMoment_log_short and normalizedMainMoment_one_pos
        PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-L2  normalizedMainMoment_zero_lt_target_one
+       CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
 ```
 
 The P2-F1 receipt is
@@ -116,7 +120,15 @@ The P2-L2-A receipt is
 It compiles the source-bound normalization identity and normalized `i = 1`
 positivity wrapper, not a formal L2 comparison. In particular, the strict
 normalized comparison, `DeltaM < 0`, repair-coefficient signs, and the
-first-repair zero remain outside this formal receipt surface.
+first-repair zero remain outside this historical formal receipt surface.
+
+The separate strict-L2 receipt is
+[`P2_L2_COLAB_2026-10-06.md`](stage_receipts/P2_L2_COLAB_2026-10-06.md).
+It closes the cross-multiplied comparison
+`normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`
+in a commit-bound clean execution with fresh F1 dependency. It does not assert
+a ratio corollary or promote `DeltaM < 0`, coefficient signs, or first-repair
+zero. The next formal obligation is L3 template-moment comparison.
 
 `SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE` is deliberately narrower than a source
 theorem: the result follows by combining pinned definitions and lemmas, but is
