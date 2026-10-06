@@ -4,10 +4,12 @@ import importlib.util
 import json
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from contextlib import ExitStack
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 RUNNER = Path(__file__).resolve().parents[1] / "scripts/run-p2-c01-replay.py"
@@ -19,7 +21,7 @@ SPEC.loader.exec_module(runner)
 class C01ReplayControls(unittest.TestCase):
     def synthetic_replay(self, root, *, fail_stage=None, stderr_stage=None):
         """Mock commands test admission behavior, not any Lean proposition."""
-        source, nsrw, output = root / "source", root / "nsrw", root / "run"
+        source, nsrw, output = ((root / name).resolve() for name in ("source", "nsrw", "run"))
         source.mkdir()
         (nsrw / "scripts").mkdir(parents=True)
         (nsrw / "formal/p2").mkdir(parents=True)
@@ -69,7 +71,8 @@ class C01ReplayControls(unittest.TestCase):
             stack.enter_context(patch.object(runner, "committed_input", side_effect=committed))
             stack.enter_context(patch.object(runner, "reject_shadow_inputs"))
             stack.enter_context(patch.object(runner.os, "sysconf", return_value=1, create=True))
-            stack.enter_context(patch.object(runner.subprocess, "run", side_effect=command))
+            # Replace only the runner's binding; Windows platform still uses real subprocess.
+            stack.enter_context(patch.object(runner, "subprocess", SimpleNamespace(run=command)))
             runner.replay(source, nsrw, output, commit)
         return json.loads((output / "metadata.json").read_text())
 
@@ -80,6 +83,36 @@ class C01ReplayControls(unittest.TestCase):
             self.assertEqual(m["claim_status"], "UNVERIFIED")
             self.assertEqual(len(m["fresh_artifacts"]), 5)
             self.assertEqual(len(m["axiom_surface"]), 12)
+
+    def test_platform_observation_keeps_real_stdlib_subprocess(self):
+        original_run = subprocess.run
+        original_system = runner.platform.system
+        observed = []
+
+        def observe_platform():
+            self.assertIs(subprocess.run, original_run)
+            observed.append(subprocess.check_output(
+                [sys.executable, "-c", "print('runtime-observation')"], text=True
+            ).strip())
+            return original_system()
+
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(runner.platform, "_uname_cache", None), patch.object(
+                runner.platform, "system", side_effect=observe_platform
+            ):
+                metadata = self.synthetic_replay(Path(directory))
+            self.assertEqual(observed, ["runtime-observation"])
+            self.assertEqual(metadata["runtime"]["os"], original_system())
+            self.assertIs(subprocess.run, original_run)
+
+    def test_noncanonical_fixture_path_matches_resolved_identity(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            alias = root / "alias"
+            alias.mkdir()
+            metadata = self.synthetic_replay(alias / "..")
+            self.assertEqual(metadata["pre_identity"]["source_commit"], runner.SOURCE_COMMIT)
+            self.assertEqual(metadata["check_status"], "PASS[COMMIT_BOUND_EXTERNAL_P2_C01_REPLAY]")
 
     def test_source_or_c01_nonzero_exit_never_admitted(self):
         for stage in ("source", "c01"):
