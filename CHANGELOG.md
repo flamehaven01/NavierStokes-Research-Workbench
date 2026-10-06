@@ -6,6 +6,27 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+### Added
+
+- A source-bound P2-L3 Lean module proving the cross-multiplied template bound
+  `exp (-(3/20)*c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`.
+- A bounded L3-only replay runner and negative controls; it does not import
+  external F1/L2 artifacts, bootstrap dependencies, or promote its own claims.
+- Separate dated 2026-10-06 receipts for strict L2 and L3, and an L3 session
+  index linking development, exact-byte checkpoints, and clean replay. Raw
+  archives and compiled artifacts remain outside Git.
+
+### Changed
+
+- Current README/capsule/study wording separates strict L2 from L2-A and L3,
+  and identifies source-defined `DeltaM` composition as the next formal task.
+
+### Not promoted
+
+- `DeltaM < 0`, repair-coefficient signs, first-repair zero and paper-level
+  conclusions remain outside the new compiled receipt scopes. No new tag or
+  release is issued; historical `v0.3.1` statements are unchanged.
+
 ## [0.3.1] - 2026-09-13
 
 ### Added
@@ -174,7 +195,8 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.0...v0.2.3
 [0.2.2]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/commit/447e86347a150bfa98e3bc5c6a61bc07c1c6223c

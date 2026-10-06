@@ -77,7 +77,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M5 P1 source-bound atlas | `HELD[LEDGER_NOT_INDEPENDENTLY_PINNED]` | No complete 4-law/10-law same-raw export or independently pinned ten-law digest ledger exists; production admission fails closed |
 | M5 P2 F1 main-moment positivity | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | A clean pinned-toolchain external Lean run compiles only `0 < mainMoment c (1 : Fin 2)`; it does not establish the L2 comparison or a P2-C conclusion |
 | M5 P2 L2-A representation/positivity bridge | `PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The historical [P2-L2-A receipt](docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md) compiles only the normalized source representation and normalized `i = 1` positivity wrapper; it is not strict-L2 evidence. |
-| M5 P2 strict-L2 comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [2026-10-06 receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) records a commit-bound clean replay of `normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`. L3, `DeltaM`, and repair-zero claims are not promoted. |
+| M5 P2 strict-L2 comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [2026-10-06 receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) records a commit-bound clean replay of `normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`. That receipt does not establish L3 or downstream conclusions. |
+| M5 P2 L3 template-moment comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [L3 receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) records `exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`. `DeltaM < 0`, coefficient signs and first-repair zero remain unpromoted. |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
@@ -94,8 +95,12 @@ normalized `i = 1` quantity. **Strict L2** is the subsequent comparison
 proposition between the normalized `i = 0` and `i = 1` quantities. Its exact
 proof bytes now have their own [pinned-toolchain compiled receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md).
 A completed P2-L2-A receipt alone must not be read as strict-L2 compile evidence.
-The new receipt closes only the strict comparison; the template-moment bound
-(L3) and downstream repair geometry still require separate proofs.
+The strict-L2 receipt closes only that comparison. The template-moment bound
+(L3) now has its own [separate receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md).
+Their composition to the source-defined `DeltaM < 0` is the next proof obligation,
+not an automatic consequence admitted by either receipt. Downstream repair
+geometry remains unformalized. The [L3 session index](docs/sessions/P2_L3_SESSION_2026-10-06.md)
+links the executions without serving as proof authority.
 
 ## Public vocabulary and research posture
 

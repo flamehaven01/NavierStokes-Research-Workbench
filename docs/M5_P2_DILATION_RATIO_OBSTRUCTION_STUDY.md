@@ -108,6 +108,9 @@ P2-L2-A normalizedMainMoment_log_short and normalizedMainMoment_one_pos
 
 P2-L2  normalizedMainMoment_zero_lt_target_one
        CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-L3  rowMoment_one_scaled_le_rowMoment_zero
+       CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
 ```
 
 The P2-F1 receipt is
@@ -128,7 +131,15 @@ It closes the cross-multiplied comparison
 `normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`
 in a commit-bound clean execution with fresh F1 dependency. It does not assert
 a ratio corollary or promote `DeltaM < 0`, coefficient signs, or first-repair
-zero. The next formal obligation is L3 template-moment comparison.
+zero.
+
+The separate [L3 receipt](stage_receipts/P2_L3_COLAB_2026-10-06.md) confirms
+`exp (-(3/20)*c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`.
+This is the cross-multiplied source-template bound, not a ratio theorem.
+Strict L2 and L3 now have their own compiled evidence. The next formal
+obligation is their composition to the source-defined `DeltaM < 0`; the
+main-pulse coefficient and first-repair-zero claims remain `SUPPORTED` with
+formalization open.
 
 `SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE` is deliberately narrower than a source
 theorem: the result follows by combining pinned definitions and lemmas, but is
@@ -527,20 +538,24 @@ endpoint cancellation
 and the strict interior support/nonnegativity of the repair bumps
 ([LocalizedMomentRepair 25--68](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/LocalizedMomentRepair.lean#L25-L68)).
 
-The promotion obligation is narrow and has four components:
+The remaining promotion chain distinguishes completed inputs from open bridges:
 
 ```text
-L1  main-pulse positivity: F1 > 0
-L2  normalized main-pulse comparison: F0 / F1 < exp(-(3/20) * lam)
-L3  template moment-ratio comparison: exp(-(3/20) * lam) <= A0 / A1
-L4  second-tail and first-window zero:
+P2-F1 compiled main-moment positivity; normalized positivity consumed by L2
+L2    compiled normalized comparison: F0 < k*F1
+L3    compiled template bound: k*A1 <= A0
+D     OPEN composition: DeltaM = F0/A0 - F1/A1 < 0
+C     OPEN affine-to-actual small-positive-eta coefficient sign
+L4    OPEN second-tail and first-window zero:
     c1 > 0 -> M_pulse(eta, upper(0)) < 0
            -> exists r in (lower(0), upper(0)), M_pulse(eta, r) = 0.
+k := exp(-(3/20)*lam); Fi := normalizedMainMoment c i
 ```
 
-Their composition proves `DeltaM < 0` and then the positive-small-`eta`
-first-window zero. No numerical `TailData` witness or new verifier framework
-is needed for this proof obligation.
+Their proposed composition, including the outstanding coefficient and tail
+bridges, would formally close `DeltaM < 0` and then the positive-small-`eta`
+first-window zero. Those conclusions are not yet compiled. No numerical
+`TailData` witness or new verifier framework is needed for these obligations.
 
 The source provides exact full moments and uniform absolute correction-jet
 bounds under a small-`lam` hypothesis

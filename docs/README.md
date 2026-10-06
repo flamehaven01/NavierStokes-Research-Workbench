@@ -29,8 +29,14 @@ notes.
   It does not promote the L2 comparison or the later P2-C conclusions.
 - `stage_receipts/P2_L2A_COLAB_2026-09-13.md`: external compilation receipt
   for only the normalized source representation and normalized `i = 1`
-  positivity wrapper. The strict L2 comparison and later P2-C conclusions
-  remain unpromoted.
+  positivity wrapper. That historical receipt does not promote strict L2 or
+  later P2-C conclusions.
+- [Strict-L2 clean replay](stage_receipts/P2_L2_COLAB_2026-10-06.md): its own
+  compiled normalized comparison, separate from the L2-A bridge.
+- [L3 clean replay](stage_receipts/P2_L3_COLAB_2026-10-06.md): compiled
+  cross-multiplied template bound only; DeltaM composition is next and open.
+- [L3 session index](sessions/P2_L3_SESSION_2026-10-06.md): development,
+  checkpoint and replay links; not proof authority.
 - `P2_COLAB_AUTHORITY_RUN.md`: rationale, narrow execution method, bootstrap
   custody, and admission rule for the P2-L1 external Linux authority run.
 - `stage_receipts/P2_L1_COLAB_TEMPLATE.md`: non-execution template for the

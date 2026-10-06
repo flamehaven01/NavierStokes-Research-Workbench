@@ -51,9 +51,10 @@ P2-L1  pulse nonnegativity plus a positive point
 P2-F1  weighted main-moment positivity: `0 < mainMoment c (1 : Fin 2)`
 P2-L2-A normalized source representation plus normalized `i = 1` positivity
 P2-L2   strict normalized main-moment comparison
+P2-L3   cross-multiplied template-moment comparison: k*A1 <= A0
 
 Next formal obligations:
-L3      template moment-ratio comparison
+DeltaM  source-defined normalized main-moment difference is negative
 L4      small-positive-eta first-repair interior zero
 ```
 
@@ -77,7 +78,17 @@ For the F1-to-L2 import chain, use `scripts/run-p2-l2-replay.py` from a clean
 checkout. It records the source build, freshly generates the external F1
 `.olean`, and compiles the L2 module with that dependency in one execution.
 It does not install or update dependencies. Source cache reuse is explicit.
-L3 is the next formal obligation; `DeltaM` and repair geometry are not promoted.
+That receipt does not promote L3, `DeltaM`, or repair geometry.
+
+The separate [`P2_L3_COLAB_2026-10-06.md`](../../docs/stage_receipts/P2_L3_COLAB_2026-10-06.md)
+receipt closes only `exp (-(3/20)*c.lam) * rowMoment (c.exponents 1)
+<= rowMoment (c.exponents 0)` at execution commit
+`15108c35a2e5df948ece653a7f3fcfa02f3180f8`. Use `scripts/run-p2-l3-replay.py`
+from a fresh clean checkout. Its source target is
+`+NavierStokes.OutgoingPulseBounds`; it generates a fresh external L3 `.olean`
+and does not import external F1/L2 modules. Source cache reuse is explicit.
+The next formal obligation is composition to the source-defined `DeltaM < 0`;
+coefficient signs and repair zero remain analytically supported, not compiled.
 
 ## Proof hygiene
 

@@ -8,10 +8,11 @@
 proposition만 승격했다. 작성과 문서 점검은 같은 신뢰영역에서 수행했으므로
 독립적인 수학 검수로 표현하지 않는다.
 
-## 1. 지금 닫아야 할 한 가지
+## 1. 현재 위치와 다음 한 가지
 
-**strict-L2 비교 부등식의 정확한 proof bytes를 pinned Lean 환경에서 compile하고,
-그 commit-bound 실행 receipt를 검수한 뒤에만 L3로 간다.**
+**strict-L2와 L3는 별도의 commit-bound compiled receipt로 닫혔다.
+다음은 source-defined DeltaM의 정확한 정의를 대조하고 두 비교의 composition을
+formalize하는 것이다. DeltaM 자체는 아직 승격하지 않는다.**
 
 ```text
 P2-L1 / P2-F1 / P2-L2-A
@@ -22,7 +23,12 @@ strict-L2
   check_status: PASS[COMMIT_BOUND_EXTERNAL_F1_STRICT_L2_REPLAY]
   commit-bound compiled receipt: reviewed, 2026-10-06
 
-L3 / DeltaM / coefficient sign / first-repair zero
+L3: k*A1 <= A0
+  claim_status: CONFIRMED (named pinned-source proposition only)
+  check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_L3_REPLAY]
+  receipt: stage_receipts/P2_L3_COLAB_2026-10-06.md
+
+DeltaM / coefficient sign / first-repair zero
   not promoted by this document
 ```
 
@@ -126,14 +132,17 @@ notebook은 launcher이고 source/proof/runner identity와 로그가 실행 증�
   `claim_status: CONFIRMED`로 승격한다. 다른 run의 source PASS와 proof PASS를 합치지
   않는다. 기존 L2-A receipt와 실패 기록을 덮어쓰지 않는다.
 
-- [ ] **T6 — L3 진입.** strict-L2 compiled receipt 검수가 닫힌 뒤 template moment
+- [x] **T6 — L3 진입.** strict-L2 compiled receipt 검수가 닫힌 뒤 template moment
   comparison을 시작한다. L2만으로 `DeltaM < 0`, `c1 > 0`, first-repair zero를
   승격하지 않는다. 이후 coefficient/amplitude decomposition, continuity, positive
   second-bump tail 및 first-window IVT bridge도 각각 닫아야 한다.
 
 완료 기준은 문서 수나 theorem 파일 존재가 아니라 **exact strict theorem의 검수된
-compiled receipt**다. T0–T5는 해당 범위에서 닫혔다. T6는 다음 작업이며,
-L3 proof를 작성하거나 compile했다는 뜻이 아니다.
+compiled receipt**다. T0–T6는 각각의 receipt 범위에서 닫혔다. L3의
+[dated receipt](stage_receipts/P2_L3_COLAB_2026-10-06.md)는 cross-multiplied
+template bound만 승격한다. DeltaM composition은 다음 미완료 작업이다.
+[세션 index](sessions/P2_L3_SESSION_2026-10-06.md)는 development와 clean replay를
+연결하는 기록이며 proof authority가 아니다.
 
 ## 5. 별도 안전보수: 주 연구선을 대체하지 않는다
 
