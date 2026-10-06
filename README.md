@@ -35,6 +35,13 @@ proof claims.
 
 ## Current P2 research
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Cdut_XJhMX6tDQX6mberM7I37sr844sM)
+
+Opens the shared execution notebook, not a verified result. Historical outputs
+are not evidence of a current successful run. Use the
+[restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) and pinned
+inputs for execution; individual dated receipts record admitted proof evidence.
+
 At the `v0.3.2` checkpoint, the study follows a scale-invariant ratio candidate
 into the repair geometry of the pinned construction. The objective is a bounded
 obstruction result, not a new proof of Navier–Stokes blowup.
