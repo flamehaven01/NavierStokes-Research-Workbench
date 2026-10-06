@@ -53,9 +53,10 @@ P2-L2-A normalized source representation plus normalized `i = 1` positivity
 P2-L2   strict normalized main-moment comparison
 P2-L3   cross-multiplied template-moment comparison: k*A1 <= A0
 P2-D    source-linked NSRW deltaM negativity plus two debt identities
+P2-C01  positive matrix gap, main-only coefficient formula and positivity
 
 Next formal obligations:
-Affine  source-indexed main-only repair-coefficient bridge and sign
+C02-C04 actual coefficient decomposition, eta=0/continuity, small-positive-eta sign
 L4      small-positive-eta first-repair interior zero
 ```
 
@@ -97,8 +98,17 @@ execution commit `06cb400667c433b076599aabadc5d5f9d13f8f24`.
 upstream declaration name. `scripts/run-p2-d-replay.py` builds the same source
 target, freshly compiles F1, strict L2, L3, and D in one execution, and confines
 the external dependency search path to the new run artifacts. Source caches
-are reused, not independently attested. The next bridge is the main-only
-affine coefficient; actual coefficient signs and repair zero are not compiled.
+are reused, not independently attested.
+
+The separate [C01 receipt](../../docs/stage_receipts/P2_C01_COLAB_2026-10-06.md)
+confirms three main-only propositions at execution commit
+`304f2adc3f26310554dfa64a572329b6a7ff8cf8`: a positive exponential gap, the
+exact formula `affineCoefficients c 0 1 1 = -deltaM c / gap`, and the main-only
+coefficient's positivity. `scripts/run-p2-c01-replay.py` builds the source
+target and freshly compiles F1, strict L2, L3, D and C01 in one run. It does
+not import stale external artifacts or promote its own claims. This is not
+actual `c1(0)` or `c1(eta)` positivity. Actual coefficient decomposition and
+small-eta signs, then the first-repair zero bridge, remain open.
 
 ## Proof hygiene
 

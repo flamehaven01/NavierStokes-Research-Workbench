@@ -80,6 +80,7 @@ project is not affiliated with or endorsed by OpenAI.
 | M5 P2 strict-L2 comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [2026-10-06 receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) records a commit-bound clean replay of `normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`. That receipt does not establish L3 or downstream conclusions. |
 | M5 P2 L3 template-moment comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [L3 receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) records `exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`. That receipt alone does not admit downstream composition. |
 | M5 P2 D source-linked composition | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) records `NSRW.P2.deltaM c < 0` and two definition-level debt identities, using same-run fresh F1/L2/L3 dependencies. Coefficient signs and first-repair zero remain unpromoted. |
+| M5 P2 C-01 main-only coefficient | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [C-01 receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md) records the positive matrix gap, exact coefficient formula, and `0 < affineCoefficients c 0 1 1`. This main-only component is not actual `c1(0)` or `c1(eta)`; their signs and first-repair zero remain unpromoted. |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
@@ -101,7 +102,10 @@ The strict-L2 receipt closes only that comparison. The template-moment bound
 Their composition now has its own [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md),
 not an automatic admission by either input receipt. `deltaM` is NSRW shorthand
 on pinned source objects; the D module binds it explicitly to source debt
-definitions. The next obligation is the main-only affine-coefficient bridge.
+definitions. The main-only affine-coefficient bridge now has its own
+[C-01 receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md).
+The next obligation is the actual coefficient decomposition, followed by the
+eta=0/amplitude/continuity and small-positive-eta sign bridges.
 Actual coefficient signs and repair geometry remain unformalized. The
 [D session index](docs/sessions/P2_D_SESSION_2026-10-06.md) links the executions
 without serving as proof authority.

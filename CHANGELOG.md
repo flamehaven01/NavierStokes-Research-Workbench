@@ -15,15 +15,21 @@ artifacts. Research claims retain their separate evidence statuses.
 - Separate dated 2026-10-06 receipts for strict L2 and L3, and an L3 session
   index linking development, exact-byte checkpoints, and clean replay. Raw
   archives and compiled artifacts remain outside Git.
+- Source-linked D composition and main-only C01 coefficient modules, bounded
+  fresh-chain replay runners with negative controls, and separate dated
+  receipts/session indexes. D confirms NSRW `deltaM c < 0` plus two debt
+  identities; C01 confirms the positive matrix gap, exact main-only coefficient
+  formula, and `0 < affineCoefficients c 0 1 1`.
 
 ### Changed
 
 - Current README/capsule/study wording separates strict L2 from L2-A and L3,
-  and identifies source-defined `DeltaM` composition as the next formal task.
+  and distinguishes completed D/C01 propositions from the next actual
+  coefficient decomposition and small-positive-eta sign bridges.
 
 ### Not promoted
 
-- `DeltaM < 0`, repair-coefficient signs, first-repair zero and paper-level
+- Actual `c1(0)`/`c1(eta)` signs, first-repair zero and paper-level
   conclusions remain outside the new compiled receipt scopes. No new tag or
   release is issued; historical `v0.3.1` statements are unchanged.
 

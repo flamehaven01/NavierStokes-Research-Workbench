@@ -114,6 +114,9 @@ P2-L3  rowMoment_one_scaled_le_rowMoment_zero
 
 P2-D   deltaM_neg and two source-debt identities
        CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-C01 mainOnly_separation_gap_pos, main-only coefficient formula and positivity
+       CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
 ```
 
 The P2-F1 receipt is
@@ -144,9 +147,14 @@ Strict L2 and L3 have their own compiled evidence. The separate
 to `NSRW.P2.deltaM c < 0` plus two explicit source-debt identities, with all
 external F1/L2/L3/D artifacts freshly generated in one commit-bound run.
 `deltaM` is NSRW shorthand on the source objects, not an upstream declaration
-name. The next formal obligation is the main-only affine-coefficient bridge;
-coefficient signs and first-repair-zero claims remain `SUPPORTED` with
-formalization open. Executor and artifact verifier share a session/trust domain.
+name. The separate [C01 receipt](stage_receipts/P2_C01_COLAB_2026-10-06.md)
+confirms the source-indexed main-only coefficient formula and positivity,
+including the positive matrix gap. Main-only positivity is not actual
+`c1(0)` or `c1(eta)` positivity. The next obligation is actual coefficient
+decomposition, then the eta=0/amplitude/continuity and small-positive-eta
+bridges. Actual coefficient signs and first-repair-zero claims remain
+`SUPPORTED` with formalization open. Executor and artifact verifier share
+a session/trust domain.
 
 `SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE` is deliberately narrower than a source
 theorem: the result follows by combining pinned definitions and lemmas, but is
@@ -552,7 +560,8 @@ P2-F1 compiled main-moment positivity; normalized positivity consumed by L2
 L2    compiled normalized comparison: F0 < k*F1
 L3    compiled template bound: k*A1 <= A0
 D     compiled source-linked composition: DeltaM = F0/A0 - F1/A1 < 0
-C     OPEN affine-to-actual small-positive-eta coefficient sign
+C01   compiled main-only coefficient formula and positivity
+C02-C04 OPEN actual decomposition, eta=0/continuity, small-positive-eta sign
 L4    OPEN second-tail and first-window zero:
     c1 > 0 -> M_pulse(eta, upper(0)) < 0
            -> exists r in (lower(0), upper(0)), M_pulse(eta, r) = 0.
