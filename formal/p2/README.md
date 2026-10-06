@@ -52,9 +52,10 @@ P2-F1  weighted main-moment positivity: `0 < mainMoment c (1 : Fin 2)`
 P2-L2-A normalized source representation plus normalized `i = 1` positivity
 P2-L2   strict normalized main-moment comparison
 P2-L3   cross-multiplied template-moment comparison: k*A1 <= A0
+P2-D    source-linked NSRW deltaM negativity plus two debt identities
 
 Next formal obligations:
-DeltaM  source-defined normalized main-moment difference is negative
+Affine  source-indexed main-only repair-coefficient bridge and sign
 L4      small-positive-eta first-repair interior zero
 ```
 
@@ -87,8 +88,17 @@ receipt closes only `exp (-(3/20)*c.lam) * rowMoment (c.exponents 1)
 from a fresh clean checkout. Its source target is
 `+NavierStokes.OutgoingPulseBounds`; it generates a fresh external L3 `.olean`
 and does not import external F1/L2 modules. Source cache reuse is explicit.
-The next formal obligation is composition to the source-defined `DeltaM < 0`;
-coefficient signs and repair zero remain analytically supported, not compiled.
+That historical receipt does not admit composition or downstream repair claims.
+
+The separate [`P2_D_COLAB_2026-10-06.md`](../../docs/stage_receipts/P2_D_COLAB_2026-10-06.md)
+receipt confirms `NSRW.P2.deltaM c < 0` and two source-debt identities at
+execution commit `06cb400667c433b076599aabadc5d5f9d13f8f24`.
+`deltaM` is NSRW shorthand assembled from pinned source objects, not an
+upstream declaration name. `scripts/run-p2-d-replay.py` builds the same source
+target, freshly compiles F1, strict L2, L3, and D in one execution, and confines
+the external dependency search path to the new run artifacts. Source caches
+are reused, not independently attested. The next bridge is the main-only
+affine coefficient; actual coefficient signs and repair zero are not compiled.
 
 ## Proof hygiene
 

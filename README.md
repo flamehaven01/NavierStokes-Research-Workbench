@@ -78,7 +78,8 @@ project is not affiliated with or endorsed by OpenAI.
 | M5 P2 F1 main-moment positivity | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | A clean pinned-toolchain external Lean run compiles only `0 < mainMoment c (1 : Fin 2)`; it does not establish the L2 comparison or a P2-C conclusion |
 | M5 P2 L2-A representation/positivity bridge | `PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The historical [P2-L2-A receipt](docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md) compiles only the normalized source representation and normalized `i = 1` positivity wrapper; it is not strict-L2 evidence. |
 | M5 P2 strict-L2 comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [2026-10-06 receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) records a commit-bound clean replay of `normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`. That receipt does not establish L3 or downstream conclusions. |
-| M5 P2 L3 template-moment comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [L3 receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) records `exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`. `DeltaM < 0`, coefficient signs and first-repair zero remain unpromoted. |
+| M5 P2 L3 template-moment comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [L3 receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) records `exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`. That receipt alone does not admit downstream composition. |
+| M5 P2 D source-linked composition | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) records `NSRW.P2.deltaM c < 0` and two definition-level debt identities, using same-run fresh F1/L2/L3 dependencies. Coefficient signs and first-repair zero remain unpromoted. |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
@@ -97,10 +98,13 @@ proof bytes now have their own [pinned-toolchain compiled receipt](docs/stage_re
 A completed P2-L2-A receipt alone must not be read as strict-L2 compile evidence.
 The strict-L2 receipt closes only that comparison. The template-moment bound
 (L3) now has its own [separate receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md).
-Their composition to the source-defined `DeltaM < 0` is the next proof obligation,
-not an automatic consequence admitted by either receipt. Downstream repair
-geometry remains unformalized. The [L3 session index](docs/sessions/P2_L3_SESSION_2026-10-06.md)
-links the executions without serving as proof authority.
+Their composition now has its own [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md),
+not an automatic admission by either input receipt. `deltaM` is NSRW shorthand
+on pinned source objects; the D module binds it explicitly to source debt
+definitions. The next obligation is the main-only affine-coefficient bridge.
+Actual coefficient signs and repair geometry remain unformalized. The
+[D session index](docs/sessions/P2_D_SESSION_2026-10-06.md) links the executions
+without serving as proof authority.
 
 ## Public vocabulary and research posture
 

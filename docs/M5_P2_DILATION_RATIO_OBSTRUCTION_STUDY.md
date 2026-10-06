@@ -111,6 +111,9 @@ P2-L2  normalizedMainMoment_zero_lt_target_one
 
 P2-L3  rowMoment_one_scaled_le_rowMoment_zero
        CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-D   deltaM_neg and two source-debt identities
+       CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
 ```
 
 The P2-F1 receipt is
@@ -136,10 +139,14 @@ zero.
 The separate [L3 receipt](stage_receipts/P2_L3_COLAB_2026-10-06.md) confirms
 `exp (-(3/20)*c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`.
 This is the cross-multiplied source-template bound, not a ratio theorem.
-Strict L2 and L3 now have their own compiled evidence. The next formal
-obligation is their composition to the source-defined `DeltaM < 0`; the
-main-pulse coefficient and first-repair-zero claims remain `SUPPORTED` with
-formalization open.
+Strict L2 and L3 have their own compiled evidence. The separate
+[D receipt](stage_receipts/P2_D_COLAB_2026-10-06.md) confirms their composition
+to `NSRW.P2.deltaM c < 0` plus two explicit source-debt identities, with all
+external F1/L2/L3/D artifacts freshly generated in one commit-bound run.
+`deltaM` is NSRW shorthand on the source objects, not an upstream declaration
+name. The next formal obligation is the main-only affine-coefficient bridge;
+coefficient signs and first-repair-zero claims remain `SUPPORTED` with
+formalization open. Executor and artifact verifier share a session/trust domain.
 
 `SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE` is deliberately narrower than a source
 theorem: the result follows by combining pinned definitions and lemmas, but is
@@ -544,7 +551,7 @@ The remaining promotion chain distinguishes completed inputs from open bridges:
 P2-F1 compiled main-moment positivity; normalized positivity consumed by L2
 L2    compiled normalized comparison: F0 < k*F1
 L3    compiled template bound: k*A1 <= A0
-D     OPEN composition: DeltaM = F0/A0 - F1/A1 < 0
+D     compiled source-linked composition: DeltaM = F0/A0 - F1/A1 < 0
 C     OPEN affine-to-actual small-positive-eta coefficient sign
 L4    OPEN second-tail and first-window zero:
     c1 > 0 -> M_pulse(eta, upper(0)) < 0
@@ -552,10 +559,10 @@ L4    OPEN second-tail and first-window zero:
 k := exp(-(3/20)*lam); Fi := normalizedMainMoment c i
 ```
 
-Their proposed composition, including the outstanding coefficient and tail
-bridges, would formally close `DeltaM < 0` and then the positive-small-`eta`
-first-window zero. Those conclusions are not yet compiled. No numerical
-`TailData` witness or new verifier framework is needed for these obligations.
+The D composition is compiled. The remaining coefficient and tail bridges
+would close the positive-small-`eta` first-window zero, which is not yet
+compiled. No numerical `TailData` witness or new verifier framework is needed
+for these obligations.
 
 The source provides exact full moments and uniform absolute correction-jet
 bounds under a small-`lam` hypothesis
