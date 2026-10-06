@@ -62,6 +62,9 @@ project is not affiliated with or endorsed by OpenAI.
 
 ## Current evidence status
 
+Software checkpoint: `v0.3.2` ([release notes](docs/releases/v0.3.2.md)).
+The version/tag records software and documentation; it is not a new P2 proof receipt.
+
 | Surface | Status | Meaning |
 |---|---|---|
 | Python research kernel | `PASS[LOCAL_TESTS]` | Bounded software behavior passes the declared suite |
@@ -81,6 +84,7 @@ project is not affiliated with or endorsed by OpenAI.
 | M5 P2 L3 template-moment comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [L3 receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) records `exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`. That receipt alone does not admit downstream composition. |
 | M5 P2 D source-linked composition | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) records `NSRW.P2.deltaM c < 0` and two definition-level debt identities, using same-run fresh F1/L2/L3 dependencies. Coefficient signs and first-repair zero remain unpromoted. |
 | M5 P2 C-01 main-only coefficient | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [C-01 receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md) records the positive matrix gap, exact coefficient formula, and `0 < affineCoefficients c 0 1 1`. This main-only component is not actual `c1(0)` or `c1(eta)`; their signs and first-repair zero remain unpromoted. |
+| M5 P2 C02 actual-coefficient decomposition | `UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]` | The [source-wrapper module](formal/p2/P2_C02_ActualCoefficientDecomposition.lean) implements two equalities, but its external compile failed at a mathlib import. No C02 receipt or actual-coefficient sign is admitted. |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
@@ -109,7 +113,10 @@ not an automatic admission by either input receipt. `deltaM` is NSRW shorthand
 on pinned source objects; the D module binds it explicitly to source debt
 definitions. The main-only affine-coefficient bridge now has its own
 [C-01 receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md).
-The next obligation is the actual coefficient decomposition, followed by the
+The actual coefficient decomposition is now implemented as a narrow
+source-wrapper module, but remains uncompiled. The next task is pinned
+environment recovery and C02 development compilation, then a separate clean
+commit-bound replay and receipt. Only afterward come the
 eta=0/amplitude/continuity and small-positive-eta sign bridges.
 Actual coefficient signs and repair geometry remain unformalized. The
 [D session index](docs/sessions/P2_D_SESSION_2026-10-06.md) links the executions
@@ -341,6 +348,7 @@ or held.
 - [Mandatory stage checklist](docs/STAGE_CHECKLIST.md)
 - [v0.2.3 release notes](docs/releases/v0.2.3.md)
 - [v0.3.0 release notes](docs/releases/v0.3.0.md)
+- [v0.3.2 checkpoint notes](docs/releases/v0.3.2.md)
 - [v0.2.2 release notes](docs/releases/v0.2.2.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
 - [Changelog](CHANGELOG.md)

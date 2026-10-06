@@ -6,6 +6,8 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-10-06
+
 ### Added
 
 - A source-bound P2-L3 Lean module proving the cross-multiplied template bound
@@ -20,12 +22,20 @@ artifacts. Research claims retain their separate evidence statuses.
   receipts/session indexes. D confirms NSRW `deltaM c < 0` plus two debt
   identities; C01 confirms the positive matrix gap, exact main-only coefficient
   formula, and `0 < affineCoefficients c 0 1 1`.
+- C02 source-wrapper equalities for generic repair-coefficient decomposition
+  and the second axial coefficient of one fixed Profile. This module is
+  implemented but uncompiled: a Windows import failed while reading a mathlib
+  private artifact, and the reconnected Colab VM has no source or toolchain.
+  No C02 compiled receipt is included.
 
 ### Changed
 
 - Current README/capsule/study wording separates strict L2 from L2-A and L3,
   and distinguishes completed D/C01 propositions from the next actual
   coefficient decomposition and small-positive-eta sign bridges.
+- Split C02 implementation, development compilation and commit-bound receipt
+  admission in the operational checklist. The next task is environment recovery
+  and development compilation, not a sign claim or another framework.
 - Publish the resource principles, evidence index, operational-exposure
   definition, stage crosswalk, proposed transfer protocol, roadmap and negative
   register as a linked documentation set. Historical 10/5 snapshots retain
@@ -47,8 +57,10 @@ artifacts. Research claims retain their separate evidence statuses.
 ### Not promoted
 
 - Actual `c1(0)`/`c1(eta)` signs, first-repair zero and paper-level
-  conclusions remain outside the new compiled receipt scopes. No new tag or
-  release is issued; historical `v0.3.1` statements are unchanged.
+  conclusions remain outside the compiled receipt scopes. C02 equalities also
+  remain unverified. This version is a Git checkpoint with release notes, not
+  a new P2 proof receipt or a published GitHub Release object. Historical
+  `v0.3.1` statements and its tag are unchanged.
 
 ## [0.3.1] - 2026-09-13
 

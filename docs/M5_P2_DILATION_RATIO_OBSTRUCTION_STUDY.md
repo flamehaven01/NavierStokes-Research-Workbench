@@ -150,8 +150,10 @@ external F1/L2/L3/D artifacts freshly generated in one commit-bound run.
 name. The separate [C01 receipt](stage_receipts/P2_C01_COLAB_2026-10-06.md)
 confirms the source-indexed main-only coefficient formula and positivity,
 including the positive matrix gap. Main-only positivity is not actual
-`c1(0)` or `c1(eta)` positivity. The next obligation is actual coefficient
-decomposition, then the eta=0/amplitude/continuity and small-positive-eta
+`c1(0)` or `c1(eta)` positivity. Actual coefficient decomposition is implemented
+in `P2_C02_ActualCoefficientDecomposition.lean` but remains uncompiled after
+an external import failure. Environment recovery and C02 development compile,
+then a separate commit-bound receipt, precede the eta=0/amplitude/continuity and small-positive-eta
 bridges. Actual coefficient signs and first-repair-zero claims remain
 `SUPPORTED` with formalization open. Executor and artifact verifier share
 a session/trust domain.
@@ -568,7 +570,8 @@ L2    compiled normalized comparison: F0 < k*F1
 L3    compiled template bound: k*A1 <= A0
 D     compiled source-linked composition: DeltaM = F0/A0 - F1/A1 < 0
 C01   compiled main-only coefficient formula and positivity
-C02-C04 OPEN actual decomposition, eta=0/continuity, small-positive-eta sign
+C02   IMPLEMENTED / UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]: decomposition equalities only
+C03-C04 OPEN eta=0/continuity, small-positive-eta sign
 L4    OPEN second-tail and first-window zero:
     c1 > 0 -> M_pulse(eta, upper(0)) < 0
            -> exists r in (lower(0), upper(0)), M_pulse(eta, r) = 0.

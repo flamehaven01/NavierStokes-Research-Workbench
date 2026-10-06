@@ -36,8 +36,9 @@ Read these first:
 
 - [NSRW Colab restart tasks — updated 2026-10-06](NSRW_COLAB_RESTART_TASKS_2026-10-06.md):
   actual 10/6 restart record and closure conditions; T0–T5 completed at scoped
-  strict-L2, L3, D and main-only C01 closure; actual coefficient decomposition next. Not itself
-  an execution receipt.
+  strict-L2, L3, D and main-only C01 closure. C02 decomposition is implemented
+  but uncompiled; environment recovery and development compilation are next.
+  Not itself an execution receipt.
 
 ## Stable NSRW mathematical policy
 
@@ -81,6 +82,9 @@ Inclusion does not imply execution.
 - `COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md`
 
 ## Historical records
+
+- [v0.3.2 checkpoint notes](releases/v0.3.2.md): completed L2/L3/D/C01 receipt
+  scopes, Windows test isolation fix, and explicitly unverified C02 implementation.
 
 Historical records remain unchanged when rewriting them would damage
 provenance.

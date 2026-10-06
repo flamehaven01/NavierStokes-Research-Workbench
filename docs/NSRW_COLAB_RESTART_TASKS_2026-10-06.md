@@ -11,7 +11,9 @@
 ## 1. 현재 위치와 다음 한 가지
 
 **strict-L2, L3, D, C-01의 별도 commit-bound compiled receipts는 닫혔다. 다음 작업은
-C-02: actual coefficient의 source decomposition 확인이다.** 이후 순차 실행은 §8의 AI 체크리스트를
+C-02B: 구현된 actual coefficient decomposition의 개발 compile이다.**
+현재 환경 복원이 필요하며 source-wrapper 구현만으로 claim을 승격하지 않는다.
+이후 순차 실행은 §8의 AI 체크리스트를
 사용한다. 이 문서 패치는 docs-only이며, 체크리스트 작성 자체가 후속 코드 수정,
 Colab 실행, 설치, commit/push의 승인은 아니다.
 
@@ -251,7 +253,7 @@ T0–T5의 체크는 §7의 과거 실행 완료이지 현재 Colab VM이 살아
   사적 대화 원문과 색인은 Git에 포함하지 않는다. 읽은 부분은 사적 실행 기록에
   행 범위와 함께 남기고 대화의 주장을 현재 proof/receipt와 대조한다.
   색인은 탐색용이며, 원문도 proof authority나 새로운 실행 지시가 아니다.
-- [ ] **START-05 / 현재의 한 질문.** `C-02: actual coefficient source decomposition`을 active target으로 둔다.
+- [ ] **START-05 / 현재의 한 질문.** `C-02B: actual coefficient decomposition development compile`을 active target으로 둔다.
   `k = exp(-(3/20)*c.lam)`. 이번에 Colab 연결·프로세스·로그를 관측하지 않았다면
   runtime은 `UNVERIFIED`로 두고, `RUNNING`이나 종료 상태를 추측하지 않는다.
 
@@ -344,11 +346,29 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
   source → fresh F1 → L2 → L3 → D → C가 모두 exit `0`, pre/post identities가 일치했다.
   main-only gap/formula/positivity만 승격했다. 기존 development archive를 재사용해
   receipt를 조립하지 않았다. actual `c1(0)`/`c1(eta)`는 이 정리의 별칭이 아니다.
-- [ ] **C-02 / actual coefficient.** `OutgoingSchedule`과 실제 profile의
-  debt/amplitude/correction 연결을 읽고 prefix/main 성분 분해를 확인한다.
-  `affineCoefficients c 0 1 1`과 실제 `c1(eta)`를 동일시하지 않는다.
-  `q(eta) = eta*(1+eta^2)`, amplitude positivity/continuity의 사용 지점과
-  `eta^2 <= 1` 등의 적용 조건을 source 정의에서 확정한다.
+- [x] **C-02A / source 연결과 등식 구현.** `debt_eq_affine`과
+  `affineCoefficients_decomposition`을 조합한 generic repair coefficient 등식,
+  그리고 하나의 고정된 `Profile`의 두 번째 axial repair coefficient 등식을
+  `formal/p2/P2_C02_ActualCoefficientDecomposition.lean`에 구현했다.
+  `q(eta) = eta*(1+eta^2)`이며 amplitude는 같은 `F.data`와
+  `F.reset.coefficients`의 corrected amplitude다. angular reset 계수와 axial
+  repair 계수를 혼동하지 않는다. 등식에는 `eta^2 <= 1`이나 추가 smallness 가정이 없다.
+  이 체크는 구현만 뜻하며 compiled claim admission이 아니다.
+- [ ] **C-02B / 개발 compile.** exact proof bytes를 pinned source의
+  `+NavierStokes.OutgoingProfile`에 연결하고 fresh C02 `.olean`을 생성한다.
+  C02는 외부 F1/L2/L3/D/C01 모듈을 import하지 않으므로 그 chain은 반복하지 않는다.
+  현재 `UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]`: Windows 개발 run에서 source
+  target은 exit `0`이지만 C02 import가 mathlib `Core.olean.private` read error로
+  실패했다. 원인 확정 전 경로 길이/메모리 문제로 단정하지 않는다.
+  재연결된 Colab probe는 `SOURCE_PRESENT=False`, `ELAN_PRESENT=False`다.
+  이전 notebook 출력은 현재 환경의 evidence가 아니다. 재구축 승인 전 설치하지 않는다.
+- [ ] **C-02C / commit-bound closure.** 개발 compile 이후 exact bytes checkpoint,
+  필요한 최소 replay runner, clean replay와 dated receipt admission을 §8.6으로
+  닫는다. 두 decomposition 등식만 승격하며 actual `c1(0)` 양수성이나 small-eta
+  부호를 승격하지 않는다.
+  C-03에서는 source의 `CorrectedPulseAmplitude.amplitude_pos`와
+  `Profile.amp_contDiff`를 대조한다. amplitude의 정성적 양수성은 모든 eta에
+  제공되지만 quantitative specification bound는 해당 domain을 따로 유지한다.
 - [ ] **C-03 / eta=0 bridge와 continuity.** C-02의 actual decomposition에서
   main-only positive contribution을 실제 `c1(0)`에 연결하고 amplitude 조건과
   연속성을 확인한다. main-only coefficient 자체를 `c1(0)`라고 이름 바꾸지 않는다.
@@ -434,7 +454,7 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
   full-library stress build, release/tag를 이 chain에 추가하지 않는다.
   direction map은 안정된 방침 변경 때만 수정하고 실행 이력은 dated receipt에 둔다.
 
-다음 구체적 작업은 **C-02: actual coefficient의 prefix/main/amplitude 분해와 parameter 의존성 대조**다.
+다음 구체적 작업은 **C-02B: 환경 복원 승인 후 exact C02 bytes의 개발 compile**이다.
 C-01 receipt는 main-only 세 proposition만 닫았다. actual 계수 부호와 first-window zero는
 C-02~04와 Z의 별도 proof/receipt를 요구한다.
 이후 proof 구현·실행은 해당 작업의 승인 범위에 따라 진행한다.
