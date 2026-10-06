@@ -19,7 +19,9 @@ Read these first:
 - [Claim ledger](E2A_RESOURCE_CLAIM_LEDGER.yaml): machine-readable atomic claim view for
   the current NSRW resource set; an evidence index, not proof authority.
 - [Program roadmap](EQUATION_TO_ARTIFACT_VISION_ROADMAP.md): end-to-end roadmap from source
-  through artifact, transfer, validation, and deployment.
+  through artifact, transfer, validation, and deployment; includes the P2
+  comparison branches, actual-coefficient bridge, and zero-geometry route,
+  without treating that route as a completed proof.
 - [Proposed transfer protocol](ARTIFACT_TO_APPLICATION_TRANSFER_GATES.md): TR-0..TR-6 protocol,
   preregistration, baselines, reviewer requirements, and stopping rules.
 - [Public language guide](PUBLIC_RESEARCH_LANGUAGE.md): public wording and evidence-verb policy.

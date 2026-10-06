@@ -1,7 +1,14 @@
-# Navier--Stokes Research Workbench
+# Navier–Stokes Research Workbench
 
-[![CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
+[![Software CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
+[![Checkpoint tag](https://img.shields.io/github/v/tag/flamehaven01/NavierStokes-Research-Workbench?label=checkpoint)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/tags)
+[![Python requirement](https://img.shields.io/badge/Python-%E2%89%A53.10-blue)](pyproject.toml)
+[![Pinned Lean](https://img.shields.io/badge/pinned_Lean-4.34.0--rc2-blue)](formal/p2/README.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+Badges describe software CI, Git tags, environment requirements, and licensing.
+They do not certify a mathematical result. A checkpoint tag is not necessarily
+a published GitHub Release; P2 proof evidence lives in individual dated receipts.
 
 NSRW is an open research-lab workbench for studying selected, checkable links
 between Navier--Stokes papers, Lean formalizations, and bounded computational
@@ -19,6 +26,37 @@ state executable scope, test bounded mathematical controls, and withhold
 stronger conclusions when evidence is missing. New mathematical, numerical,
 CFD, and SciML investigations are research-program directions, not current
 proof claims.
+
+**Start here:** [Research roadmap](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
+· [Current P2 work](#current-p2-research)
+· [Install](#installation)
+· [Run checks](#running-the-workbench)
+· [Documentation index](docs/README.md)
+
+## Current P2 research
+
+At the `v0.3.2` checkpoint, the study follows a scale-invariant ratio candidate
+into the repair geometry of the pinned construction. The objective is a bounded
+obstruction result, not a new proof of Navier–Stokes blowup.
+
+| Step | Recorded result | Evidence / next gate |
+|---|---|---|
+| strict L2 | Normalized main-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) |
+| L3 | Template-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) |
+| D | `deltaM c < 0` confirmed | [Compiled composition receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) |
+| C01 | Main-only repair coefficient positivity confirmed | [Compiled receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md); not actual `c1(eta)` |
+| C02 | Actual-coefficient decomposition implemented; compile unverified | Recover pinned environment, development compile, then clean commit-bound replay |
+| C03–C04 / Z | Actual coefficient sign and first-repair zero formal closure open | Separate downstream amplitude, continuity, and partial-tail obligations |
+
+**Next task: C02 development compilation.** Its previous external compile failed
+at a mathlib import; no mathematical falsifier or C02 proof receipt is admitted.
+The [restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) separates
+implementation, development compile, and receipt admission. The
+[formal capsule](formal/p2/README.md) describes the pinned environment.
+
+P1 source-atlas closure remains parallel and non-blocking. Numerical source
+witness extraction and external dataset experiments remain held; they do not
+replace or widen the current parametric formal claims.
 
 ## Research objective
 
@@ -65,6 +103,9 @@ project is not affiliated with or endorsed by OpenAI.
 Software checkpoint: `v0.3.2` ([release notes](docs/releases/v0.3.2.md)).
 The version/tag records software and documentation; it is not a new P2 proof receipt.
 
+<details>
+<summary>Full evidence inventory — including earlier stages and held results</summary>
+
 | Surface | Status | Meaning |
 |---|---|---|
 | Python research kernel | `PASS[LOCAL_TESTS]` | Bounded software behavior passes the declared suite |
@@ -88,6 +129,8 @@ The version/tag records software and documentation; it is not a new P2 proof rec
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
 | Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
+
+</details>
 
 Status words are scoped. `PASS[LOCAL_TESTS]` is not a proof claim.
 `PASS[COMPILED_TARGET]` does not mean a paper is correct, that all library
@@ -236,6 +279,8 @@ of the form `forall F, exists R(F), forall X >= R(F)`.
 | `src/nsrw/m4_audit.py` | Source/check scope comparison, Support/Cone/Moment checks, secondary diagnostic adapter, and M4 mutations |
 | `src/nsrw/external_experiments/` | Pinned external numerical experiment auditors |
 | `colab/` | Project-owned notebooks; execution evidence is not prefilled |
+| `formal/p2/` | Source-bound external Lean modules and their reproduction guide |
+| `scripts/run-p2-*-replay.py` | Stage-specific commit-bound replay runners |
 | `docs/` | Designs, checklists, boundaries, receipts, and research map |
 
 ## Installation
@@ -282,7 +327,7 @@ it does not by itself mean the mathematical theorem is false.
 
 ## CI and verification
 
-The GitHub Actions pipeline contains three distinct jobs:
+The GitHub Actions pipeline contains three job families:
 
 1. cross-platform Python quality: pytest, coverage, Ruff, and compilation;
 2. deterministic artifact replay, structural-check dependency identity, and mutation checks;
@@ -328,7 +373,16 @@ or held.
 ## Documentation
 
 - [Documentation status index](docs/README.md)
+- [Program roadmap: source → artifact → controlled transfer](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
+- [Active P2 restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md)
+- [P2 mathematical study](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md)
+- [Lean reproduction capsule](formal/p2/README.md)
 - [Research direction map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
+- [Changelog](CHANGELOG.md)
+
+<details>
+<summary>Earlier stage designs, receipts, and checkpoint notes</summary>
+
 - [M5 Lean export and `H_scaling` vertical-slice contract](docs/M5_LEAN4EXPORT_H_SCALING_VERTICAL_SLICE.md)
 - [M5 `H_scaling` local receipt](docs/stage_receipts/M5_H_SCALING_LOCAL.md)
 - [M5 P1 `OutgoingDilation` scaling-atlas contract](docs/M5_OUTGOING_DILATION_SCALING_ATLAS_P1.md)
@@ -351,7 +405,8 @@ or held.
 - [v0.3.2 checkpoint notes](docs/releases/v0.3.2.md)
 - [v0.2.2 release notes](docs/releases/v0.2.2.md)
 - [v0.2.0 release notes](docs/releases/v0.2.0.md)
-- [Changelog](CHANGELOG.md)
+
+</details>
 
 ## Upstream references
 

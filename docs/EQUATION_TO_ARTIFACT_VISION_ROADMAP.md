@@ -220,19 +220,44 @@ A negative answer is recorded, not hidden.
 
 ## 9. Current NSRW route
 
-The active mathematical route remains:
+The mathematical route separates two comparison branches, their composition,
+and the subsequent actual-coefficient and zero-geometry obligations:
 
 ~~~text
-strict L2 compile
-   -> L3
-   -> DeltaM < 0
-   -> repair-coefficient sign
-   -> first-repair zero
+main-moment branch: F1 -> strict L2 ----+
+                                      +-> D: DeltaM < 0
+template branch: L3 -------------------+       |
+                                              v
+                                    C01: main-only coefficient > 0
+
+source definition branch: C02 actual-coefficient decomposition
+                              |
+                   C01 + C02 + amplitude / continuity bridges
+                              v
+                   C03-C04: actual c1(eta) > 0 for small positive eta
+                              v
+                   Z: first-repair interior zero
 ~~~
 
-The dated status of those claims is not stored in this roadmap. It lives in
-`CURRENT_POSITION_2026-10-05.md` and
-`E2A_RESOURCE_CLAIM_LEDGER.yaml`.
+This is a dependency route, not a claim that every step has compiled. In
+particular, main-only positivity is not positivity of the actual coefficient.
+C02 consumes the upstream `OutgoingProfile` surface; it does not import the
+F1/L2/L3/D/C01 modules. Those branches meet only in later sign arguments.
+
+The dated execution status and next action live in the
+[restart checklist](NSRW_COLAB_RESTART_TASKS_2026-10-06.md), with individual
+[compiled receipts](README.md#current-source-derived-and-execution-evidence).
+The [claim ledger](E2A_RESOURCE_CLAIM_LEDGER.yaml) is an evidence index, not
+proof authority. The [2026-10-05 position](CURRENT_POSITION_2026-10-05.md)
+remains a historical snapshot with its dated addendum, not a live status board.
+
+For each new module, keep three distinct gates: implementation, development
+compilation, and clean commit-bound replay with an admitted receipt. Advance
+only the named proposition; downstream sign or zero claims do not inherit PASS.
+
+P1 source-atlas closure is a parallel track, not a prerequisite for this route.
+Selected numerical-witness extraction and external numerical comparators are
+separate tracks. Neither is a substitute for the parametric formal argument.
 
 This separation keeps the roadmap stable while execution status changes.
 
