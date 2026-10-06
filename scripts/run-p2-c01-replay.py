@@ -251,5 +251,3 @@ if __name__ == "__main__":
     parser.add_argument("--expected-nsrw-commit", required=True)
     args = parser.parse_args()
     replay(args.source_root, args.nsrw_root, args.output_dir, args.expected_nsrw_commit)
-
-
