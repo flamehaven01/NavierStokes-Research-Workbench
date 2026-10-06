@@ -1,0 +1,360 @@
+schema: flamehaven.e2a-resource-claim-ledger.v1
+valid_as_of: "2026-10-06"
+reviewed_on: "2026-10-06"
+# Evidence index only. Each claim retains its own dated evidence boundary.
+# Strict L2, L3, D and C01 retain separate 10/6 compiled receipts; actual eta signs remain open.
+# falsifier: claim-domain contradiction, not compile/identity failure.
+# admission_failure: reason an execution record cannot be accepted.
+# reopening_condition: prerequisite for resuming held work, not a falsifier.
+# These are specified conditions, not observed/tested outcomes; null = unspecified.
+status_enum:
+  - CONFIRMED
+  - SUPPORTED
+  - UNVERIFIED
+  - HELD
+  - CONTRADICTED
+  - HYPOTHESIS
+  - OUT_OF_SCOPE
+
+source_defaults:
+  repository: https://github.com/openai/NavierStokesAndEuler
+  commit: 8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538
+  lean_toolchain: leanprover/lean4:v4.34.0-rc2
+  lean_commit: 6a10ac8c22beadecabdbb0919c2b50214762f91d
+  manifest_git_blob_sha1: f07a8454cb6200d90bcc4371bc9965e9f8f46c7d
+
+claims:
+  - resource_id: nsrw/p2/l1/mainpulse-nonnegative
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 <= z -> 0 <= NavierStokes.OutgoingSchedule.mainPulse z"
+    source_pin:
+      module: NavierStokes.OutgoingSchedule
+      locator: mainPulse
+    gate_state: PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+    oe_level: OE-2
+    evidence_class: [historical_receipt, external_compile]
+    receipt:
+      path: docs/stage_receipts/P2_L1_COLAB_2026-09-12.md
+      nsrw_commit: 9f374f928e57a8955f6795d1cc6360549ed5b75b
+      proof_sha256: 73991827f9edfd8677cf1166f0c6927c089123986494af88c1e509fcdae6d30a
+    non_claims: [F1, strict_L2, DeltaM_negative, repair_zero, paper_theorem]
+    falsifier: "a real z >= 0 with mainPulse z < 0 under the pinned definition"
+    admission_failure: "nonzero Lean exit or identity mismatch under admitted replay"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: [nsrw/p2/f1/mainmoment-one-pos]
+    reverify_on: [source_repin, toolchain_change, proof_bytes_change]
+
+  - resource_id: nsrw/p2/l1/mainpulse-positive-1-25
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < NavierStokes.OutgoingSchedule.mainPulse (1 / 25)"
+    source_pin:
+      module: NavierStokes.OutgoingSchedule
+      locator: mainPulse
+    gate_state: PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+    oe_level: OE-2
+    evidence_class: [historical_receipt, external_compile]
+    receipt:
+      path: docs/stage_receipts/P2_L1_COLAB_2026-09-12.md
+      nsrw_commit: 9f374f928e57a8955f6795d1cc6360549ed5b75b
+      proof_sha256: 73991827f9edfd8677cf1166f0c6927c089123986494af88c1e509fcdae6d30a
+    non_claims: [F1, strict_L2, DeltaM_negative, repair_zero, paper_theorem]
+    falsifier: "mainPulse (1 / 25) <= 0 under the pinned definition"
+    admission_failure: "nonzero Lean exit or identity mismatch under admitted replay"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: [nsrw/p2/f1/mainmoment-one-pos]
+    reverify_on: [source_repin, toolchain_change, proof_bytes_change]
+
+  - resource_id: nsrw/p2/f1/mainmoment-one-pos
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < NavierStokes.OutgoingSchedule.mainMoment c (1 : Fin 2)"
+    source_pin:
+      module: NavierStokes.OutgoingSchedule
+      locator: mainMoment
+    gate_state: PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_P2_F1_MODULE]
+    oe_level: OE-2
+    evidence_class: [historical_receipt, local_clean_compile]
+    receipt:
+      path: docs/stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md
+      nsrw_commit: 5876e3bb27d48299cb963f5a8f809a8b29852302
+      proof_sha256: df9f605fa7ad9fa2842f54ae2d67b6a9b1773849d72c695192ae1bebe2f01206
+    non_claims: [strict_L2, DeltaM_negative, repair_zero, paper_theorem]
+    falsifier: "admissible Parameters c with mainMoment c 1 <= 0"
+    admission_failure: "nonzero Lean exit or pre/post clean identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/l1/mainpulse-nonnegative, nsrw/p2/l1/mainpulse-positive-1-25]
+      downstream: [nsrw/p2/l2a/one-pos]
+    reverify_on: [source_repin, toolchain_change, proof_bytes_change]
+
+  - resource_id: nsrw/p2/l2a/log-short
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "normalizedMainMoment c i equals the pinned short log-coordinate integral"
+    source_pin:
+      module: NavierStokes.OutgoingPulseBounds
+      locator: mainMoment_log_short
+    gate_state: PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+    oe_level: OE-2
+    evidence_class: [historical_receipt, external_clean_compile]
+    receipt:
+      path: docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md
+      nsrw_commit: a0d42a86b88c17e4af876eb255916f3e3f45ed38
+      proof_sha256: 9766f9abf296bd6f2ea18c90aad60f3569c2ae28c7441cfd34916b0d4f59f919
+    non_claims: [strict_L2, DeltaM_negative, repair_zero, paper_theorem]
+    falsifier: "admissible c and i for which the stated normalized short-log identity fails"
+    admission_failure: "nonzero Lean exit, dependency hash mismatch, or source identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/f1/mainmoment-one-pos]
+      downstream: [nsrw/p2/l2/strict-normalized]
+    reverify_on: [source_repin, toolchain_change, bridge_bytes_change]
+
+  - resource_id: nsrw/p2/l2a/one-pos
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < normalizedMainMoment c (1 : Fin 2)"
+    source_pin:
+      module: NavierStokes.OutgoingPulseBounds
+      locator: mainMoment
+    gate_state: PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+    oe_level: OE-2
+    evidence_class: [historical_receipt, external_clean_compile]
+    receipt:
+      path: docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md
+      nsrw_commit: a0d42a86b88c17e4af876eb255916f3e3f45ed38
+      proof_sha256: 9766f9abf296bd6f2ea18c90aad60f3569c2ae28c7441cfd34916b0d4f59f919
+      fresh_f1_olean_sha256: c6ea5c2a5c1095c98e177f20f985d2a656e3e52758783407122e5b37d714d1ea
+    non_claims: [strict_L2, DeltaM_negative, repair_zero, paper_theorem]
+    falsifier: "admissible Parameters c with normalizedMainMoment c 1 <= 0"
+    admission_failure: "nonzero Lean exit or dependency identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/f1/mainmoment-one-pos]
+      downstream: [nsrw/p2/l2/strict-normalized]
+    reverify_on: [source_repin, toolchain_change, bridge_bytes_change]
+
+  - resource_id: nsrw/p2/l2/strict-normalized
+    version: 2
+    valid_as_of: "2026-10-06"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1"
+    source_pin:
+      modules: [NavierStokes.OutgoingSchedule, NavierStokes.OutgoingPulseBounds]
+      locators: [Parameters.exponents, Parameters.pulseLength, beta, center, mainMoment_log_short]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_F1_STRICT_L2_REPLAY]
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      nsrw_commit: b02002b1ab954e34e7017a45e3afb338b21abfc5
+      path: docs/stage_receipts/P2_L2_COLAB_2026-10-06.md
+      proof_sha256: 624f1aa042377db7e2bbe50ba70d08a35035cddc51697bd5a69a1ce0bd9bbcdd
+      proof_git_blob_sha1: cd2a549f4648088e4f5aea04228847b7603caf45
+      archive_sha256: ef825f4b1d45df191455cb155516558c135e156f62d500c20cc9de6cb7203699
+      independent_attestation: false
+    non_claims: [DeltaM_negative, L3, repair_coefficient_sign, repair_zero, paper_theorem]
+    falsifier: "admissible c with normalizedMainMoment c 0 >= exp (-(3/20) * c.lam) * normalizedMainMoment c 1"
+    admission_failure: "pinned Lean compile failure or identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/l2a/log-short, nsrw/p2/l2a/one-pos]
+      downstream: [nsrw/p2/deltam-negative]
+    reverify_on: [proof_bytes_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/l3/template-ratio
+    # Historical resource ID retained; primary claim is now cross-multiplied.
+    version: 2
+    valid_as_of: "2026-10-06"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)"
+    source_pin:
+      module: NavierStokes.OutgoingPulseBounds
+      locators: [rowMoment, radialTemplate_support, radialTemplate_nonneg, rowMoment_integrable]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_L3_REPLAY]
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_L3_COLAB_2026-10-06.md
+      nsrw_commit: 15108c35a2e5df948ece653a7f3fcfa02f3180f8
+      proof_sha256: 9ad9b6ea625e2c39f126a8d3a770cb365f48db9f67c734964d972e382b5fa1d4
+      proof_git_blob_sha1: c359075d585f5b66934ad81ae8b29ecba16c9eae
+      archive_sha256: da905dba44f894836e9b2198e6e4de51283e82ae5b66a2f347e15286ce882653
+      independent_attestation: false
+    non_claims: [ratio_corollary, DeltaM_negative, repair_coefficient_sign, repair_zero, paper_theorem]
+    falsifier: "admissible c with exp (-(3/20) * c.lam) * A1 > A0, where Ai = rowMoment (c.exponents i)"
+    admission_failure: "nonzero Lean exit, identity mismatch, or failed artifact review; not itself a counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: [nsrw/p2/deltam-negative]
+    reverify_on: [source_repin, target_statement_change]
+
+  - resource_id: nsrw/p2/deltam-negative
+    version: 3
+    valid_as_of: "2026-10-06"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "NSRW.P2.deltaM c < 0; NSRW shorthand on pinned source objects"
+    source_pin:
+      document: docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md
+      locators: [DeltaM, rowMoment, normalized_main_moment_comparison]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_D_REPLAY]
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_D_COLAB_2026-10-06.md
+      nsrw_commit: 06cb400667c433b076599aabadc5d5f9d13f8f24
+      proof_sha256: 8f5df8d9f5df6ea29b8138cf087a271bb7606131667b5b25adf3179a286d39b2
+      proof_git_blob_sha1: 6e2bbf2e33efa8a7e36f5d0d4269b96aed5afd56
+      archive_sha256: 2dd04c4caa5683e1b36e77e831378bb5dc0ba5c727465f748734e8996ce25de3
+      independent_attestation: false
+    non_claims: [repair_coefficient_sign, repair_zero_compiled, paper_theorem]
+    falsifier: "admissible source parameters with DeltaM >= 0"
+    admission_failure: "failed source-definition binding or composition proof; compiled L2/L3 alone do not admit this claim"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/l2/strict-normalized, nsrw/p2/l3/template-ratio]
+      downstream: [nsrw/p2/c01/main-only-coefficient]
+    reverify_on: [upstream_claim_change, source_repin]
+
+  - resource_id: nsrw/p2/c01/main-only-coefficient
+    version: 1
+    valid_as_of: "2026-10-06"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < affineCoefficients c 0 1 1; main-only component, not actual c1(eta)"
+    source_pin:
+      module: NavierStokes.OutgoingPulseBounds
+      locators: [actual_coefficients_normalized_system, normalizedMatrix_entry, separation_exponential_gap, affineCoefficients]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C01_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C01_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    development_evidence:
+      proof_sha256: 6be4e26255568f5b45c297b548ecadceb35f807519e01bf21e372eb9fbd22fcf
+      archive_sha256: d2efe58d0c7e2c07c384704a14bdcc69a24a4163d7588a13b41e6eb6713268aa
+      proof_commit_binding: NONE_UNTRACKED_C01_BYTES
+      independent_attestation: false
+    receipt:
+      path: docs/stage_receipts/P2_C01_COLAB_2026-10-06.md
+      nsrw_commit: 304f2adc3f26310554dfa64a572329b6a7ff8cf8
+      proof_sha256: 6be4e26255568f5b45c297b548ecadceb35f807519e01bf21e372eb9fbd22fcf
+      proof_git_blob_sha1: 9a73a3e3483dda1a606fde64f792ed457e0fa446
+      archive_sha256: fbc7e04db2fbdc2dc97915fae8491c201794612293c90e3551ecff42cb61823f
+      independent_attestation: false
+    non_claims: [actual_c1_eta_sign, actual_c1_zero_sign, repair_zero_compiled, paper_theorem]
+    falsifier: "admissible c with affineCoefficients c 0 1 1 <= 0"
+    admission_failure: "nonzero Lean exit, input identity mismatch, or missing clean commit-bound replay; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/deltam-negative]
+      downstream: [nsrw/p2/l4/first-repair-zero]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/l4/first-repair-zero
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: SUPPORTED
+    claim_type: source_definition_derivation
+    claim: "for sufficiently small positive eta, an interior mass zero occurs in the first repair window"
+    source_pin:
+      document: docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md
+      locators: [mass_integrand_pulse, massMoment_endpoint, repair_bump_support]
+    gate_state: HELD[FORMAL_CLOSURE_OPEN]
+    oe_level: OE-1
+    evidence_class: [source_located_tail_argument]
+    receipt: null
+    non_claims: [global_zero_geometry, paper_theorem, millennium_problem]
+    falsifier: "admissible fixed source parameters for which no epsilon > 0 gives a first-window mass zero for every 0 < eta < epsilon in the specification range"
+    admission_failure: "unclosed coefficient-sign, amplitude/continuity, or partial-tail/IVT proof obligations"
+    reopening_condition: "close DeltaM and the coefficient/amplitude/continuity/tail bridges to the stated zero"
+    lineage:
+      upstream: [nsrw/p2/deltam-negative]
+      downstream: []
+    reverify_on: [upstream_claim_change, source_repin]
+
+  - resource_id: nsrw/m5/h-scaling-reconstruction
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: CONFIRMED
+    claim_type: numerical_source_derived
+    claim: "bounded Decimal reconstruction agrees with the pinned normalized H_scaling declaration under the recorded local run"
+    source_pin:
+      module: NavierStokes.OutgoingDilation
+      locator: H_scaling
+      lean4export_commit: cacf989bd75f608700820f6afc595f32e7a99a4d
+    gate_state: PASS[LOCAL_SOURCE_DERIVED_VERTICAL_SLICE]__REVIEWER_REPLAY_NOT_EXECUTED[RUNTIME_MISMATCH]
+    oe_level: OE-2
+    evidence_class: [local_source_derived_execution, bounded_numerical_reconstruction, secondary_structural_review]
+    receipt:
+      path: docs/stage_receipts/M5_H_SCALING_LOCAL.md
+      raw_export_sha256: 129f7dee6cf93f3588c4cceb13d55cb88345f39b525bfbbd58031eb0f7cd0148
+      normalized_fixture_sha256: 466a52a2e266ffcfe580f0b183526b8154a294f4c020969bb88e1dff0647f543
+    non_claims: [lean_proof_verification, paper_theorem, independent_replay]
+    falsifier: "reconstruction error above the declared tolerance on the recorded bounded input surface"
+    admission_failure: "source/body identity mutation or schema mismatch"
+    reopening_condition: "separate reviewer replay requires an admitted runtime and exact evidence inputs"
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [source_repin, exporter_repin, normalizer_change, fixture_change]
+
+  - resource_id: nsrw/m4s/source-instance
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: HELD
+    claim_type: executable_witness
+    claim: "selected source instance has a pinned numerical evaluator"
+    source_pin:
+      commit: 8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538
+    gate_state: HELD[NO_PINNED_NUMERICAL_EVALUATOR]
+    oe_level: OE-1
+    evidence_class: [source_interface_review]
+    receipt: null
+    non_claims: [concrete_taildata_witness]
+    falsifier: null
+    admission_failure: "no pinned source-instance evaluator"
+    reopening_condition: "source-pinned evaluator becomes available and is admitted"
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [source_repin, evaluator_exposed]
+
+  - resource_id: nsrw/e2/vorticity-reconstruction
+    version: 1
+    valid_as_of: "2026-10-05"
+    status: HELD
+    claim_type: numerical_contract
+    claim: "pinned 2-D vorticity reconstruction is executable under admitted source/sample/hash inputs"
+    source_pin: null
+    gate_state: HELD[SOURCE_REVISION_FILE_SAMPLE_HASH_ADMISSION_MISSING]
+    oe_level: OE-1
+    evidence_class: [contract_implemented]
+    receipt: null
+    non_claims: [executed_reconstruction, theorem_evidence]
+    falsifier: null
+    admission_failure: "missing or mismatched source/sample/hash admission"
+    reopening_condition: "all source revision/file/sample/hash identities supplied and admitted"
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [source_admission_added, contract_change]

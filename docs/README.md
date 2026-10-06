@@ -1,69 +1,76 @@
 # Documentation status index
 
-This index separates current guidance from historical evidence and future work.
-A status recorded in a dated receipt describes that execution only; it does not
-override the current repository status in the root README and latest release
-notes.
+This index separates stable resource policy, dated status, historical evidence,
+and proposed work.
 
-## Current guidance
+A dated receipt describes its execution only. It does not automatically become
+the current status of later bytes.
 
-- `PUBLIC_RESEARCH_LANGUAGE.md`: public language and positioning policy.
-- `NAVIER_STOKES_NORTH_STAR_MAP.md`: long-range mathematical direction and
-  current research position.
-- `M5_LEAN4EXPORT_H_SCALING_VERTICAL_SLICE.md`: current Lean-native export
-  compatibility result and the contracted first source-derived mathematical
-  slice.
-- `M5_OUTGOING_DILATION_SCALING_ATLAS_P1.md`: P1 scaling-atlas scope,
-  self-authorizing-digest closure, and remaining same-raw export gate.
+## Canonical Equation to Artifact resources
+
+Read these first:
+
+- [Evidence principles](E2A_RESOURCE_PRINCIPLES.md): canonical resource charter, no-authority-
+  inheritance rule, transformation boundary, and audit/slop discipline.
+- [Operational exposure](OPERATIONALLY_EXPOSED.md): mathematical existence, representation,
+  operational exposure OE-0..OE-4, and technological realization.
+- [Stage crosswalk](E2A_RESOURCE_STAGE_CROSSWALK.md): single mapping source for R/OE/TR/M/T/A
+  terminology.
+- [Claim ledger](E2A_RESOURCE_CLAIM_LEDGER.yaml): machine-readable atomic claim view for
+  the current NSRW resource set; an evidence index, not proof authority.
+- [Program roadmap](EQUATION_TO_ARTIFACT_VISION_ROADMAP.md): end-to-end roadmap from source
+  through artifact, transfer, validation, and deployment.
+- [Proposed transfer protocol](ARTIFACT_TO_APPLICATION_TRANSFER_GATES.md): TR-0..TR-6 protocol,
+  preregistration, baselines, reviewer requirements, and stopping rules.
+- [Public language guide](PUBLIC_RESEARCH_LANGUAGE.md): public wording and evidence-verb policy.
+- [Negative and held results](NEGATIVE_RESULT_REGISTER.md): held, not-executed, and negative outcomes.
+
+## Dated current status
+
+- [Dated position snapshot](CURRENT_POSITION_2026-10-05.md): P2/strict-L2 snapshot, source pins,
+  evidence classes, OE levels, and restart target; its dated 10/6 addendum links
+  the subsequent strict-L2, L3, D and main-only C01 closures without rewriting
+  the 10/5 snapshot.
+
+## Restart tasks
+
+- [NSRW Colab restart tasks — updated 2026-10-06](NSRW_COLAB_RESTART_TASKS_2026-10-06.md):
+  actual 10/6 restart record and closure conditions; T0–T5 completed at scoped
+  strict-L2, L3, D and main-only C01 closure; actual coefficient decomposition next. Not itself
+  an execution receipt.
+
+## Stable NSRW mathematical policy
+
+- `NAVIER_STOKES_NORTH_STAR_MAP.md`: stable research direction policy. It
+  intentionally contains no undated current-status section.
 - `M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md`: active source-located
-  mathematical analysis of the `J/(M*H)` candidate: the after-pulse
-  obstruction, ideal-prefix ratio, and pre-pulse mass sign. Its
-  positive-small-`eta` first-repair interior zero is supported but remains
-  formalization-open; the remaining non-small/negative-`eta` repair-window
-  zero geometry is the open mathematical question.
-- `../formal/p2/README.md`: minimal external Lean reproduction capsule for
-  the active P2 analysis. It uses the pinned OpenAI source environment; it
-  is not a separate Lean project or a claim that P2 is formalized.
-- `stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md`: clean local compilation
-  receipt for the single source-bound proposition `0 < mainMoment c 1`.
-  It does not promote the L2 comparison or the later P2-C conclusions.
-- `stage_receipts/P2_L2A_COLAB_2026-09-13.md`: external compilation receipt
-  for only the normalized source representation and normalized `i = 1`
-  positivity wrapper. That historical receipt does not promote strict L2 or
-  later P2-C conclusions.
-- [Strict-L2 clean replay](stage_receipts/P2_L2_COLAB_2026-10-06.md): its own
-  compiled normalized comparison, separate from the L2-A bridge.
-- [L3 clean replay](stage_receipts/P2_L3_COLAB_2026-10-06.md): compiled
-  cross-multiplied template bound only; DeltaM composition is next and open.
-- [L3 session index](sessions/P2_L3_SESSION_2026-10-06.md): development,
-  checkpoint and replay links; not proof authority.
-- `P2_COLAB_AUTHORITY_RUN.md`: rationale, narrow execution method, bootstrap
-  custody, and admission rule for the P2-L1 external Linux authority run.
-- `stage_receipts/P2_L1_COLAB_TEMPLATE.md`: non-execution template for the
-  first external P2 Lean compile receipt.
-- `stage_receipts/P2_L1_COLAB_2026-09-12.md`: recorded external P2-L1 Lean
-  execution; confirmation is limited to the two named L1 propositions.
-- `stage_receipts/M5_H_SCALING_LOCAL.md`: content-hash-bound local
-  `H_scaling` vertical-slice receipt; separately operated pytest replay was
-  not executed because that reviewer runtime lacked pytest.
-- `STAGE_CHECKLIST.md`: checks required before a stage transition.
-- `M4_PARAMETRIC_AUDIT_DESIGN.md`: active M4-P scope and limits.
-- `V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md`: completed v0.2.3 audit
-  closure and release boundary.
-- `stage_receipts/M4P_V0.2.3_LOCAL_CLOSURE.md`: local release-candidate
-  evidence.
-- `stage_receipts/M4P_V0.2.3_FINAL_RELEASE_HOSTED.md`: final tagged-commit
-  hosted same-run evidence.
-- `releases/v0.2.3.md`: historical verifier evidence-boundary release notes.
-- `releases/v0.3.0.md`: current M5/P1 checkpoint release notes and held
-  source-atlas boundary.
-- `releases/v0.3.1.md`: P2-F1 compiled checkpoint and explicitly uncompiled
-  L2-A scaffold.
+  mathematical analysis. Its claims remain bounded by the exact source
+  propositions and identified execution receipts; the ledger is a reading index.
+- `../formal/p2/README.md`: external Lean reproduction capsule.
+
+## Current source-derived and execution evidence
+
+- `M5_LEAN4EXPORT_H_SCALING_VERTICAL_SLICE.md`
+- `M5_OUTGOING_DILATION_SCALING_ATLAS_P1.md`
+- `P2_COLAB_AUTHORITY_RUN.md`
+- `stage_receipts/P2_L1_COLAB_2026-09-12.md`
+- `stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md`
+- `stage_receipts/P2_L2A_COLAB_2026-09-13.md`
+- [Strict-L2 clean replay — 2026-10-06](stage_receipts/P2_L2_COLAB_2026-10-06.md)
+- [L3 clean replay — 2026-10-06](stage_receipts/P2_L3_COLAB_2026-10-06.md)
+- [L3 session index — 2026-10-06](sessions/P2_L3_SESSION_2026-10-06.md):
+  development/checkpoint/replay links, not proof authority.
+- [D composition receipt — 2026-10-06](stage_receipts/P2_D_COLAB_2026-10-06.md)
+- [C01 main-only coefficient receipt — 2026-10-06](stage_receipts/P2_C01_COLAB_2026-10-06.md)
+- [C01 session index — 2026-10-06](sessions/P2_C01_SESSION_2026-10-06.md):
+  development/checkpoint/replay links, not proof authority.
+- `stage_receipts/M5_H_SCALING_LOCAL.md`
+- `STAGE_CHECKLIST.md`
+- `M4_PARAMETRIC_AUDIT_DESIGN.md`
 
 ## Research plans and references
 
-These documents describe work that may be proposed, designed, active, or held.
-Their own status fields govern them; inclusion here does not mean execution.
+Inclusion does not imply execution.
 
 - `REALISTIC_RESEARCH_DESIGN.md`
 - `PROFILE_CLOSURE_M3_DESIGN.md`
@@ -75,10 +82,8 @@ Their own status fields govern them; inclusion here does not mean execution.
 
 ## Historical records
 
-The dated checkpoints, handoffs, previous release notes, patch plans, and stage
-receipts preserve what was known at the time. Older test counts and statuses are
-not current claims. They remain unchanged where modification would damage
-provenance; a current document may instead add a supersession notice.
+Historical records remain unchanged when rewriting them would damage
+provenance.
 
 - `NAVIER-STOKES-RESEARCH-CHECKPOINT-2026-09-09.md`
 - `SESSION_HANDOFF_2026-09-09_M3.md`
@@ -88,17 +93,20 @@ provenance; a current document may instead add a supersession notice.
 - `M4P_VERIFIER_HARDENING_2026-09-11.md`
 - `M4P_V0.2.1_EVIDENCE_INTEGRITY_PATCH_PLAN.md`
 - `V0.2.1_SUBPATCH_AUDIT_ALIGNMENT_AND_SOURCE_INTERFACE.md`
+- `V0.2.2_AUDIT_PATCH_TO_V0.2.3_CLOSURE.md`
 - `CI_RECEIPT.md`
 - `FINAL_CHECKLIST.md`
 - `stage_receipts/`
-- `releases/v0.2.0.md`
-- `releases/v0.2.2.md`
-- `stage_receipts/M4P_V0.2.2_LOCAL_IMPLEMENTATION.md`
-- `stage_receipts/M4P_V0.2.2_HOSTED_LIVE.md`
-- `stage_receipts/M4P_V0.2.3_HOSTED_LIVE.md` (release-candidate evidence)
+- `releases/`
 
 ## Reading rule
 
-For current software behavior, read the code and CI result. For mathematical
-scope, read the current design and the exact source locator. For a historical
-claim, read the corresponding receipt without promoting it to current evidence.
+For a promoted bounded claim, read the claim ledger first, then the dated
+receipt. This is navigation order, not evidence-authority order. Execution facts
+remain bound to the recorded run and artifacts; the ledger cannot authorize
+itself.
+
+For mathematical scope, read the exact source locator and current design.
+
+For current project position, read the dated snapshot rather than inferring
+status from a stable vision document.

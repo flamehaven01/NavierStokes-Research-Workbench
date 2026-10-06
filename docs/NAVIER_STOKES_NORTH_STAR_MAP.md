@@ -1,146 +1,138 @@
 # Navier--Stokes research direction map
 
-Status: adopted research principle; not an executable gate.
+Document status: `ADOPTED`
+Scope: stable mathematical research policy; not a dated status report and not an
+execution gate.
 
-This document was previously called the internal `#map-north-star`. The plain
-title is used publicly; the research objective is unchanged.
+The filename preserves the project's historical internal "north-star" naming.
+Public summaries should call this the research direction map.
 
-## Long-range objective
+## 1. Long-range objective
 
 The workbench exists to discover, isolate, and eventually prove a mathematical
 mechanism that closes a genuine gap in the three-dimensional incompressible
-Navier–Stokes problem. The long-horizon goal is a rigorous contribution toward
-the Clay problem. The immediate product is not a larger collection of receipts
-or a claim of proof; it is a sharper, reproducible understanding of which
-analytic obligations are true, false, or still missing.
+Navier--Stokes problem.
 
-## Research lanes
+The long-horizon objective is a rigorous theorem-level contribution. The
+immediate product is a sharper, reproducible understanding of which analytic
+obligations are true, false, held, or still missing.
 
-**Verification boundaries constrain claims; they do not constrain mathematical
-investigation.** **Exploratory freedom does not remove mathematical
-obligations.**
+Receipts and CI are guardrails. They are not the mathematical destination.
 
-The workbench has three complementary research lanes. They are not an
-authority ladder: a source-bound reproduction and an exploratory candidate do
-different work and must keep their respective evidence boundaries.
+## 2. Research directions
 
-| Lane | Core question | Legitimate output |
-|---|---|---|
-| Source reproduction | What does the pinned source actually state? | Source-bound executable surface or explicit unresolved loss |
-| Mathematical analysis | Which quantities are invariant, and which obligations are genuine bottlenecks? | Derivation, obstruction, open lemma, or counterexample |
-| Candidate exploration | Can a different mechanism meet the declared PDE obligations? | A candidate that passes a stated check, or a documented failure condition |
+Verification boundaries constrain claims; they do not constrain mathematical
+investigation. Exploratory freedom does not remove mathematical obligations.
 
-## Map
+| Direction | Core question | Legitimate output |
+| --- | --- | --- |
+| Source reproduction | What does the pinned source actually state? | source-bound executable surface or explicit unresolved loss |
+| Mathematical analysis | Which quantities and inequalities are genuine bottlenecks? | derivation, obstruction, open lemma, counterexample |
+| Candidate exploration | Can a materially different mechanism meet the PDE obligations? | candidate, failed candidate, or new proof obligation |
 
-```text
-Primary source / formal source
-            ↓
-Exact mathematical obligation
-            ↓
-Independent reconstruction or counterexample
-            ↓
-Quantitative estimate with explicit hypotheses
-            ↓
-Formal-semantic bridge
-            ↓
-Candidate theorem contribution
-```
+The source construction is a research input and source of definitions,
+scalings, geometry, and formal structure. It is not the novelty claim.
 
-The OpenAI construction is the reproduction lane and a valuable source of
-scales, profile identities, stress geometry, and Lean proof structure. It is not
-the novelty lane. A new lane must differ in its central mechanism, not merely
-rename the same annular stress–pulse architecture.
+## 3. Stable mathematical map
 
-## Architecture test for every artifact
+~~~text
+primary source / formal source
+            |
+            v
+exact mathematical obligation
+            |
+            v
+independent reconstruction or counterexample
+            |
+            v
+quantitative estimate with explicit hypotheses
+            |
+            v
+formal-semantic bridge
+            |
+            v
+candidate theorem contribution
+~~~
 
-Before adding code, a ledger, a receipt, or a new research lane, ask:
+## 4. Architecture test
+
+Before adding code, a ledger, a receipt, or a new research direction, ask:
 
 1. Does it expose a mathematical quantity or dependency that was previously
    opaque?
 2. Does it support an independent derivation or kill a concrete alternative?
-3. Does it preserve the exact source hypotheses and their boundary cases?
-4. Does it produce the next falsifier or proof obligation needed for the
-   Navier–Stokes argument?
+3. Does it preserve source hypotheses and boundary cases?
+4. Does it produce the next falsifier or proof obligation?
 
 If all answers are no, the artifact is process growth rather than research
-progress and should be removed or deferred. Tests, CI, code-quality heuristic
-checks, and receipts
-are guardrails: they protect the research engine but are not its destination.
+progress and should be removed or deferred.
 
-## Current map position
+## 5. Nontriviality and semantic-review gate
 
-- M1: exact scaling and similarity-coordinate algebra — local support.
-- M2: source-shaped leading-field interface and local diagnostics — local
-  support; source profiles not instantiated.
-- M3: dependent profile closure and paper–Lean crosswalk —
-  **closed with a noncomputable source boundary**. The source-domain contract,
-  axis pressure limit, endpoint policy, declaration matching, and scoped Lean
-  compilation are verified. A concrete selected `TailData` evaluator remains
-  unavailable through the current source interface.
-- M3R: closure recovery — **completed for the scoped compiled dependency
-  target**. Its remaining source-instance question is carried by M4-S rather
-  than silently reopening M3 engineering.
-- M4-P: Support, Cone, Moment, and verifier falsification — **active**. The v2
-  pilot gate binds normalized Lean signatures and ordered quantifier fragments,
-  cross-verifies structured build receipts, and uses baseline-delta mutation
-  verdicts. Its evaluators remain manufactured controls, not source theorem
-  reproductions.
-- M4-S: selected source instance — **held** because the current formal source
-  exposes no pinned numerical evaluator for the existential witness.
-- M5: source-derived mathematical interface — the manifest-pinned Lean4Export
-  compatibility spike is **locally reproducible but large**. The first
-  `H_scaling` normalization and independent reconstruction are a
-  content-hash-bound local source-derived vertical slice. Separately operated
-  pytest replay is `NOT_EXECUTED[RUNTIME_MISMATCH]`; it does not support an
-  independent-replay claim. P1 adds a ten-law reviewed-static scaling atlas
-  and exact exponent algebra, but production source-bound atlas admission is
-  **held** until a complete same-raw export and independently pinned digest
-  ledger exist. Broader source-structure coverage remains open.
-- M5-P2: dilation-ratio obstruction study — **active mathematical analysis**.
-  P2-A establishes the global after-pulse obstruction (`M=0`); P2-B1 derives
-  the ideal-prefix value `Q=5/8`; P2-B2 establishes pre-pulse mass-sign
-  preservation for `eta != 0`. P2-C additionally excludes a zero before the
-  first repair window in the specified angular range and locates a terminal
-  zero plateau before the endpoint. A **supported, formalization-open**
-  source-definition comparison now gives a one-sided obstruction: for
-  sufficiently small positive `eta`, the main-pulse component forces the
-  second repair coefficient positive. The terminal-tail identity then places
-  an interior mass zero in the **first** repair window. This remains a
-  formalization-open source-definition result, not a source theorem. The
-  active question is the remaining negative/non-small-`eta` zero geometry and
-  first-window partial-tail behavior; only then assess whether `Q-5/8` has a
-  useful bound. P2-L1 is externally compiled for two pulse facts, P2-F1 is
-  cleanly compiled for `0 < mainMoment c 1`, and P2-L2-A is externally
-  compiled for the normalized source representation and normalized `i = 1`
-  positivity wrapper. None establishes the strict L2 normalized comparison.
-  The next formal target is that comparison itself. P1 source-atlas closure
-  remains parallel and non-blocking for this work.
-- External E2: pinned 2-D vorticity reconstruction — **contract implemented;
-  execution held until source revision/file/sample/hash admission**. This is
-  an independent numerical observation surface, not theorem evidence.
-- Later: full Theorem 4.6 conjunction audit, Lean build/dependency receipt,
-  independent stable-profile or multiscale lanes, and only then any candidate
-  theorem claim.
+A proposition should not be described as an independent nontrivial mathematical
+result merely because it was not copied verbatim from the source.
 
-## Strategic decision
+Before that label is used, record:
 
-The near-term objective is not “finish reproducing 167 pages.” It is to reduce
-the highest-risk semantic debt surface:
+- exact source lineage;
+- proof/derivation;
+- why the statement is not a direct restatement;
+- paper/formal semantic comparison;
+- expert review appropriate to the analytic content.
 
-1. map each quantitative conjunct of Theorem 4.6 to an inspectable proof
-   dependency;
-2. replace manufactured M4-P controls one family at a time with source-derived
-   Support, Cone, and Moment obligations without widening their claim scope;
-3. independently test one materially different mechanism (stable/dynamically
-   rescaled profile or multiscale cascade) against the same PDE obligations;
-4. promote nothing beyond `UNVERIFIED` until the pinned Lean build and an
-   obligation-by-obligation semantic comparison exist.
+Where feasible, the reviewer should be operationally separate from the artifact
+author. A blind review may be used: show the proposed proposition and source
+surface to a reviewer and ask whether it follows immediately from the source or
+requires a genuinely new derivation.
 
-The external experiment lane is interleaved only where it adds a measurable
-quantity or falsifier: E1 analytic control, E2 dataset-to-field reconstruction,
-E3 learned-rollout drift, and E4 forced/unforced scope custody. It cannot close
-the M4-S hold or substitute for the missing pressure-tail witness and
-paper–Lean semantic bridge.
+Until this review is complete, use a bounded status such as
+`SUPPORTED[NONTRIVIALITY_UNREVIEWED]`.
 
-This keeps the ambitious goal visible while ensuring each stage is cumulative,
-mathematically useful, and able to fail.
+## 6. Relation to the wider Equation to Artifact program
+
+This map governs the mathematical objective. The broader program continues only
+when an admitted artifact exposes a reusable computational structure:
+
+~~~text
+mathematical result
+    -> executable custody
+    -> operational exposure
+    -> computational primitive
+    -> transfer experiment
+    -> prototype
+    -> domain validation
+~~~
+
+The later stages do not widen the mathematical claim.
+
+See:
+
+- `OPERATIONALLY_EXPOSED.md`;
+- `EQUATION_TO_ARTIFACT_VISION_ROADMAP.md`;
+- `ARTIFACT_TO_APPLICATION_TRANSFER_GATES.md`;
+- `E2A_RESOURCE_STAGE_CROSSWALK.md`;
+- `E2A_RESOURCE_CLAIM_LEDGER.yaml`.
+
+## 7. Status indirection
+
+This policy document intentionally contains no "current map position" section.
+
+Dated state belongs in:
+
+- `CURRENT_POSITION_2026-10-05.md`;
+- execution receipts;
+- `E2A_RESOURCE_CLAIM_LEDGER.yaml`;
+- `NEGATIVE_RESULT_REGISTER.md`.
+
+This prevents a stable research-policy document from becoming stale when an
+execution state changes.
+
+## 8. Strategic rule
+
+The near-term objective is not to reproduce a manuscript page count.
+
+The objective is to reduce the highest-risk mathematical and semantic
+uncertainty, preserve explicit source boundaries, and allow each candidate to
+fail visibly.
+
+No candidate theorem claim is promoted merely because software checks pass.

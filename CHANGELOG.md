@@ -26,6 +26,23 @@ artifacts. Research claims retain their separate evidence statuses.
 - Current README/capsule/study wording separates strict L2 from L2-A and L3,
   and distinguishes completed D/C01 propositions from the next actual
   coefficient decomposition and small-positive-eta sign bridges.
+- Publish the resource principles, evidence index, operational-exposure
+  definition, stage crosswalk, proposed transfer protocol, roadmap and negative
+  register as a linked documentation set. Historical 10/5 snapshots retain
+  their original states; dated addenda link the separate 10/6 closures.
+- Clarify `v0.3.1` as a tagged Git checkpoint with notes, not a published GitHub
+  Release object. The tag and its historical mathematical scope are unchanged.
+
+### Fixed
+
+- Isolate C01 synthetic replay commands from the shared stdlib `subprocess`
+  module so Windows platform observations cannot be intercepted by fake Lean
+  commands; normalize fixture paths and add cold-platform/noncanonical-path
+  regression checks. Production replay runner, proof bytes and receipts are
+  unchanged.
+- Replace stale DeltaM/main-only coefficient prose with the separate D/C01
+  compiled receipt scopes; actual eta-dependent signs and first-repair zero
+  formal closure remain open.
 
 ### Not promoted
 

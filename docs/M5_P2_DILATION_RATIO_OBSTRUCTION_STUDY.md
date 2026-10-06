@@ -77,8 +77,8 @@ P2-C4  ACTIVE REPAIR-WINDOW ZERO GEOMETRY
         FULL_GEOMETRY_OPEN]
 
 P2-C4a MAIN-PULSE COMPONENT OF SECOND REPAIR COEFFICIENT
-        SUPPORTED[PINNED_DEFINITIONS_NEW_COMPARISON_ARGUMENT;
-        FORMALIZATION_OPEN]
+        CONFIRMED[COMMIT_BOUND_EXTERNAL_P2_C01_REPLAY;
+        MAIN_ONLY_COMPONENT]
 
 P2-C4b POSITIVE-SMALL-ETA FIRST-REPAIR ZERO
         SUPPORTED[PINNED_DEFINITIONS_AND_TAIL_ARGUMENT;
@@ -505,12 +505,19 @@ DeltaM = F0 / A0 - F1 / A1 < 0
 affineCoefficients(c, 0, 1, 1) > 0.
 ```
 
-This is a new analytic comparison assembled from pinned definitions and
-elementary integral monotonicity. It is **not** a source theorem and has not
-yet been encoded or compiled as a Lean lemma; accordingly its claim status is
-`SUPPORTED`, not `ESTABLISHED`.
+This comparison was initially derived analytically from pinned definitions and
+elementary integral monotonicity. It has since been formalized in the external
+NSRW modules: the [P2-D receipt](stage_receipts/P2_D_COLAB_2026-10-06.md)
+confirms `deltaM c < 0`, and the
+[P2-C01 receipt](stage_receipts/P2_C01_COLAB_2026-10-06.md) confirms the
+main-only coefficient formula and positivity. These named propositions are
+`CONFIRMED` at their recorded pinned-source compiled scopes. They are not
+theorems stated in the upstream source, evidence of independent novelty, or
+formal closure of the actual eta-dependent coefficient and mass-zero bridges.
 
-The amplitude component of `c1` is consequently positive. Since `amp(0) > 0`
+The following actual-coefficient and tail argument remains `SUPPORTED`, with
+formalization open. It is not admitted by the D or C01 receipts.
+The main-only coefficient contributing to `c1` is positive. Since `amp(0) > 0`
 and `q(0) = 0`, continuity gives `c1(eta) > 0` for all sufficiently small
 `|eta|`. For sufficiently small positive `eta`, the necessary second-window
 sign-preservation condition `eta * c1 < 0` therefore fails.

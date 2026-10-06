@@ -89,6 +89,11 @@ Status words are scoped. `PASS[LOCAL_TESTS]` is not a proof claim.
 `PASS[COMPILED_TARGET]` does not mean a paper is correct, that all library
 targets compile, or that two mathematical statements are equivalent.
 
+The CI badge reports the latest software pipeline, not the status of a P2
+Colab proof replay. Local test success does not imply that every hosted OS/Python
+job passed. The hosted Lean job checks the M4 targets; P2 claims instead retain
+their separately recorded external-module receipts.
+
 ### P2 L2 receipt boundary
 
 `P2-L2-A` and **strict L2** are different scopes. P2-L2-A is the completed
@@ -111,6 +116,14 @@ Actual coefficient signs and repair geometry remain unformalized. The
 without serving as proof authority.
 
 ## Public vocabulary and research posture
+
+The [documentation index](docs/README.md) links the
+[evidence principles](docs/E2A_RESOURCE_PRINCIPLES.md),
+[operational-exposure definition](docs/OPERATIONALLY_EXPOSED.md), and
+[claim ledger](docs/E2A_RESOURCE_CLAIM_LEDGER.yaml). These resources describe
+evidence handling; they do not create mathematical authority or assert that a
+new governance framework is enforced by CI. Application-transfer protocols are
+proposed future work, not demonstrated application capability.
 
 The project prefers plain descriptions over authority-heavy labels:
 
