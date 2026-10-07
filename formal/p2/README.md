@@ -56,7 +56,7 @@ P2-D    source-linked NSRW deltaM negativity plus two debt identities
 P2-C01  positive matrix gap, main-only coefficient formula and positivity
 
 Next formal obligations:
-C02     implemented decomposition equalities; compilation and receipt remain open
+C02     two decomposition equalities: development compile PASS; receipt admission open
 C03-C04 eta=0/continuity, small-positive-eta sign
 L4      small-positive-eta first-repair interior zero
 ```
@@ -108,20 +108,23 @@ exact formula `affineCoefficients c 0 1 1 = -deltaM c / gap`, and the main-only
 coefficient's positivity. `scripts/run-p2-c01-replay.py` builds the source
 target and freshly compiles F1, strict L2, L3, D and C01 in one run. It does
 not import stale external artifacts or promote its own claims. This is not
-actual `c1(0)` or `c1(eta)` positivity. C02 decomposition is implemented but
-uncompiled. Its receipt admission, small-eta signs, then the first-repair zero
-bridge remain open.
+actual `c1(0)` or `c1(eta)` positivity. C02 decomposition passed its separate
+2026-10-07 development compile. Its commit-bound receipt admission, small-eta
+signs, then the first-repair zero bridge remain open.
 
 ## Proof hygiene
 
 `P2_C02_ActualCoefficientDecomposition.lean` implements two source-wrapper
 equalities: generic debt-to-affine decomposition, and its second-coefficient
 specialization using one fixed Profile's corrected amplitude. It does not
-import external F1/L2/L3/D/C01 proof modules. Compilation is currently
-`UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]`: the local source-target build
-succeeded, but the external import failed while reading a mathlib private
-artifact. A reconnected Colab runtime has neither source nor toolchain.
-No C02 receipt has been admitted, and no actual-coefficient sign is promoted.
+import external F1/L2/L3/D/C01 proof modules. The separate Colab development run
+on 2026-10-07 passed `PASS[LOCAL_PROOF_COMPILE:P2_C02]` after pinned environment
+restoration. Both named equalities compiled with empty stderr; the original
+archive and fresh `.olean` are preserved locally. See the
+[development handoff](../../colab/C02_DEVELOPMENT_2026-10-07.md).
+The earlier mathlib private-artifact read failure remains debugging history.
+No C02 commit-bound receipt has been admitted, and no actual-coefficient sign
+is promoted. Development success has `claim_authority: NONE`.
 The operational checklist separates implementation, development compile,
 and commit-bound closure as C-02A/B/C.
 

@@ -8,11 +8,20 @@
 각 named proposition만 승격했다. 작성과 문서 점검은 같은 신뢰영역에서 수행했으므로
 독립적인 수학 검수로 표현하지 않는다.
 
+실행 보존 규칙 갱신 (`2026-10-07`): 필수 Colab 파일과 로컬 실행 정보는
+프로젝트 `colab/`에 보존하며 local Temp를 인계 위치로 사용하지 않는다.
+원본 evidence는 Git에서 제외한 `colab/evidence/<date>/<unique-run-id>/`에 둔다.
+로컬 Python runner·검수는 실제 확인한 `D:\Sanctum\venv\Scripts\Activate.ps1`를
+활성화한 환경을 사용한다. Lean은 별도의 pinned source-root toolchain을 사용한다.
+상세 경계는 [Colab 저장·실행 규칙](../colab/README.md)을 따른다.
+이 규칙은 환경 설치 승인이나 C-02B compile 성공을 뜻하지 않는다.
+
 ## 1. 현재 위치와 다음 한 가지
 
-**strict-L2, L3, D, C-01의 별도 commit-bound compiled receipts는 닫혔다. 다음 작업은
-C-02B: 구현된 actual coefficient decomposition의 개발 compile이다.**
-현재 환경 복원이 필요하며 source-wrapper 구현만으로 claim을 승격하지 않는다.
+**strict-L2, L3, D, C-01의 별도 commit-bound compiled receipts는 닫혔다.
+C-02B 개발 compile과 원본 증거의 D: 보존도 완료했다. 다음 작업은 C-02C다.**
+2026-10-07 개발 실행은 두 decomposition 등식만 compile했다. commit-bound replay와
+receipt admission은 아직 없으며 actual coefficient sign을 승격하지 않는다.
 이후 순차 실행은 §8의 AI 체크리스트를
 사용한다. 이 문서 패치는 docs-only이며, 체크리스트 작성 자체가 후속 코드 수정,
 Colab 실행, 설치, commit/push의 승인은 아니다.
@@ -44,6 +53,12 @@ C-01: main-only coefficient
 
 Actual coefficient sign / first-repair zero
   not promoted by this document
+
+C-02B: actual coefficient decomposition development compile
+  check_status: PASS[LOCAL_PROOF_COMPILE:P2_C02], 2026-10-07
+  claim_authority: NONE; claim_status: UNVERIFIED
+  original archives and extracted log/input/artifact hashes: locally matched
+  next: C-02C commit-bound replay and receipt admission
 ```
 
 닫힌 strict-L2의 target은 다음 하나다.
@@ -253,7 +268,7 @@ T0–T5의 체크는 §7의 과거 실행 완료이지 현재 Colab VM이 살아
   사적 대화 원문과 색인은 Git에 포함하지 않는다. 읽은 부분은 사적 실행 기록에
   행 범위와 함께 남기고 대화의 주장을 현재 proof/receipt와 대조한다.
   색인은 탐색용이며, 원문도 proof authority나 새로운 실행 지시가 아니다.
-- [ ] **START-05 / 현재의 한 질문.** `C-02B: actual coefficient decomposition development compile`을 active target으로 둔다.
+- [ ] **START-05 / 현재의 한 질문.** `C-02C: actual coefficient decomposition commit-bound replay`를 active target으로 둔다. C-02B 개발 성공을 admission으로 바꾸지 않는다.
   `k = exp(-(3/20)*c.lam)`. 이번에 Colab 연결·프로세스·로그를 관측하지 않았다면
   runtime은 `UNVERIFIED`로 두고, `RUNNING`이나 종료 상태를 추측하지 않는다.
 
@@ -354,14 +369,30 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
   `F.reset.coefficients`의 corrected amplitude다. angular reset 계수와 axial
   repair 계수를 혼동하지 않는다. 등식에는 `eta^2 <= 1`이나 추가 smallness 가정이 없다.
   이 체크는 구현만 뜻하며 compiled claim admission이 아니다.
-- [ ] **C-02B / 개발 compile.** exact proof bytes를 pinned source의
+- [x] **C-02B / 개발 compile.** exact proof bytes를 pinned source의
   `+NavierStokes.OutgoingProfile`에 연결하고 fresh C02 `.olean`을 생성한다.
   C02는 외부 F1/L2/L3/D/C01 모듈을 import하지 않으므로 그 chain은 반복하지 않는다.
-  현재 `UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]`: Windows 개발 run에서 source
+  전용 development runner는 `colab/run-c02-development.py`다. `inputs/`와
+  `artifacts/`를 분리하며 NSRW dirty 상태는 관측만 한다. 실행 전 pinned 환경과
+  executor의 exact proof raw SHA를 확인한다. synthetic runner tests의 성공은
+  C02 Lean compile 증거가 아니며 이 체크박스를 닫지 않는다.
+  2026-10-07 Colab run `c02-development-20261007T090736Z`에서
+  `PASS[LOCAL_PROOF_COMPILE:P2_C02]`. source target과 fresh C02 compile이 모두
+  exit `0`, 두 stderr는 empty, 두 axiom surface는
+  `[propext, Classical.choice, Quot.sound]`이며 `sorryAx`가 없다.
+  source/proof pre/post identity와 `OutgoingProfile.olean` 해시가 일치했다.
+  원본 metadata와 네 로그는 `colab/evidence/2026-10-07/`에 무손실 전송하고
+  실행 기록의 SHA-256과 대조했다. 전체 C02 ZIP과 bootstrap ZIP도 D:에 보존하고
+  Colab 관측 SHA-256과 일치함을 확인했다. fresh `.olean`과 두 input의 추출 해시도
+  원본 metadata와 일치했다. 이는 로컬 보존이며 별도 백업이나 독립 검수가 아니다.
+  [개발 실행 인계](../colab/C02_DEVELOPMENT_2026-10-07.md)를 따른다.
+  `claim_authority: NONE`, `claim_status: UNVERIFIED`; C-02C admission은 아직 없다.
+  과거 Windows 개발 run에서 source
   target은 exit `0`이지만 C02 import가 mathlib `Core.olean.private` read error로
   실패했다. 원인 확정 전 경로 길이/메모리 문제로 단정하지 않는다.
-  재연결된 Colab probe는 `SOURCE_PRESENT=False`, `ELAN_PRESENT=False`다.
-  이전 notebook 출력은 현재 환경의 evidence가 아니다. 재구축 승인 전 설치하지 않는다.
+  초기 재연결 probe의 `SOURCE_PRESENT=False`, `ELAN_PRESENT=False`는 복원 전
+  관측이다. 이번 명시적 승인으로 Colab VM 안에서만 pinned 환경을 복원했다.
+  Windows Lean 설치와 `lake update`는 실행하지 않았다. mathlib cache를 사용했다.
 - [ ] **C-02C / commit-bound closure.** 개발 compile 이후 exact bytes checkpoint,
   필요한 최소 replay runner, clean replay와 dated receipt admission을 §8.6으로
   닫는다. 두 decomposition 등식만 승격하며 actual `c1(0)` 양수성이나 small-eta
@@ -454,7 +485,9 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
   full-library stress build, release/tag를 이 chain에 추가하지 않는다.
   direction map은 안정된 방침 변경 때만 수정하고 실행 이력은 dated receipt에 둔다.
 
-다음 구체적 작업은 **C-02B: 환경 복원 승인 후 exact C02 bytes의 개발 compile**이다.
+전체 C02/환경 복원 증거 archive의 D: 보존과 해시 대조는 완료했다.
+다음은 별도 commit/push 승인을 받아 **C-02C exact-bytes checkpoint와 clean replay**로 간다.
+성공한 C-02B 개발 실행을 다시 반복하거나 기존 run을 authority receipt로 이름 바꾸지 않는다.
 C-01 receipt는 main-only 세 proposition만 닫았다. actual 계수 부호와 first-window zero는
 C-02~04와 Z의 별도 proof/receipt를 요구한다.
 이후 proof 구현·실행은 해당 작업의 승인 범위에 따라 진행한다.

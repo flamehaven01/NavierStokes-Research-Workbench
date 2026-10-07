@@ -11,3 +11,5 @@ external_sources/
 .env.*
 outputs/*
 !outputs/.gitkeep
+# Raw local Colab evidence: retain locally, publish only reviewed summaries.
+colab/evidence/
