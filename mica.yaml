@@ -1,0 +1,21 @@
+mica_spec: "0.2.9"
+name: NavierStokes-Research-Workbench
+mode: memory_injection
+description: "Small repository memory and maintenance playbook; not governance or proof evidence."
+
+layers:
+  - name: archive
+    path: memory/mica_archive.json
+    format: json
+    loading_hint: always
+  - name: playbook
+    path: memory/mica_playbook.md
+    format: markdown
+    loading_hint: always
+
+invocation_protocol:
+  primary_pattern: readme_protocol
+  agent_context_surfaces: [archive, playbook]
+
+di_policy:
+  critical_binding_required: false

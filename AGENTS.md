@@ -1,0 +1,1 @@
+Start at README.md, read its MICA manifest, and read the selected memory and playbook directly with ordinary file access; no external repository, Python loader, or network is needed. These files are maintenance context only, not permission, governance, or proof authority.

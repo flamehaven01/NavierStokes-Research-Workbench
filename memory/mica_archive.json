@@ -1,0 +1,39 @@
+{
+  "mica_spec": "0.2.9",
+  "project": {
+    "name": "NavierStokes-Research-Workbench"
+  },
+  "purpose": "Retained maintenance context, not governance, permission, or mathematical evidence.",
+  "decisions": [
+    {
+      "id": "memory-purpose",
+      "remember": "Use MICA only for memory and playbook. Read the manifest-selected files directly; no external MICA checkout or Python loader is required. Do not add internal intervention, governance, or new execution gates. Keep adoption small.",
+      "origin": "Repository adoption, 2026-10-07",
+      "references": ["README.md", "mica.yaml", "AGENTS.md"]
+    },
+    {
+      "id": "research-direction",
+      "remember": "The long-range direction is Navier-Stokes research. The current work studies bounded consequences of a pinned construction; it is not a solution to the millennium problem. The stable map is not a dated execution report.",
+      "references": ["README.md", "docs/NAVIER_STOKES_NORTH_STAR_MAP.md"]
+    },
+    {
+      "id": "claim-separation",
+      "remember": "Implementation, development compile, and commit-bound receipt admission are different events. Main-only coefficient positivity is not actual c1(eta) positivity. Keep claims within named propositions and do not infer downstream closure.",
+      "references": ["docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md", "formal/p2/README.md"]
+    },
+    {
+      "id": "execution-storage",
+      "remember": "Required local Colab files and execution information belong under colab/, not local Temp. Raw evidence belongs in the Git-ignored colab/evidence/ subtree. Colab /content is ephemeral execution storage. Historical evidence is preserved, not automatically migrated or deleted.",
+      "origin": "Repository storage procedure, 2026-10-07",
+      "references": ["colab/README.md"]
+    },
+    {
+      "id": "current-state-is-not-memory",
+      "remember": "Find the next task in the dated restart checklist; inspect its referenced receipts and current source bytes. Do not duplicate active status, proof hashes, or run outcomes in this archive. Old notebook outputs do not establish the state of a reconnected runtime.",
+      "references": ["docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md", "docs/E2A_RESOURCE_CLAIM_LEDGER.yaml", "docs/stage_receipts/"]
+    }
+  ],
+  "operation_meta": {
+    "last_updated": "2026-10-07"
+  }
+}

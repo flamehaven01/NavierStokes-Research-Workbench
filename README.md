@@ -1,5 +1,7 @@
 # Navier–Stokes Research Workbench
 
+<!-- MICA:INVOKE manifest="mica.yaml" -->
+
 [![Software CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
 [![Checkpoint tag](https://img.shields.io/github/v/tag/flamehaven01/NavierStokes-Research-Workbench?label=checkpoint)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/tags)
 [![Python requirement](https://img.shields.io/badge/Python-%E2%89%A53.10-blue)](pyproject.toml)
@@ -10,27 +12,18 @@ Badges describe software CI, Git tags, environment requirements, and licensing.
 They do not certify a mathematical result. A checkpoint tag is not necessarily
 a published GitHub Release; P2 proof evidence lives in individual dated receipts.
 
-NSRW is an open research-lab workbench for studying selected, checkable links
-between Navier--Stokes papers, Lean formalizations, and bounded computational
-experiments. It records what source was used, what was actually checked, and
-which conclusions remain unavailable.
-
-The project supports serious mathematical research without claiming to be a
-theorem prover, production CFD solver, or solution to the Navier--Stokes
-millennium problem. The OpenAI manuscript and Lean repository are important
-pinned research inputs and audit benchmarks; they are not proof authority for
-this project and are not vendored.
-
-The current contribution is narrow and inspectable: preserve source identity,
-state executable scope, test bounded mathematical controls, and withhold
-stronger conclusions when evidence is missing. New mathematical, numerical,
-CFD, and SciML investigations are research-program directions, not current
-proof claims.
+NSRW is an open research-lab workbench investigating bounded mathematical
+consequences of a pinned Navier–Stokes construction. The current P2 study asks
+where a scale-invariant ratio fails, rather than treating scaling as sufficient
+evidence that the ratio is useful. Source analysis has rejected one of our own
+candidate assumptions; separate Lean modules have compiled narrow comparison
+and repair-coefficient results. Reproduction tools support this research.
 
 **Start here:** [Research roadmap](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
 · [Current P2 work](#current-p2-research)
 · [Install](#installation)
-· [Run checks](#running-the-workbench)
+· [Reproduce P2](#reproduce-the-current-p2-artifacts)
+· [Run software checks](#running-the-workbench)
 · [Documentation index](docs/README.md)
 
 ## Current P2 research
@@ -42,24 +35,66 @@ are not evidence of a current successful run. Use the
 [restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) and pinned
 inputs for execution; individual dated receipts record admitted proof evidence.
 
-At the `v0.3.2` checkpoint, the study follows a scale-invariant ratio candidate
-into the repair geometry of the pinned construction. The objective is a bounded
-obstruction result, not a new proof of Navier–Stokes blowup.
+The study follows `Q = J / (M H)` into the repair geometry of the pinned
+construction. Its [mathematical note](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md)
+distinguishes source-derived arguments from propositions with compiled receipts.
+
+### Research findings so far
+
+- **A candidate assumption was rejected.** In the study's stated source domain,
+  the endpoint cannot be the first mass-history zero: support geometry and exact
+  endpoint cancellation imply
+  `M_pulse = 0` on a nonempty terminal interval before that endpoint. This
+  terminal zero plateau also makes `Q` undefined there. It is a source-derived
+  algebraic consequence, not a separately compiled plateau theorem.
+- **Two comparison branches have been compiled.** Strict L2 bounds the
+  normalized main moments; L3 bounds the template moments. Their separately
+  compiled source-linked composition proves `deltaM c < 0`.
+- **The main-only second repair coefficient is compiled positive.** C01 binds
+  that result to the source repair system. This component is not actual
+  `c1(0)` or `c1(eta)`.
+- **The actual-coefficient bridge is advancing, not closed.** C02's two
+  decomposition equalities passed development compilation on 2026-10-07;
+  commit-bound admission remains pending. Actual coefficient signs and the
+  first-repair interior-zero formal proof remain open. The small-positive-eta
+  zero argument is supported analytically, not yet formally admitted.
+
+We falsified one of **our own candidate assumptions**, not the upstream theorem.
+These findings do not establish a new Navier–Stokes solution, manuscript–Lean
+equivalence, or independently novel mathematics. **Independent external
+reproduction of the current P2 receipts has not yet been performed.**
+
+### Current mathematical chain
+
+```text
+L1 → F1 → strict L2 ─┐
+                    ├→ D: deltaM < 0 → C01: main-only coefficient > 0
+             L3 ────┘
+
+OutgoingProfile → C02: actual decomposition (development compile only)
+                    ↓ commit-bound replay still pending
+                 C03 / C04: actual sign and continuity → Z: first-window zero
+```
+
+The two branches have distinct compiled dependencies. C02 imports only the
+upstream `OutgoingProfile`, not the external F1/L2/L3/D/C01 chain; C03 is where
+its decomposition must be combined with main-only positivity.
 
 | Step | Recorded result | Evidence / next gate |
 |---|---|---|
+| F1 | `0 < mainMoment c (1 : Fin 2)` confirmed | [Compiled receipt](docs/stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md) |
 | strict L2 | Normalized main-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) |
 | L3 | Template-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) |
 | D | `deltaM c < 0` confirmed | [Compiled composition receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) |
 | C01 | Main-only repair coefficient positivity confirmed | [Compiled receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md); not actual `c1(eta)` |
-| C02 | Actual-coefficient decomposition implemented; compile unverified | Recover pinned environment, development compile, then clean commit-bound replay |
+| C02 | Two decomposition equalities passed development compile; claim admission unverified | [Development handoff](colab/C02_DEVELOPMENT_2026-10-07.md); C-02C clean commit-bound replay pending |
 | C03–C04 / Z | Actual coefficient sign and first-repair zero formal closure open | Separate downstream amplitude, continuity, and partial-tail obligations |
 
-**Next task: C02 development compilation.** Its previous external compile failed
-at a mathlib import; no mathematical falsifier or C02 proof receipt is admitted.
-The [restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) separates
-implementation, development compile, and receipt admission. The
-[formal capsule](formal/p2/README.md) describes the pinned environment.
+**Next task: C-02C commit-bound replay and receipt review**, not another C02
+development compile. The original successful development evidence is preserved
+locally, but has `claim_authority: NONE`. The
+[restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) separates
+implementation, development compilation, and receipt admission.
 
 P1 source-atlas closure remains parallel and non-blocking. Numerical source
 witness extraction and external dataset experiments remain held; they do not
@@ -86,7 +121,27 @@ The goal is not to generate a persuasive narrative. It is to create a chain of
 artifacts from equations to executable checks, with every loss of authority made
 visible.
 
-## Implemented now
+## Reproduce the current P2 artifacts
+
+Start with the [Lean reproduction guide](formal/p2/README.md) and the stage's
+dated receipt in the table above. Each receipt identifies the proof/runner
+commit, source revision, toolchain, execution commands, and admitted proposition.
+Use a fresh clean checkout of that recorded NSRW commit, rather than assuming
+the latest `main` reproduces historical bytes.
+
+The source environment is `openai/NavierStokesAndEuler` at
+`8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538`, with Lean `4.34.0-rc2` and the
+committed dependency manifest. Stage-specific runners under `scripts/` compile
+the required source target and fresh external modules in one recorded run.
+They do not install dependencies or admit claims automatically. See the
+[Colab execution guide](docs/P2_COLAB_AUTHORITY_RUN.md) for the executor rationale
+and [Colab storage instructions](colab/README.md) for preservation.
+
+L2-A's normalized representation/positivity bridge is distinct from **strict
+L2's comparison theorem**. C02's development handoff is not a commit-bound
+receipt. No current P2 claim is established by running manufactured controls.
+
+## Supporting workbench infrastructure
 
 The pinned OpenAI construction and Lean proof graph provide a valuable compiled
 formal surface. NSRW adds bounded controls implemented in this repository that can
@@ -105,13 +160,20 @@ No OpenAI source code, manuscript, or PDF is vendored here. Users obtain those
 artifacts from their original sources and bind them by revision and hash. This
 project is not affiliated with or endorsed by OpenAI.
 
-## Current evidence status
+For AI maintainers, the manifest above selects a short repository memory and
+playbook. Read those files directly; no Python loader, external MICA checkout,
+or network is required. They provide orientation, not permission or proof
+authority. Current work remains in the restart checklist and dated receipts.
+The memory contract is `mica_spec: 0.2.9`; optional validation was tested with
+MICA v3.3.1, not tied to that tool release.
+
+## Historical validation and tooling surfaces
 
 Software checkpoint: `v0.3.2` ([release notes](docs/releases/v0.3.2.md)).
 The version/tag records software and documentation; it is not a new P2 proof receipt.
 
 <details>
-<summary>Full evidence inventory — including earlier stages and held results</summary>
+<summary>Earlier infrastructure checks and held lanes — separate from current P2 findings</summary>
 
 | Surface | Status | Meaning |
 |---|---|---|
@@ -123,18 +185,11 @@ The version/tag records software and documentation; it is not a new P2 proof rec
 | M4-P v3 replay pilot | `PASS[LOCAL_REPLAY_V0.2.3]` | Schema-first admission, committed golden mutations, and 13 applicable replay cases pass locally; the live-only case is not applicable |
 | M4-P v3 hosted live | `PASS[HOSTED_LIVE_V0.2.3]` | Tagged commit `1120b77` passed the full hosted pipeline in [run 34666375341](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/34666375341) |
 | M4-S selected instance | `HELD[NONCOMPUTABLE_SOURCE_INSTANCE]` | Current source interface exposes no pinned numerical evaluator |
-| M5 Lean-native source interface | `PASS[LOCAL_SOURCE_DERIVED_VERTICAL_SLICE]` | Pinned `H_scaling` export, 78-node type projection, and bounded independent reconstruction are content-hash-bound locally; separately operated pytest replay is `NOT_EXECUTED[RUNTIME_MISMATCH]` |
+| M5 Lean-native source interface | `PASS[LOCAL_SOURCE_DERIVED_VERTICAL_SLICE]` | Pinned `H_scaling` export and 78-node type projection are hash-bound locally. `NOT_EXECUTED[RUNTIME_MISMATCH]` concerns only its historical separately operated pytest attempt, not the current P2 Lean receipt chain. |
 | M5 P1 scaling-atlas analysis | `PASS[LOCAL_REVIEWED_METADATA]` | Ten reviewed static scaling-law entries and exact `Fraction` algebra produce bounded degree-zero candidates, not Lean-derived exponents or theorem claims |
 | M5 P1 source-bound atlas | `HELD[LEDGER_NOT_INDEPENDENTLY_PINNED]` | No complete 4-law/10-law same-raw export or independently pinned ten-law digest ledger exists; production admission fails closed |
-| M5 P2 F1 main-moment positivity | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | A clean pinned-toolchain external Lean run compiles only `0 < mainMoment c (1 : Fin 2)`; it does not establish the L2 comparison or a P2-C conclusion |
-| M5 P2 L2-A representation/positivity bridge | `PASS[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The historical [P2-L2-A receipt](docs/stage_receipts/P2_L2A_COLAB_2026-09-13.md) compiles only the normalized source representation and normalized `i = 1` positivity wrapper; it is not strict-L2 evidence. |
-| M5 P2 strict-L2 comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [2026-10-06 receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) records a commit-bound clean replay of `normalizedMainMoment c 0 < exp (-(3/20) * c.lam) * normalizedMainMoment c 1`. That receipt does not establish L3 or downstream conclusions. |
-| M5 P2 L3 template-moment comparison | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [L3 receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) records `exp (-(3/20) * c.lam) * rowMoment (c.exponents 1) <= rowMoment (c.exponents 0)`. That receipt alone does not admit downstream composition. |
-| M5 P2 D source-linked composition | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | The separate [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) records `NSRW.P2.deltaM c < 0` and two definition-level debt identities, using same-run fresh F1/L2/L3 dependencies. Coefficient signs and first-repair zero remain unpromoted. |
-| M5 P2 C-01 main-only coefficient | `CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]` | Its own [C-01 receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md) records the positive matrix gap, exact coefficient formula, and `0 < affineCoefficients c 0 1 1`. This main-only component is not actual `c1(0)` or `c1(eta)`; their signs and first-repair zero remain unpromoted. |
-| M5 P2 C02 actual-coefficient decomposition | `UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]` | The [source-wrapper module](formal/p2/P2_C02_ActualCoefficientDecomposition.lean) implements two equalities, but its external compile failed at a mathlib import. No C02 receipt or actual-coefficient sign is admitted. |
 | Paper--Lean semantic equivalence | `OPEN_RESEARCH_OBLIGATION` | A build does not establish semantic equivalence |
-| Independent selected-candidate reproduction | `UNVERIFIED` | No independent reproduction is claimed |
+| Historical M4-S selected numerical witness reproduction | `UNVERIFIED` | Separate from P2 compiled propositions; no independent reproduction or concrete numerical evaluator is claimed |
 | Millennium-problem solution | `NOT_ESTABLISHED` | Explicit non-claim |
 
 </details>
@@ -147,30 +202,6 @@ The CI badge reports the latest software pipeline, not the status of a P2
 Colab proof replay. Local test success does not imply that every hosted OS/Python
 job passed. The hosted Lean job checks the M4 targets; P2 claims instead retain
 their separately recorded external-module receipts.
-
-### P2 L2 receipt boundary
-
-`P2-L2-A` and **strict L2** are different scopes. P2-L2-A is the completed
-external-module bridge for a normalized source identity and positivity of the
-normalized `i = 1` quantity. **Strict L2** is the subsequent comparison
-proposition between the normalized `i = 0` and `i = 1` quantities. Its exact
-proof bytes now have their own [pinned-toolchain compiled receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md).
-A completed P2-L2-A receipt alone must not be read as strict-L2 compile evidence.
-The strict-L2 receipt closes only that comparison. The template-moment bound
-(L3) now has its own [separate receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md).
-Their composition now has its own [D receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md),
-not an automatic admission by either input receipt. `deltaM` is NSRW shorthand
-on pinned source objects; the D module binds it explicitly to source debt
-definitions. The main-only affine-coefficient bridge now has its own
-[C-01 receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md).
-The actual coefficient decomposition is now implemented as a narrow
-source-wrapper module, but remains uncompiled. The next task is pinned
-environment recovery and C02 development compilation, then a separate clean
-commit-bound replay and receipt. Only afterward come the
-eta=0/amplitude/continuity and small-positive-eta sign bridges.
-Actual coefficient signs and repair geometry remain unformalized. The
-[D session index](docs/sessions/P2_D_SESSION_2026-10-06.md) links the executions
-without serving as proof authority.
 
 ## Public vocabulary and research posture
 
@@ -197,80 +228,20 @@ This wording is intentional. The lab's role here is Navier--Stokes research.
 Reproducibility and evidence controls constrain how far each mathematical or
 computational result may be interpreted; they are not the research subject.
 
-## Architecture
+## Supporting validation design
 
-```text
-Primary papers / datasets / formal repositories
-                      |
-                      v
-          pinned source and claim contracts
-                      |
-                      v
-      equation reconstruction + proof dependency graph
-                      |
-          +-----------+-----------+
-          |                       |
-          v                       v
- exact/symbolic checks      numerical controls
-          |                       |
-          +-----------+-----------+
-                      v
-       required Navier--Stokes validation
-                      |
-                      v
-       secondary structural consistency check
-                      |
-                      v
-       deterministic receipt + non-claims
-```
+The historical validation infrastructure records source pins, declared
+hypotheses, compiled dependencies, bounded numerical checks, and mutations of
+the verifier itself. It does not turn text matching or finite samples into
+theorem evidence. An optional structural consistency diagnostic cannot override
+a failed required check or establish mathematical truth.
 
-The required NSRW checks determine whether an artifact is accepted. A secondary
-structural consistency check, supplied by an optional pinned dependency, can
-flag suspicious wording or structure. Its score cannot override a missing
-source hash, failed scope check, missing compiled target, or other required
-condition. It is not an AI semantic engine and does not establish theorem truth.
-
-## Navier--Stokes-specific validation pipeline
-
-The dedicated pipeline is additional to ordinary software CI.
-
-### Source traceability
-
-- pin the formal repository commit and primary-artifact hashes;
-- distinguish the primary PDF from lossy searchable transports;
-- validate theorem and paper locators without calling text presence a proof;
-- preserve forced/unforced, dimension, domain, and initial-data hypotheses.
-
-### Formal dependency evidence
-
-- read the upstream `lean-toolchain` rather than installing an arbitrary version;
-- compile only declared targets required by the current stage;
-- retain target-specific `.olean` hashes and dependency outputs;
-- distinguish scoped target success from a full-library build;
-- keep paper--Lean semantic equivalence as a separate obligation.
-
-### M4-P mathematical obligations
-
-- `Support`: inclusion, region ordering, cutoff interaction;
-- `Cone`: inequality direction, threshold dependencies, margin propagation;
-- `Moment`: exact cancellation and normalization using rational arithmetic;
-- `Negative controls`: manufactured mutations that must be rejected;
-- `Source/check comparison`: record source quantifiers and executable checks side by side;
-  this is an audit record, not a proof of quantifier equivalence.
-
-The active v3 M4 contract hashes each normalized Lean declaration signature,
-checks ordered source fragments under the declared
-`NAMED_BINDERS_AND_DATA_EXISTENTIALS` projection, and reads structured compiled
-evidence rather than trusting a handwritten `PASS`. Version 3 also separates
-historical replay from same-run live evidence and uses 14 committed, hashed
-negative-control manifests with stage-specific expected detectors. The v1
-schema and fixture are retained as historical artifacts but are not admitted by
-the current M4 evaluator. Version 2 remains runnable historical replay only.
-Neither version can be promoted to v3 authority.
-
-Checking one fixture and a finite grid remains
-`SAMPLED_PARAMETRIC_DIAGNOSTIC`. It cannot be promoted to a source statement
-of the form `forall F, exists R(F), forall X >= R(F)`.
+The [M4-P design](docs/M4_PARAMETRIC_AUDIT_DESIGN.md) and
+[verifier-hardening notes](docs/M4P_VERIFIER_HARDENING_2026-09-11.md) describe
+these controls in detail. They support, rather than replace, the current P2
+mathematical investigation. Historical replay and same-run live evidence remain
+distinct; checking a manufactured fixture is not proving the source's universal
+statement.
 
 ## Repository layout
 
@@ -352,14 +323,25 @@ python -m ruff check src tests
 python -m compileall -q src
 ```
 
-## Future research directions
+## Current mathematical frontier
+
+After C-02C's commit-bound decomposition replay, C03 must combine that equality
+with C01 and the **same fixed Profile's** corrected amplitude to establish
+actual `c1(0)` positivity and continuity. C04 then asks for a construction-dependent
+`epsilon > 0` with positivity for `0 < eta < epsilon`. Z must separately connect
+that sign to partial weighted tails and a first-repair-window mass zero.
+None of these downstream propositions is admitted by C01 or C02 development
+success. See the [active checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md).
+
+## Deferred numerical comparators
 
 The bounded E2 auditor for a 2-D periodic-vorticity comparator is implemented:
 spectral velocity reconstruction, divergence, vorticity consistency, energy,
 and enstrophy. A pinned, admitted execution against the external dataset remains
 a future research experiment. Even when run, it is a numerical control surface,
 not evidence of a 3-D finite-time singularity and not part of the current proof
-authority. See `docs/COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md`.
+authority. It is not the current active research task. See the
+[external experiment design](docs/COLAB_HUGGINGFACE_EXPERIMENT_DESIGN.md).
 
 ## Limits and non-claims
 
