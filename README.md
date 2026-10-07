@@ -28,6 +28,11 @@ and repair-coefficient results. Reproduction tools support this research.
 
 ## Current P2 research
 
+**Evidence snapshot: 2026-10-07.** The findings and table below describe that
+snapshot, not the live Colab VM. Consult the
+[dated checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) and individual
+receipts for subsequent execution history.
+
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Cdut_XJhMX6tDQX6mberM7I37sr844sM)
 
 Opens the shared execution notebook, not a verified result. Historical outputs
@@ -64,7 +69,34 @@ These findings do not establish a new Navier–Stokes solution, manuscript–Lea
 equivalence, or independently novel mathematics. **Independent external
 reproduction of the current P2 receipts has not yet been performed.**
 
+### Notation in brief
+
+For the ratio, fix a source `Profile`, a positive dilation factor `XR`, and
+angular coordinate `eta`; `X` is the radial coordinate. Suppressing those fixed
+arguments, the main quantities are:
+
+| Quantity | Meaning in this study |
+|---|---|
+| `H(X, eta)` | The source's rescaled angular field `sqrt(2*X) * E(X, eta)`, not a history integral |
+| `M(eta, X)` | Source mass history: the integral of the axial field `U(u, eta)` over `0 < u <= X` |
+| `J(eta, X)` | Source `H`-weighted history: the integral of `H(u, eta) * U(u, eta)` over the same interval |
+| `Q = J/(M H)` | Our candidate ratio, studied only where `M*H != 0`; degree-zero scaling alone does not give this domain condition |
+| `deltaM c` | **NSRW-defined shorthand**, not an upstream declaration: `F0/A0 - F1/A1`, with `Fi = normalizedMainMoment c i` and `Ai = rowMoment (c.exponents i)` |
+| `c1(eta)` | Study notation for the second **axial** repair coefficient for one fixed Profile and its corrected amplitude; not the angular-reset coefficients stored in `F.reset` |
+
+Here `normalizedMainMoment c i = exp(-(beta c i * center c 0)) * mainMoment c i`.
+The index `i` ranges over `0, 1`, and `lambda = c.lam`. The stage name **F1**
+below denotes the positivity proof for `mainMoment c 1`; the notation `F1` in
+the formula for `deltaM` denotes its normalized value. Exact definitions and
+hypotheses are in the [P2 study](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md)
+and [D module](formal/p2/P2_D_DeltaMComposition.lean).
+
 ### Current mathematical chain
+
+Proof labels (`L1`, `F1`, `L2`, `L3`, `D`, `C01`, `C02`) name mathematical
+modules. Checklist labels `C-02A/B/C` instead distinguish implementation,
+development compilation, and commit-bound replay/admission of the **same C02
+module**; they are not three additional mathematical results.
 
 ```text
 L1 → F1 → strict L2 ─┐
@@ -82,17 +114,20 @@ its decomposition must be combined with main-only positivity.
 
 | Step | Recorded result | Evidence / next gate |
 |---|---|---|
+| L1 | `mainPulse z >= 0` for `z >= 0`, and `mainPulse(1/25) > 0`, confirmed | [Compiled receipt](docs/stage_receipts/P2_L1_COLAB_2026-09-12.md); not integral positivity by itself |
 | F1 | `0 < mainMoment c (1 : Fin 2)` confirmed | [Compiled receipt](docs/stage_receipts/P2_F1_LOCAL_WINDOWS_2026-09-13.md) |
 | strict L2 | Normalized main-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L2_COLAB_2026-10-06.md) |
 | L3 | Template-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) |
-| D | `deltaM c < 0` confirmed | [Compiled composition receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) |
+| D | `NSRW.P2.deltaM c < 0` confirmed for the NSRW-defined difference above | [Compiled composition receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) |
 | C01 | Main-only repair coefficient positivity confirmed | [Compiled receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md); not actual `c1(eta)` |
 | C02 | Two decomposition equalities passed development compile; claim admission unverified | [Development handoff](colab/C02_DEVELOPMENT_2026-10-07.md); C-02C clean commit-bound replay pending |
 | C03–C04 / Z | Actual coefficient sign and first-repair zero formal closure open | Separate downstream amplitude, continuity, and partial-tail obligations |
 
-**Next task: C-02C commit-bound replay and receipt review**, not another C02
-development compile. The original successful development evidence is preserved
-locally, but has `claim_authority: NONE`. The
+**At this snapshot, the next mathematical admission gate is C-02C**, not another
+C02 development compile. The original successful development evidence is
+preserved locally, but has `claim_authority: NONE`. A replay wrapper is now
+implemented at [the runner checkpoint](scripts/run-p2-c02-replay.py); its existence
+does not close that gate. The
 [restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) separates
 implementation, development compilation, and receipt admission.
 
@@ -104,22 +139,23 @@ replace or widen the current parametric formal claims.
 
 The long-range objective is deliberately ambitious: explore new, testable
 directions toward the three-dimensional Navier--Stokes regularity/blowup problem.
-The present workbench does not claim to answer that problem. It asks smaller
-questions that can be answered honestly and reproduced:
+The present workbench does not claim to answer that problem. P2 pursues smaller
+mathematical questions:
 
-- Which analytic identities can be derived independently from declared equations?
-- Which support, cone, moment, pressure-tail, and scaling obligations are actually
-  consumed by a candidate construction?
-- Where does a formal existence proof stop exposing computational content?
-- Which claims are theorem-level, symbolic, sampled, manufactured, or still unknown?
-- Can a verifier detect quantifier drift, missing assumptions, stale source bindings,
-  and forced-to-unforced scope inflation?
-- Which numerical experiments can falsify intermediate assumptions without being
-  misrepresented as proof evidence?
+- Where is `Q` defined, and where does repair-induced cancellation obstruct its
+  use as a bounded quantity?
+- How do the main-pulse and template comparisons determine the main-only repair
+  coefficient, and what changes when the actual amplitude is included?
+- For one fixed Profile, can positivity at `eta = 0` and continuity give a
+  construction-dependent positive neighborhood for the actual coefficient?
+- Which partial-tail estimates would then force a mass-history zero inside the
+  first repair window? What remains possible outside that neighborhood?
 
-The goal is not to generate a persuasive narrative. It is to create a chain of
-artifacts from equations to executable checks, with every loss of authority made
-visible.
+The current route tests a candidate, rejects unsupported assumptions, and turns
+narrow analytic consequences into inspectable formal propositions. Longer-term
+work may explore other quantities and constructions; this particular ratio is
+not assumed to survive. Reproduction and evidence checks support that inquiry,
+rather than becoming its mathematical objective.
 
 ## Reproduce the current P2 artifacts
 
@@ -141,6 +177,37 @@ L2-A's normalized representation/positivity bridge is distinct from **strict
 L2's comparison theorem**. C02's development handoff is not a commit-bound
 receipt. No current P2 claim is established by running manufactured controls.
 
+### Public evidence access and external review
+
+Proofs, runners, dated receipts, commands and digests are public. The original
+execution ZIPs, raw logs and generated `.olean` files are currently retained in
+a non-public local evidence store, **not published download assets**. A published
+hash alone does not let a third party inspect those bytes or authenticate the
+reported run. The public inputs support a new replay, not direct inspection of
+our retained execution bundle. See the [storage policy](colab/README.md).
+
+A reviewed public evidence bundle could improve inspection of recorded runs,
+but none is promised here. Publishing one requires checking privacy, licensing,
+completeness and its exact relation to the receipt. It would still not be an
+independent reproduction or semantic proof audit by itself.
+
+External review is welcome, starting with two bounded targets:
+
+1. **Terminal zero plateau:** check the support intervals and exact endpoint
+   cancellation in the [P2 study](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md).
+   Look for an omitted hypothesis, coordinate mismatch or invalid inference.
+   This argument has no separate compiled Lean theorem yet.
+2. **D composition:** inspect the [D proof](formal/p2/P2_D_DeltaMComposition.lean)
+   and [receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md). Check the NSRW
+   definition, strict-L2/L3 inputs and positivity needed for division. To test
+   reproduction, use the receipt's exact commit and pinned source/toolchain,
+   retaining your own commands, logs and exit codes.
+
+Please identify the precise statement, source location and hypothesis at issue.
+For a replay, include input identities and distinguish an invocation/cache
+failure from a mathematical counterexample. Reading a receipt is not replaying
+it; neither should be described as independent review of the entire construction.
+
 ## Supporting workbench infrastructure
 
 The pinned OpenAI construction and Lean proof graph provide a valuable compiled
@@ -159,13 +226,6 @@ also be reused for later Navier--Stokes candidates:
 No OpenAI source code, manuscript, or PDF is vendored here. Users obtain those
 artifacts from their original sources and bind them by revision and hash. This
 project is not affiliated with or endorsed by OpenAI.
-
-For AI maintainers, the manifest above selects a short repository memory and
-playbook. Read those files directly; no Python loader, external MICA checkout,
-or network is required. They provide orientation, not permission or proof
-authority. Current work remains in the restart checklist and dated receipts.
-The memory contract is `mica_spec: 0.2.9`; optional validation was tested with
-MICA v3.3.1, not tied to that tool release.
 
 ## Historical validation and tooling surfaces
 
@@ -203,30 +263,11 @@ Colab proof replay. Local test success does not imply that every hosted OS/Pytho
 job passed. The hosted Lean job checks the M4 targets; P2 claims instead retain
 their separately recorded external-module receipts.
 
-## Public vocabulary and research posture
-
-The [documentation index](docs/README.md) links the
-[evidence principles](docs/E2A_RESOURCE_PRINCIPLES.md),
-[operational-exposure definition](docs/OPERATIONALLY_EXPOSED.md), and
-[claim ledger](docs/E2A_RESOURCE_CLAIM_LEDGER.yaml). These resources describe
-evidence handling; they do not create mathematical authority or assert that a
-new governance framework is enforced by CI. Application-transfer protocols are
-proposed future work, not demonstrated application capability.
-
-The project prefers plain descriptions over authority-heavy labels:
-
-| Project term | Meaning here | Explicit non-meaning |
-|---|---|---|
-| evidence traceability | keeping source, scope, input, and result boundaries inspectable | truth of the underlying theorem |
-| source/check comparison | recording source and executable quantifiers side by side | formal quantifier equivalence |
-| required validation | a check that must succeed before an artifact is accepted | a mathematical proof |
-| manufactured control | a deliberately constructed test input | the selected Navier--Stokes witness |
-| structural consistency check | an optional secondary review supplied by a pinned dependency | semantic AI review or proof authority |
-| research direction | a planned investigation or comparator track | a completed independent solution |
-
-This wording is intentional. The lab's role here is Navier--Stokes research.
-Reproducibility and evidence controls constrain how far each mathematical or
-computational result may be interpreted; they are not the research subject.
+Evidence vocabulary, operational-exposure definitions and proposed application
+transfer are documented in the [documentation index](docs/README.md) and
+[public language guide](docs/PUBLIC_RESEARCH_LANGUAGE.md). They describe how
+results are reported, not additional mathematical results or demonstrated
+application capability.
 
 ## Supporting validation design
 
@@ -368,6 +409,12 @@ or held.
 - [Lean reproduction capsule](formal/p2/README.md)
 - [Research direction map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
 - [Changelog](CHANGELOG.md)
+
+For AI maintainers: [AGENTS.md](AGENTS.md) identifies the
+[MICA manifest](mica.yaml), which selects short maintenance memory and a
+playbook. Read those files directly; no external repository or Python loader
+is required. They provide orientation, not permission or proof authority.
+Current research state belongs to the dated checklist and receipts, not memory.
 
 <details>
 <summary>Earlier stage designs, receipts, and checkpoint notes</summary>
