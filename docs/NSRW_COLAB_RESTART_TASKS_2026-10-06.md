@@ -1,6 +1,7 @@
 # NSRW Colab 재점검과 재개 tasks
 
 최초 재점검: `2026-10-05` / 문서 갱신·실제 재작업 시작: `2026-10-06`
+최근 상태 검수·동기화: `2026-10-13` (Asia/Bangkok), C02 실행일은 UTC `2026-10-07`, C03은 `2026-10-08`, C04는 `2026-10-10`.
 
 이 문서는 내부 실행 계획이다. 정식 연구 보고서나 새 execution receipt가 아니다.
 기준 snapshot은 `CURRENT_POSITION_2026-10-05.md`이며,
@@ -18,10 +19,33 @@
 
 ## 1. 현재 위치와 다음 한 가지
 
-**strict-L2, L3, D, C-01의 별도 commit-bound compiled receipts는 닫혔다.
-C-02B 개발 compile과 원본 증거의 D: 보존도 완료했다. 다음 작업은 C-02C다.**
-2026-10-07 개발 실행은 두 decomposition 등식만 compile했다. commit-bound replay와
-receipt admission은 아직 없으며 actual coefficient sign을 승격하지 않는다.
+**strict-L2, L3, D, C-01, C-02, C-03, C-04의 별도 commit-bound receipts는 닫혔다.
+C-03은 actual coefficient의 eta=0 등식·양수성·eta 전체에서의 연속성만 admission했다.
+C-04는 고정된 Profile마다 존재하는 양의 epsilon 안에서의 positive-eta 부호 하나만 admission했다.
+Z-01D의 두 mass identity와 Z-02의 조건부 boundary signs는 개발 compile까지 통과했다.
+기존 `103659Z` 실패 run을 보존하고 최소 proof 수정 후 별도 `112430Z` run에서
+source → fresh Z01 → fresh Z02가 모두 exit 0이었다. Z-03 조건부 continuity/IVT도
+별도 `115139Z` run에서 개발 compile을 통과했다. Z04-core도 `164504Z` run에서
+`PASS[LOCAL_PROOF_COMPILE:P2_Z04_CORE]`로 개발 compile을 통과했고, bounded Z+J source map은
+2026-10-11 `PASS[STATIC_PINNED_SOURCE_MAPPING]`으로 닫혔다. Z+J 조건부 구조 정리도
+별도 retry `135801314921Z`에서 개발 compile을 통과했다. source `Profile.J` bridge와
+동일 witness M/J composition도 별도 `144300398298Z`에서 개발 compile을 통과했다.
+두 개발 성공 ZIP의 D: 크기/SHA/내부 hash 대조를 완료했다. 2026-10-12에는 같은 exact
+checkpoint의 새 clean full-DAG replay와 private Drive/D: ZIP 보존·내부 검수까지 PASS했다.
+별도 [Z-core receipt](stage_receipts/P2_Z_CORE_COLAB_2026-10-12.md)와
+[Z+J receipt](stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md)의 검수를 완료했다.
+각 Profile의 small-positive-eta 첫 window 내부 source M-zero 존재와 동일 점의
+M=0/J>0 명제는 정확한 named scope에서 CONFIRMED다. 두 receipt는 같은 실행·trust domain을
+공유하며 독립 attestation이 아니다. 이전 10/11 replay ZIP의 custody gap은 새 실행으로
+소급 복구하지 않는다. 다음은 별도 승인 아래 public reproduction/technical-note 준비다.**
+2026-10-07 C-02C 실행은 두 decomposition 등식만 닫았다.
+[dated receipt](stage_receipts/P2_C02_COLAB_2026-10-07.md)가 해당 범위를 기록하며,
+그 C02 receipt 자체는 coefficient sign이나 first-repair zero를 승격하지 않는다.
+[C03 dated receipt](stage_receipts/P2_C03_COLAB_2026-10-08.md)는 별도 실행·검수로
+actual `c1(0) > 0`과 연속성을 닫았다.
+[C04 dated receipt](stage_receipts/P2_C04_COLAB_2026-10-10.md)는 per-Profile
+`exists epsilon(F) > 0, forall eta, 0 < eta < epsilon(F) -> c1(eta) > 0`만 닫았다.
+공통·수치 epsilon은 미승격이다. Z mass-zero는 C04가 아니라 별도 Z-core receipt에서 닫혔다.
 이후 순차 실행은 §8의 AI 체크리스트를
 사용한다. 이 문서 패치는 docs-only이며, 체크리스트 작성 자체가 후속 코드 수정,
 Colab 실행, 설치, commit/push의 승인은 아니다.
@@ -51,14 +75,42 @@ C-01: main-only coefficient
   check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C01_REPLAY]
   receipt: stage_receipts/P2_C01_COLAB_2026-10-06.md
 
-Actual coefficient sign / first-repair zero
-  not promoted by this document
+First-repair zero (Z)
+  named formal closure CONFIRMED by the separate 2026-10-12 Z-core receipt
+  per-Profile small-positive-eta interior existence only; not promoted by C04
+  full negative/non-small-eta geometry, first/unique zero and numerical radius OPEN
 
 C-02B: actual coefficient decomposition development compile
   check_status: PASS[LOCAL_PROOF_COMPILE:P2_C02], 2026-10-07
   claim_authority: NONE; claim_status: UNVERIFIED
   original archives and extracted log/input/artifact hashes: locally matched
-  next: C-02C commit-bound replay and receipt admission
+  historical development evidence only; not renamed as authority
+
+C-02C: separate commit-bound replay and same-session archive review
+  check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C02_REPLAY]
+  claim_status: CONFIRMED for two decomposition equalities only
+  receipt: stage_receipts/P2_C02_COLAB_2026-10-07.md
+  scope: two equalities only; C03 has a separate receipt
+
+C-03C: separate commit-bound replay and same-session archive review
+  check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+  claim_status: CONFIRMED for zero identity, zero positivity and global continuity
+  receipt: stage_receipts/P2_C03_COLAB_2026-10-08.md
+  scope: no neighborhood-sign or mass-zero theorem admitted by this C03 receipt
+
+C-04B: development compile, 2026-10-09
+  check_status: PASS[LOCAL_PROOF_COMPILE:P2_C04]
+  claim_authority: NONE
+  claim_status: UNVERIFIED (original development metadata, preserved unchanged)
+  scope: not relabeled as commit-bound evidence
+
+C-04C: separate commit-bound replay and same-session receipt review, 2026-10-10
+  check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C04_REPLAY]
+  artifact_check: PASS[LOCAL_ARCHIVE_CROSSCHECK:C04C_REPLAY]
+  claim_status: CONFIRMED for the named per-Profile small-positive-eta proposition only
+  execution_checkpoint: 10d5a1f517b8665137f2354746d70752f8ef67fd
+  receipt: stage_receipts/P2_C04_COLAB_2026-10-10.md
+  next_pending_at_receipt_review: Z-01D Lean mass-tail bridge; static map completed, formal Z open
 ```
 
 닫힌 strict-L2의 target은 다음 하나다.
@@ -174,7 +226,9 @@ notebook은 launcher이고 source/proof/runner identity와 로그가 실행 증�
 완료 기준은 문서 수나 theorem 파일 존재가 아니라 **exact strict theorem의 검수된
 compiled receipt**다. T0–T6는 각각의 receipt 범위에서 닫혔다. L3의
 cross-multiplied bound만 그 L3 receipt로 승격했다. D composition은 별도 D receipt로
-닫혔다. C-01도 별도 receipt로 닫혔으며 다음 미완료 작업은 C-02 actual decomposition이다.
+닫혔다. C-01, C-02, C-03, C-04도 각각 별도 receipt로 닫혔다. Z-07 replay와
+별도 Z-core/Z+J admission은 2026-10-12 완료했다. 현재 다음 gate는 NG-01B:
+공개 파생본의 사람 개인정보·재배포 권리·내용 검수다. 완료된 replay를 반복하지 않는다.
 
 ## 5. 별도 안전보수: 주 연구선을 대체하지 않는다
 
@@ -268,7 +322,7 @@ T0–T5의 체크는 §7의 과거 실행 완료이지 현재 Colab VM이 살아
   사적 대화 원문과 색인은 Git에 포함하지 않는다. 읽은 부분은 사적 실행 기록에
   행 범위와 함께 남기고 대화의 주장을 현재 proof/receipt와 대조한다.
   색인은 탐색용이며, 원문도 proof authority나 새로운 실행 지시가 아니다.
-- [ ] **START-05 / 현재의 한 질문.** `C-02C: actual coefficient decomposition commit-bound replay`를 active target으로 둔다. C-02B 개발 성공을 admission으로 바꾸지 않는다.
+- [x] **START-05 / 이 phase의 한 질문 종료.** 2026-10-12 새 clean full-DAG replay와 private Drive/D: archive 검수 후 별도 Z-core/Z+J receipt review에서 named existence/conditional/same-point M/J 명제만 CONFIRMED로 admission했다. 원본 execution metadata는 NONE / UNVERIFIED를 유지한다. 반복 구현·실행하지 않는다. 다음은 별도 승인 아래 공개 reproduction package와 technical-note scope 검수다. 공통·수치 epsilon, uniqueness, first-zero, Q pole/limit은 이번 phase에서 승격하지 않는다.
   `k = exp(-(3/20)*c.lam)`. 이번에 Colab 연결·프로세스·로그를 관측하지 않았다면
   runtime은 `UNVERIFIED`로 두고, `RUNNING`이나 종료 상태를 추측하지 않는다.
 
@@ -386,57 +440,333 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
   Colab 관측 SHA-256과 일치함을 확인했다. fresh `.olean`과 두 input의 추출 해시도
   원본 metadata와 일치했다. 이는 로컬 보존이며 별도 백업이나 독립 검수가 아니다.
   [개발 실행 인계](../colab/C02_DEVELOPMENT_2026-10-07.md)를 따른다.
-  `claim_authority: NONE`, `claim_status: UNVERIFIED`; C-02C admission은 아직 없다.
+  해당 개발 metadata는 `claim_authority: NONE`, `claim_status: UNVERIFIED`로 보존한다.
+  당시에는 C-02C admission이 없었으며, 아래의 별도 새 replay와 혼합하지 않는다.
   과거 Windows 개발 run에서 source
   target은 exit `0`이지만 C02 import가 mathlib `Core.olean.private` read error로
   실패했다. 원인 확정 전 경로 길이/메모리 문제로 단정하지 않는다.
   초기 재연결 probe의 `SOURCE_PRESENT=False`, `ELAN_PRESENT=False`는 복원 전
   관측이다. 이번 명시적 승인으로 Colab VM 안에서만 pinned 환경을 복원했다.
   Windows Lean 설치와 `lake update`는 실행하지 않았다. mathlib cache를 사용했다.
-- [ ] **C-02C / commit-bound closure.** 개발 compile 이후 exact bytes checkpoint,
+- [x] **C-02C / commit-bound closure.** 개발 compile 이후 exact bytes checkpoint,
   필요한 최소 replay runner, clean replay와 dated receipt admission을 §8.6으로
   닫는다. 두 decomposition 등식만 승격하며 actual `c1(0)` 양수성이나 small-eta
   부호를 승격하지 않는다.
-  C-03에서는 source의 `CorrectedPulseAmplitude.amplitude_pos`와
-  `Profile.amp_contDiff`를 대조한다. amplitude의 정성적 양수성은 모든 eta에
+  checkpoint `01d2deae3534cba5a035e87ac1cbe37faac470ca`의 새 clean checkout에서
+  source → `+NavierStokes.OutgoingProfile` → fresh C02가 같은 run으로 모두 exit `0`.
+  두 stderr empty, 두 named axiom surface는 `[propext, Classical.choice, Quot.sound]`,
+  `sorryAx` absent. 세 committed 입력, 11개 dependency revision, pre/post identities,
+  원본 ZIP/로그/fresh `.olean` 해시를 로컬에서 대조하고
+  [C02 receipt](stage_receipts/P2_C02_COLAB_2026-10-07.md)로 두 등식만 admission했다.
+  검수와 실행은 같은 신뢰영역이며 독립 attestation은 아니다.
+  C-03에서 source의 `CorrectedPulseAmplitude.amplitude_pos`와
+  `Profile.amp_contDiff`를 대조했다. amplitude의 정성적 양수성은 모든 eta에
   제공되지만 quantitative specification bound는 해당 domain을 따로 유지한다.
-- [ ] **C-03 / eta=0 bridge와 continuity.** C-02의 actual decomposition에서
+- [x] **C-03 / eta=0 bridge와 continuity.** C-02의 actual decomposition에서
   main-only positive contribution을 실제 `c1(0)`에 연결하고 amplitude 조건과
   연속성을 확인한다. main-only coefficient 자체를 `c1(0)`라고 이름 바꾸지 않는다.
-- [ ] **C-04 / small-positive-eta quantifiers와 완료 조건.** 고정된 admissible construction마다
+  - [x] **C-03A / 구현 (2026-10-08).**
+    `formal/p2/P2_C03_ActualCoefficientAtZero.lean`에 실제 axial coefficient 정의,
+    eta=0 product identity, positivity, continuity를 작성했다. pinned source의
+    `amplitude_pos`와 `Profile.amp_contDiff`를 직접 대조했다.
+    proof raw SHA-256:
+    `c706e8a00f46670cacdea9056b1d51404f90e487f3e609afa02977ae68ca3110`.
+    구현 bytes는 아래 development run에서 그대로 compile됐으며 commit-bound admission은 별도다.
+  - [x] **C-03B / development compile 결과 확보 (2026-10-08).** Colab-only 복원 후
+    `nsrw-c03-development-20261008T075446Z`에서 source → fresh F1/L2/L3/D/C01/C02 → C03
+    동일한 개발 run이 `2026-10-08T08:06:14Z`에 완료됐다.
+    `PASS[LOCAL_PROOF_COMPILE:P2_C03]`: source target 2851 jobs 및 7개 external module 모두
+    exit 0 / stderr 0 bytes. C03의 `actualSecondRepairCoefficient_zero_eq`,
+    `actualSecondRepairCoefficient_zero_pos`, `actualSecondRepairCoefficient_continuous`가
+    compile됐고 각각 `[propext, Classical.choice, Quot.sound]`만 관측됐다 (`sorryAx` 없음).
+    source identity와 `OutgoingProfile.olean` pre/post hash는 동일하다.
+    동일 세션의 로컬 archive 대조에서 입력/proof/runner bytes, 8개 stage 로그 hash,
+    7개 fresh `.olean` hash를 확인했다. 독립 외부 attestation은 아니다.
+    개발 evidence ZIP은 `colab/evidence/2026-10-08/c03-development/`의
+    `nsrw-c03-development-20261008T075446Z-evidence.zip` (422476 bytes), SHA-256:
+    `ed14a5077f6a7528067dfd16901ef14ea7a82c28c01f26a5bc51e687c1581cb4`.
+    notebook 저장 충돌/reconnect 이후에도 기존 run의 결과를 읽어 보존했으며 재실행하지 않았다.
+    저장 충돌은 강제 저장으로 덮어쓰지 않았다. read-only 관측: `colab/c03-observe.py`.
+    복원 원본 ZIP은 `colab/evidence/2026-10-08/c03-development/`에 보존했으며 SHA-256은
+    `70cfbe73aeeb77981d72c0b193238530cda91aa02bf098dc9212fe7281618316`이다.
+    Python input controls 28 tests 및 Ruff PASS는 runner 검사일 뿐 Lean evidence가 아니다.
+  - [x] **C-03C / commit-bound admission (2026-10-08).** proof-only checkpoint
+    `5b649fa3bf8f877219dc88fd15e28944329a4e97` 이후 proof/runner checkpoint
+    `d7e41b9b60ae7510e5b4cc67eb5d071df21bd73d`에서 새 clean replay를 실행했다.
+    run `nsrw-c03c-20261008T141509Z`: source → fresh F1/L2/L3/D/C01/C02/C03,
+    8개 stage 모두 exit 0 / stderr 0 bytes; C03 세 named theorem의 axiom surface는
+    `[propext, Classical.choice, Quot.sound]`, `sorryAx` 없음.
+    committed inputs, source/NSRW pre/post identity, 7개 fresh external artifacts와
+    archive bytes/hash를 대조했다. 원본은 `colab/evidence/2026-10-08/nsrw-c03c-20261008T141509Z/`에 보존했다.
+    [C03 receipt](stage_receipts/P2_C03_COLAB_2026-10-08.md)에서 zero identity,
+    zero positivity, eta 전체에서의 continuity만 `CONFIRMED`로 admission했다.
+    원본 execution metadata는 `claim_authority=NONE`, `claim_status=UNVERIFIED`로
+    그대로 보존한다. 개발 run을 재사용한 admission이 아니며, 검수는 실행과 같은 신뢰영역이다.
+    이 C03 receipt 자체는 C04나 Z를 승격하지 않는다. 사이트·논문은 Z 이후 재검토한다.
+- [x] **C-04 / per-Profile small-positive-eta quantifiers와 완료 조건 (2026-10-10).** 고정된 source Profile마다
   `exists epsilon > 0, forall eta, 0 < eta < epsilon -> actual c1(eta) > 0`을
-  목표로 둔다. 필요하면 `epsilon <= 1`로 specification domain을 유지한다.
+  C-04C receipt에서 이 named proposition 하나만 닫았다. `epsilon <= 1` 등
+  specification-domain 제한이 Z에서 필요하면 별도 bridge로 유지한다.
   모든 construction에 공통인 epsilon, 모든 양의 eta, 음의 eta 확장은 별도 문제다.
   construction의 파라미터가 eta에 의존한다면 고정-parameter 논증을 멈추고,
   그 의존성을 포함한 statement와 필요한 estimate를 다시 확인한다.
-  continuity 또는 명시적 one-sided estimate로 닫고 §8.6의 receipt에 정확한 범위를 기록한다.
+  continuity를 소비해 닫았으며 아래 별도 receipt에 정확한 범위를 기록했다.
   selected numerical `TailData`를
   만들어내지 않는다. parametric proof에 불필요한 numerical witness를 gate로 두지 않는다.
+  - [x] **C-04A / Lean implementation (2026-10-09).**
+    `formal/p2/P2_C04_SmallPositiveEta.lean`은 C03의 zero positivity와 continuity를
+    열린 positive preimage와 `Metric.mem_nhds_iff`로 소비한다.
+    target은 `forall F : Profile, exists epsilon(F) > 0, forall eta,
+    0 < eta < epsilon(F) -> actualSecondRepairCoefficient F eta > 0` 하나다.
+    파일 존재는 compilation 또는 claim admission이 아니다.
+  - [x] **C-04B / development fresh-chain compile (2026-10-09).**
+    `colab/run-c04-development.py`: source → fresh F1/L2/L3/D/C01/C02/C03/C04.
+    dependency bytes는 C03 checkpoint `d7e41b9b60ae7510e5b4cc67eb5d071df21bd73d`에서
+    고정한다. C04 bytes는 별도 executor SHA로 기록하며 development evidence만 생성한다.
+    앱 재시작 후 직접 브라우저 제어가 복구됐고, 새 Colab VM 안에서만 pinned 환경을
+    복원했다. Windows 설치와 `lake update`는 하지 않았다.
+    run `nsrw-c04-development-20261009T131825Z`는 source build 2851 jobs와
+    8개 fresh external modules를 같은 실행에서 완료했다. 9개 stage 모두 exit 0,
+    stderr 0 bytes다. C04 named theorem의 axiom surface는
+    `[propext, Classical.choice, Quot.sound]`; `sorryAx`는 관측되지 않았다.
+    proof SHA-256: `38cdf1bf01fd420795dc5331ad78ec64370fea34ac052bcbfce5053c39c7b50c`.
+    원본 ZIP은 `colab/evidence/2026-10-09/nsrw-c04-development-20261009T131825Z/`
+    에 보존했다(446240 bytes; SHA-256
+    `4c6b7dadd69ceb99fee6dea1a3b443a58e7ac597486686141a7727143531c0a8`).
+    로컬 archive 검수에서 입력·로그·8개 artifact hash, source/NSRW pre/post identity와
+    source target artifact 불변을 대조했다. 실행과 검수는 같은 신뢰영역이며,
+    원본 metadata의 `claim_authority=NONE`, `claim_status=UNVERIFIED`를 유지한다.
+    로컬 C04 input/failure controls 8 PASS와 기존 C03 controls 3 PASS는
+    Lean compile evidence가 아니다.
+  - [x] **C-04C / commit-bound replay and receipt admission (2026-10-10).**
+    development와 분리된 exact-bytes checkpoint의 새 clean replay를 검수했다.
+    [dated receipt](stage_receipts/P2_C04_COLAB_2026-10-10.md)에서 named per-Profile
+    existential epsilon 명제 하나만 `CONFIRMED`로 admission했다. 원본 metadata는
+    `NONE / UNVERIFIED`를 유지한다. Z는 미승격이며 uniform/numerical epsilon을 주장하지 않는다.
+    - [x] **C-04C-01 / 최소 wrapper 준비 (2026-10-09).**
+      `scripts/run-p2-c04-replay.py`는 exact expected commit과 clean checkout,
+      committed proof/engine/wrapper 및 기존 helper·7개 dependency blob을 검사한다.
+      proof Git blob: `63a1f00db5a38bdb0c9c93e15d2b3f9bc71f2b02`;
+      proof SHA는 C-04B와 동일하다. source → fresh F1/L2/L3/D/C01/C02/C03/C04를
+      새로 실행하고 로그·artifact·axiom surface·pre/post identity를 재검사한다.
+      성공한 wrapper metadata도 `claim_authority=NONE`, `claim_status=UNVERIFIED`를
+      유지한다. observer/preservation/summary cells와 checklist는 authority inputs가 아니다.
+      C04 engine에 `expected_dependency_commit` 연결만 추가했다. 기존 C-04B ZIP과
+      그 안의 runner bytes/hash는 변경하지 않았으며, 새 runner를 과거 실행 증거로 쓰지 않는다.
+      C04 replay/development 및 기존 C03 replay controls: 58 PASS (`--no-cov`);
+      Ruff와 diff check PASS. 이 검사는 Lean replay나 전체 CI/coverage 성공을 뜻하지 않는다.
+    - [x] **C-04C-02 / 의도적인 checkpoint.** proof-only commit
+      `4790bacc5fbc1899dd119c809597100a459ab53e` 이후 execution-surface checkpoint
+      `10d5a1f517b8665137f2354746d70752f8ef67fd`를 실행 pin으로 고정했다.
+      proof SHA/blob은 C-04B와 같으며 기존 dirty docs, one-off 도구와 원본 evidence는
+      포함하지 않았다. 이번 receipt 작성은 그 실행 checkpoint를 변경하지 않는다.
+    - [x] **C-04C-03 / 새 clean replay (2026-10-10).** final checkpoint의 fresh
+      checkout에서 `nsrw-c04c-replay-20261010T061436Z`를 한 번 실행했다.
+      source → fresh F1/L2/L3/D/C01/C02/C03/C04의 9개 stage 모두 exit 0 / stderr empty;
+      C04 axiom surface는 `[propext, Classical.choice, Quot.sound]`, `sorryAx` 없음.
+      C-04B ZIP을 relabel하거나 이전 실행 결과를 조합하지 않았다.
+    - [x] **C-04C-04 / 보존·receipt admission (2026-10-10).**
+      `colab/evidence/2026-10-10/nsrw-c04c-replay-20261010T061436Z/`에 원본을 보존했다.
+      replay ZIP SHA-256: `88b2c75508fe2f43d6ac6557e0d6896c530486d0c577fac447c05785160e934b`.
+      11개 committed inputs, 8개 fresh artifacts, 로그 hash, source/NSRW identity와
+      source-target artifact 불변을 대조했다. same-session receipt review에서 C04 하나만
+      admission했다. 검수는 독립 attestation이 아니며 Z는 별도 미착수 단계다.
 
 ### 8.5 Z — 첫 repair window 내부 영점을 source mass로 연결
 
 진입 조건: 실제 small-positive-eta coefficient sign의 compiled receipt가 검수 완료됐다.
 
-- [ ] **Z-01 / geometry.** main pulse와 두 bump의 support, window 순서와 분리를
-  확인한다. `lower(0)`, `upper(0)`, `lower(1)`, terminal endpoint의 radial/log/profile
-  coordinate를 통일한다. source의 `massMoment`와 profile의 `M`을 연결하는
-  양의 scale factor를 정확한 bridge로 유지한다.
+- [ ] **Z-01 / geometry와 mass-tail bridge.**
+  [10/10 source map](M5_P2_Z01_SOURCE_MAP_2026-10-10.md)을 먼저 읽는다.
+  static source review와 새 Lean bridge compilation을 구분한다. `M_at_exp`는
+  `massMoment`와 `Profile.M`의 직접 equality이며 양의 `momentScale*shape`는
+  pulse 적분의 prefactor다. 두 mass identity의 개발 compile은 완료했지만
+  Z-01 전체 formal bridge의 commit-bound admission은 아직 없다.
+  - [x] **Z-01A / coordinate source alignment (2026-10-10).** `r`, `log r`,
+    `B+log r`, `X=exp B*r`를 고정했다. `r>=1`과 `B>0`로 `M_at_exp`의
+    `y>=0` 가정을 유지한다. XR/dilation 확장은 이번 범위가 아니다.
+  - [x] **Z-01B / support source alignment (2026-10-10).**
+    `exp(11/lam)<lower(0)<upper(0)<=lower(1)<upper(1)<exp L`과
+    각 open window 끝점의 bump 소멸 재료를 확인했다. `upper(0)`를 포함한다.
+  - [x] **Z-01C / mass-tail derivation map (2026-10-10).** partial-mass identity,
+    full cancellation과 interval split을 연결하는 논증을 `SUPPORTED`로 기록했다.
+    second-bump 적분은 기존 `actual_matrix_entry` + `rowMoment_pos`로
+    양수성을 얻는 경로를 확인했다. mass identity나 sign의 compile 성공은 아니다.
+  - [x] **Z-01D / exact Lean bridge 구현·개발 compile (2026-10-10).**
+    `P2_Z01_LocalMassIdentities.lean`의 `localMass_partial_identity`와
+    `localMass_tail_identity` 두 명제만 `PASS[LOCAL_PROOF_COMPILE:P2_Z01]`.
+    source build와 external module 모두 exit 0 / stderr empty; 두 axiom surface는
+    `[propext, Classical.choice, Quot.sound]`, `sorryAx` absent.
+    [development record](../colab/Z01_DEVELOPMENT_2026-10-10.md)에 exact input과
+    보존 ZIP을 연결했다. 원본 metadata는 `NONE / UNVERIFIED`이며 proof는 미커밋이다.
+    boundary signs, IVT, Z claim admission은 포함하지 않는다.
 - [ ] **Z-02 / endpoint signs.** small positive eta에서 첫 window 진입점의
-  `M > 0`을 source primitive에서 얻는다. second bump의 비음수성뿐 아니라 positive
-  subinterval과 양의 weight로 full weighted integral의 strict positivity를 얻는다.
+  `M > 0`을 source primitive에서 얻는다. second bump의 weighted full integral은
+  source `matrix` entry와 연결하고 `actual_matrix_entry` + `rowMoment_pos`의
+  strict positivity를 재사용한다. interval tail과 whole-line integral의 동일성을 닫는다.
   tail representation과 `c1 > 0`으로 **첫 window 상단**에서 `M < 0`을 닫는다.
   gap 내부 한 점의 음수 값만으로 window 내부의 영점 위치까지 확인했다고 하지 않는다.
-- [ ] **Z-03 / continuity와 IVT.** 같은 mass object의 연속성과 양 끝의 strict
-  signs로 `exists r in (lower(0), upper(0)), M(eta,r)=0`을 증명한다.
-  개구간 포함, XR/log/radial 변환, epsilon과 specification 조건을 유지한다.
-- [ ] **Z-04 / 완료·제외 범위.** §8.6을 닫은 named existence proposition만 승격한다.
-  영점 유일성, 첫 영점, 모든 eta의 부호, Q의 removable extension, Navier–Stokes
-  전체의 새 증명을 주장하지 않는다. terminal zero plateau와 endpoint-first-zero
-  가설 기각은 지우지 않고 Q의 domain obstruction을 정리한다.
-- [ ] **Z-05 / 다음 수학 질문.** 가정·비자명성·source 대비 추가 내용을 사람의
-  수학적 검토에 전달한다. compiled proposition과 독립적인 수학적 novelty를 구분한다.
-  Q 후보의 한계에서 다음에 시도할 질문 하나를 고르고, framework 증설을 연구 성과로
-  세지 않는다.
+  - [x] **Z-02A / 조건부 source bridge 구현 (2026-10-10).**
+    `P2_Z02_BoundaryMassSigns.lean`에 prefix positivity, lower mass positivity,
+    second-bump full moment positivity, upper-tail pointwise reduction/localization,
+    exact upper mass formula와 조건부 upper mass negativity를 작성했다.
+    C04를 import하지 않으며 upper sign은 source second coefficient positivity를 가정한다.
+    Lean compile 성공이나 named claim admission은 아니다.
+  - [x] **Z-02B / 개발 실행 준비.** `colab/run-z02-development.py`는
+    source `OutgoingProfile` → fresh Z01 → fresh Z02만 실행한다.
+    focused driver controls 12 PASS / Ruff PASS. 테스트는 Lean evidence가 아니다.
+  - [x] **Z-02C / 실제 개발 compile (2026-10-10).** 기존 `103659Z` run은
+    source/Z01 exit 0, Z02 exit 1의 Lean 적용 오류였다. 실패 ZIP을 보존하고
+    세 적용 지점만 수정한 뒤 별도 `112430Z`에서 source/Z01/Z02 모두 exit 0,
+    stderr empty, Z02 8개 axiom surface 일치, sorryAx absent를 확인했다.
+    성공 ZIP과 input/log/fresh artifact hashes를 D:에서 재대조했다.
+    [현재 준비 기록](../colab/Z02_DEVELOPMENT_2026-10-10.md).
+    성공/실패 모두 보존하고 `claim_authority: NONE / claim_status: UNVERIFIED`를 유지한다.
+- [x] **Z-03 / 조건부 continuity와 IVT 개발 compile (2026-10-10).**
+  같은 source mass primitive의 연속성, positive radial interval에서의 log continuity,
+  Z02 양 끝 strict signs로 `eta > 0`과 `secondCoeff > 0`을 가정한
+  `exists r in (lower(0), upper(0)), localMass(F,eta,r)=0`을 닫았다.
+  endpoints는 명시적으로 배제했다. source → fresh Z01 → Z02 → Z03 모두
+  exit 0 / stderr empty / 세 Z03 axiom surface 일치 / sorryAx absent.
+  [개발 실행 기록](../colab/Z03_DEVELOPMENT_2026-10-10.md)의 원본 ZIP을 D:에서
+  해시 대조했다. C04/epsilon/coordinate bridge는 포함하지 않았고 claim은 UNVERIFIED다.
+- [x] **Z-04 / Z04-core composition 개발 compile (2026-10-10).** coefficient alias, C04→Z03 composition,
+  `1 ≤ r`를 사용하는 source `Profile.M` coordinate bridge와 per-Profile
+  small-positive-eta first-repair interior mass-zero named proposition만 개발한다.
+  개발 compile 성공도 claim admission은 아니다. 영점 유일성, first-zero, 공통·수치
+  epsilon, J/Q 결론은 이 theorem에 섞지 않는다.
+  - [x] **Z-04A / 구현과 개발 driver 준비 (2026-10-10).**
+    `P2_Z04_FirstRepairInteriorZero.lean`에 네 named surface를 작성했고,
+    `colab/run-z04-development.py`는 pinned source → fresh F1–C04와
+    Z01–Z04의 두 branch를 같은 개발 run에서 생성하도록 준비했다.
+    focused controls 26 PASS / Ruff PASS는 Lean compile evidence가 아니다.
+  - [x] **Z-04B / 실제 개발 compile (2026-10-10).** 사용자의 Colab-only 복원
+    승인 후 pinned 환경을 새로 복원했다. 새 `164504Z` run에서 source → fresh
+    F1–C04 → Z01–Z04의 13단계 모두 exit 0 / stderr empty, fresh `.olean` 12개,
+    Z04 네 axiom surface 일치 / sorryAx absent를 확인했다. proof/runner bytes는
+    변경하지 않았다. ZIP·14 inputs·artifacts·logs hashes와 pre/post identity를
+    D:에서 재대조했다. `PASS[LOCAL_PROOF_COMPILE:P2_Z04_CORE]`이며 claim은
+    `NONE / UNVERIFIED`다. [개발 실행·보존 기록](../colab/Z04_DEVELOPMENT_2026-10-10.md).
+    Z+J, commit-bound replay와 receipt admission은 이 체크 완료에 포함하지 않는다.
+- [x] **Z-05 / bounded Z+J source map (2026-10-11).** Z04-core 성공 bytes를 변경하지 않고
+  pinned source의 `angularMoment_at_pulseStart`, `angular_integrand_pulse`,
+  `(pulse_closes_prefix).2`, `J_at_exp`, repair support를 대조했다.
+  `a1=a0-lam`, explicit definitions의 strict `upper(0)<lower(1)`,
+  mass-zero identity에서 `T0>0`·`c0<0`가 강제되는 경로와 S0/T0·S1/T1
+  weighted-tail 비교를 정적 검수했다. target은 특정 IVT witness가 아니라
+  `lower(0)<r<upper(0) ∧ M(r)=0 ∧ c1>0 -> J(r)>0` 구조 정리다.
+  [source map](M5_P2_ZPLUS_J_SOURCE_MAP_2026-10-11.md)은
+  `PASS[STATIC_PINNED_SOURCE_MAPPING] / claim_authority: NONE / formal UNVERIFIED`다.
+  `T0>0`만으로 pointwise `b0(r)>0`, uniqueness, simple-zero를 주장하지 않는다.
+- [x] **Z-06 / separate Z+J development module (development only).** Z-05가 살아남을 때만 별도 module로
+  구현·개발 compile한다. eta>0/C04 epsilon은 구조 정리의 hypothesis로 넣지 않고,
+  최종 existence composition에서만 공급한다. `T0>0`만으로 `b0(r)>0`, uniqueness,
+  simple-zero를 추론하지 않는다.
+  - [x] **Z-06A / 조건부 구조 정리 구현 (2026-10-11).**
+    `P2_ZPLUS_J_FirstRepairAngularMoment.lean`에 angular partial/tail identity,
+    future two-bump decomposition, mass-zero balance, `T0>0`·`c0<0`,
+    separated-window weighted-tail comparison와 조건부 `localAngularMoment>0`를
+    작성했다. source `Profile.J` 좌표 bridge와 small-eta existence composition은
+    포함하지 않았다. 구현 완료는 Lean compile 성공이나 claim admission이 아니다.
+  - [x] **Z-06B / 최소 개발 실행 준비 (2026-10-11).**
+    `colab/run-zplus-j-development.py`는 source `OutgoingProfile` → fresh Z01 →
+    Z02 → Z+J만 실행한다. focused controls와 frozen notebook 입력 대조 34 PASS / Ruff PASS.
+    이 테스트는 synthetic runner 검사이지 Lean evidence가 아니다.
+    [frozen-input launcher notebook](../colab/ZPLUS_J_DEVELOPMENT_2026-10-11.ipynb)을
+    준비했다. 설치·`lake update`·F1–C04/Z04 재실행은 하지 않는다.
+  - [x] **Z-06C / 첫 pinned Colab 개발 compile 실패 보존 (2026-10-11).**
+    app-internal browser에서 run `nsrw-zplus-j-development-20261011T090512460321Z`를 실행했다.
+    source / fresh Z01 / fresh Z02는 exit 0, stderr empty였고 Z+J는 exit 1이었다.
+    오류는 old line 120의 이미 닫힌 goal 뒤 tactic과 두 weighted-tail 비교의
+    inference/elaboration failure다. 수학적 반례로 취급하지 않는다.
+    Colab은 실패 ZIP 153910 bytes / SHA-256
+    `808fc0c346ce378ed63e8f87bfe801e19dee387d2df3a82455c5a3a1cbccb414`를 보고했지만
+    raw ZIP은 이후 현재 VM과 검사한 로컬 위치에서 발견되지 않았다. custody gap을
+    유지한다. 보존한 입력 사본을 원본 실행 archive로 대체하지 않으며, 이 공백은
+    사용자가 승인한 별도 성공 retry나 후속 수학을 무기한 막는 조건이 아니다.
+    수정 전 failed proof/runner/notebook exact worktree bytes는 D: evidence에 별도 복사했다.
+  - [x] **Z-06D / bounded retry bytes 준비 (2026-10-11).**
+    theorem statement·dependency·runner·Z04 bytes를 바꾸지 않고 세 elaboration/tactic 지점만
+    최소 수정했다. retry proof SHA-256:
+    `2af3c68a73530a97421b3bd971bae5e63bbfb60c1abb7f40361d6d347e875d4a`.
+    regenerated notebook SHA-256:
+    `c5cebfb2775de4195ef181315d30d4671bcae1db803e7768a875c40e7c44e00f`.
+    `D:/Sanctum/venv`에서 focused controls 34 PASS, Ruff PASS, `git diff --check` PASS.
+    이 검사는 Lean compile evidence가 아니다.
+  - [x] **Z-06E / 별도 retry pinned Colab compile (2026-10-11).**
+    `nsrw-zplus-j-development-20261011T135801314921Z`: source → fresh Z01 → Z02 → Z+J
+    4단계 exit 0 / stderr empty, fresh artifacts 3개, named axiom surfaces 12개,
+    `sorryAx` absent, proof SHA `2af3c68a…e875d4a` 유지.
+    `PASS[LOCAL_PROOF_COMPILE:P2_ZPLUS_J]`; claim은 `NONE / UNVERIFIED`다.
+    성공 ZIP: 323962 bytes, SHA-256
+    `58cdcaee6f057667e67030673c98121374fccefb82aaba00799f3c0ee73cc004`.
+    승인된 Drive 사본과 D: ZIP의 크기/SHA가 일치한다. 내부 CRC/안전한 member 이름,
+    16개 recorded hashes, 4 stages, 3 artifacts, 12 named axiom surfaces 대조 PASS.
+    `PASS[LOCAL_ARCHIVE_CROSSCHECK:ZPLUS_DEVELOPMENT]`; independent attestation은 아니다.
+    [실행·보존 기록](../colab/ZPLUS_J_DEVELOPMENT_2026-10-11.md).
+  - [x] **Z-06F / source-facing final composition (development only).**
+    `P2_ZPLUS_J_SourceComposition.lean`: `1 ≤ r`에서 `Profile.J` 좌표 bridge,
+    조건부 source J positivity, per-Profile small-positive-eta `M=0 ∧ J>0`를
+    동일 F/eta/r/X에서 연결한다. 기존 Z04와 Z+J proof는 변경하지 않는다.
+    최소 새 driver의 focused controls 24 PASS / Ruff PASS는 Lean evidence가 아니다.
+    새 full-DAG development run `20261011T144300398298Z`가 15/15 exit 0,
+    stderr empty, fresh artifacts 14개, 최종 named axiom surfaces 3개로 통과했다.
+    ZIP 807617 bytes, SHA `0268a15966db153997bcad83eec2b79581f2bfa973bd1b0bda90ddb8d7007a72`.
+    D: ZIP의 크기/SHA, CRC/member safety, 내부 recorded hashes 60개 대조 PASS.
+    `PASS[LOCAL_PROOF_COMPILE:P2_ZPLUS_J_COMPOSITION]`; claim `NONE / UNVERIFIED` 유지.
+    [최종 결합 개발 기록](../colab/ZPLUS_J_COMPOSITION_DEVELOPMENT_2026-10-11.md).
+- [x] **Z-07 / phase replay and separate claim review.** 성공한 exact bytes를 고정한 뒤
+  필요한 전체 dependency DAG를 한 clean run에서 replay할 수 있다. 같은 실행이 여러
+  named proposition의 실행 근거가 될 수 있으나 Z-core와 Z+J의 claim scope/receipt는
+  분리하고 shared trust domain을 각각 명시한다. Z+J가 HELD여도 Z-core는 독립적으로
+  replay/admission 가능하다.
+  - [x] **Z-07A / proof-only checkpoint.** 성공한 Z proof 6개만
+    `8581a511d4c60c52f8d37663fd49f70e4d835d64`로 commit/push했다.
+    raw SHA와 portable Git blob이 예상값과 일치한다. 기존 dirty docs는 제외했다.
+  - [x] **Z-07B / execution checkpoint.** 최소 wrapper/engine과 두 focused test 파일만
+    `3a50b5f50b034319a469b9de68f556be70fff02c`로 별도 commit/push했다.
+    focused controls 64 PASS; 로컬 전체 pytest 542 PASS / 3 skipped / coverage 90.29%,
+    Ruff/compileall PASS. 테스트는 Lean evidence나 GitHub CI green을 대신하지 않는다.
+    observer/preservation/notebook/docs는 authority input에서 제외했다.
+  - [x] **Z-07C1 / 새 clean replay.** `nsrw-z-phase-replay-20261011T150531375936Z`에서
+    exact checkpoint를 사용해 source → fresh F1…C04 → Z01…Z04 → conditional Z+J →
+    source composition을 한 번 실행했다. 15/15 exit 0 / stderr empty,
+    fresh artifacts 14개, committed inputs 17개, Z named axiom surfaces 19개 일치.
+    source/NSRW/base/target pre-post identity 일치; wrapper `NONE / UNVERIFIED` 유지.
+    `PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]`. [실행 기록](../colab/Z_PHASE_REPLAY_2026-10-11.md).
+  - [x] **Z-07C2 / 새 정식 replay D: archive review.** 별도 승인된 2026-10-12 recovery
+    run `nsrw-z-phase-replay-20261012T065216884451Z`는 같은 `3a50b5f...` checkpoint에서
+    15/15 exit 0 / stderr empty로 종료했다. 새 outer ZIP 815996 bytes,
+    SHA `bd109a6f0db1eaaa1e6054d5ba16f8e07696434f7ffebb5527128f721267d74b`를
+    private Drive와 D:에 보존했고 raw size/SHA 및 내부 hash 60개, fresh artifacts 14개,
+    committed inputs 17개, axiom surfaces 19개를 대조했다.
+    `PASS[LOCAL_ARCHIVE_CROSSCHECK:Z_PHASE_REPLAY]`, claim `NONE / UNVERIFIED` 유지.
+    [새 실행·보존 기록](../colab/Z_PHASE_REPLAY_2026-10-12.md).
+    이전 10/11 outer ZIP 815297 bytes / `ff47b49f...`는 현재 VM과 검사한 Drive/D: 위치에
+    없으며 보존 gap을 유지한다. 새 run은 그 이전 ZIP을 복구·재구성한 것이 아니다.
+    개발 ZIP이나 서로 다른 run의 일부 증거를 조합해 admission하지 않는다.
+  - [x] **Z-07D / separate receipts (2026-10-12).**
+    [Z-core](stage_receipts/P2_Z_CORE_COLAB_2026-10-12.md)는 source-facing 첫 window M-zero
+    존재를, [Z+J](stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md)는 조건부 local/source J positivity와
+    동일 witness source M=0/J>0를 admission했다. 같은 실행·trust domain을 공개했고,
+    nonfatal linter warning과 이전 lost-archive gap을 숨기지 않았다. claim 범위는 분리한다.
+  - [x] **Z-07E / current docs sync.** receipt admission 이후 ledger/README/checklist/
+    formal README/P2 note/docs index를 정확한 named CONFIRMED scope로 동기화했다.
+    역사 snapshot과 stable policy는 재작성하지 않는다. 실행 pin은 `3a50b5f...` 그대로다.
+    실행 checkpoint는 불변이며 후속 공개 문서 commit과 별도 identity를 갖는다.
+  - [x] **NG-01A / 로컬 공개 파생본 구성·무결성 검사 (2026-10-13).** exact 입력,
+    후속 receipt 스냅샷, 선별 axiom 출력과 bounded stage 요약을 구성했다.
+    원본 ZIP/실행 pin은 불변이며 raw logs/runtime metadata/olean/cache는 의도적으로 제외한다.
+    자동 hash 검사는 사람의 개인정보·재배포 권리 검수나 독립 attestation이 아니다.
+  - [ ] **NG-01B / 공개 내용·권리·개인정보 검수.** 최신 파생본의 실제 구성 파일,
+    추출 후 링크와 checksum을 검수하고 human review를 기록한다. 이전 후보는 보존한다.
+  - [ ] **NG-01C / 버전·문서·배포.** [v0.4.0 초안](releases/v0.4.0.md)에 따라
+    정확한 변경 inventory와 software/docs 검증을 확인한 뒤 version/tag/Release를 결정한다.
+    2026-10-14에 NSRW + P01 최종 배포 점검, commit/push 및 exact-commit hosted CI
+    성공 후 v0.4.0 tag/Release·Zenodo 확인이 승인됐다. 패키지 버전은 0.4.0으로
+    준비한다. 실제 게시/DOI는 관측 후 기록하며 실행 checkpoint 3a50b5f...는 불변이다.
+    P02/P03·응용 초안·사이트 배포는 이번 공개에서 제외한다.
+    uniqueness/simple-zero/Q pole/quantitative epsilon은 이번 phase 완료 조건이 아니다.
 
 ### 8.6 공통 gate — 새로운 named proposition마다 적용
 
@@ -485,9 +815,29 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
   full-library stress build, release/tag를 이 chain에 추가하지 않는다.
   direction map은 안정된 방침 변경 때만 수정하고 실행 이력은 dated receipt에 둔다.
 
-전체 C02/환경 복원 증거 archive의 D: 보존과 해시 대조는 완료했다.
-다음은 별도 commit/push 승인을 받아 **C-02C exact-bytes checkpoint와 clean replay**로 간다.
-성공한 C-02B 개발 실행을 다시 반복하거나 기존 run을 authority receipt로 이름 바꾸지 않는다.
-C-01 receipt는 main-only 세 proposition만 닫았다. actual 계수 부호와 first-window zero는
-C-02~04와 Z의 별도 proof/receipt를 요구한다.
+별도 C-02C, C-03C와 C-04C 원본 ZIP의 `colab/evidence/` 보존과 해시 대조는 완료했다.
+각 개발 기록을 재사용하지 않은 새 commit-bound replay와 별도 receipt로 admission했다.
+C03은 actual zero identity·zero positivity·global continuity 세 명제만 닫았다.
+C04는 별도 10/10 receipt에서 per-Profile positive-eta existential radius 하나만 닫았다.
+Z-01의 static coordinate/support/derivation map과 Z-01D의 두 Lean identity 개발 compile은 완료했다.
+Z-02 first-window boundary signs는 **PASS[LOCAL_PROOF_COMPILE:P2_Z02]**이다.
+성공 `112430Z`와 실패 `103659Z`의 evidence는 분리 보존했다.
+Z03 조건부 IVT는 별도 `115139Z`에서 개발 compile을 통과했고 evidence를 보존했다.
+당시 Z01/Z02/Z03/Z04-core 개발 실행 metadata는 NONE / UNVERIFIED였으며 그대로 보존한다. bounded Z+J source map은
+static mapping PASS이며 separate Z+J module과 최소 driver는 구현했다. 첫 pinned Colab
+개발 compile은 Z+J elaboration/tactic 오류로 실패했고 source/Z01/Z02는 통과했다.
+실패 proof/runner/notebook bytes는 로컬에 보존했지만 raw failed ZIP의 D: transfer/re-hash는
+미완료이며 현재 검사한 VM/로컬 위치에 원본이 없다. 이 custody gap은 보존한다.
+별도 retry와 source J bridge + 동일 witness 최종 composition은 개발 PASS다.
+두 성공 ZIP은 Drive/D: 크기·SHA·내부 recorded hashes 대조까지 통과했다.
+Z-07의 proof-only / execution checkpoint를 분리 commit/push했고 새 clean full-DAG
+replay도 PASS했다. 10/11 ZIP 보존 gap 이후 별도 승인된 10/12 새 replay는 private Drive/D:
+archive 검수와 별도 Z-core/Z+J receipt admission까지 완료했다.
+named source M-zero 존재, 조건부 J positivity와 동일 점 M=0/J>0는 CONFIRMED다.
+Z01–Z03은 같은 replay의 fresh compiled supporting dependencies이며 별도 receipt를 늘리지 않는다.
+원본 개발/정식 실행 metadata는 NONE / UNVERIFIED를 유지한다.
+공통·수치 epsilon, uniqueness/simple-zero/Q pole은 닫히지 않았다.
+현재 문서 변경은 아직 commit/push하지 않았다.
+C-01 receipt는 main-only 세 proposition만 닫았다. actual 계수의 작은 양의 eta 부호는
+별도 C04 receipt로 닫혔고 first-window zero는 별도 Z-core receipt로 닫혔다.
 이후 proof 구현·실행은 해당 작업의 승인 범위에 따라 진행한다.

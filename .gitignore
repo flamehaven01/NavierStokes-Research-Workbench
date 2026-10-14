@@ -13,3 +13,46 @@ outputs/*
 !outputs/.gitkeep
 # Raw local Colab evidence: retain locally, publish only reviewed summaries.
 colab/evidence/
+# Local session launch/restore/observe helpers; keep proof engines and tests public.
+colab/c03-*.py
+colab/c04-*.py
+colab/c04c-*.py
+colab/z*-start.py
+colab/z*-observe.py
+colab/z*-summary.py
+colab/z*-evidence.py
+colab/zplus-j-preserve-drive.py
+colab/z02-development-retry.py
+# Accidental raw outputs outside the normal evidence subtree.
+colab/*.zip
+colab/*.log
+colab/*.olean
+colab/*.ilean
+# Unapproved text/evidence candidates and machine-local build/review helpers.
+publication/p2-z-phase-*-candidate/
+publication/*_BUILD_REVIEW_*.md
+publication/*.zip
+publication/*.zip.sha256
+scripts/build-p2-z-held-derivative.*
+scripts/inspect-p2-z-private-evidence.*
+scripts/prepare-p2-z-publication-candidate.ps1
+scripts/check-p2-z-publication-candidate.ps1
+scripts/review-p2-z-held-derivative.ps1
+# Internal manuscript preparation/review records are not publication assets.
+/research-papers/private/
+# P02/P03 manuscripts are deferred from the first Software + P01 publication.
+/research-papers/P02_*.md
+/research-papers/P03_*.md
+/research-papers/latex/P02_*.tex
+/research-papers/latex/P03_*.tex
+/research-papers/pdf/P02_*.pdf
+/research-papers/pdf/P03_*.pdf
+/research-papers/SHA256SUMS-v0.2
+/research-papers/SHA256SUMS-v0.3
+/research-papers/SHA256SUMS-v0.4
+research-papers/REVIEW_TRACKER.md
+research-papers/ROUND*_REVIEW_*.md
+research-papers/AUTHOR_PREPARATION_RECORD_*.md
+research-papers/REVISION_NOTES_*.md
+research-papers/RELEASE_PREPARATION_*.md
+# Ignore is not erasure or a privacy guarantee; tracked files remain tracked.

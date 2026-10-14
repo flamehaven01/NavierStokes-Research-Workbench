@@ -1,0 +1,31 @@
+{
+  "format": "FH-RESEARCH-PACK/1",
+  "task_id": "NSRW-P2-Z01-2026-10-10",
+  "question": "Can the admitted per-Profile C04 coefficient sign be connected to the exact source mass at the first repair window boundaries?",
+  "research_level": "WORK",
+  "date_boundary": "2026-10-10",
+  "source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538",
+  "sources": [
+    {"source_id": "S1", "title": "OutgoingSchedule.lean", "url": "https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean", "source_class": "primary", "access_mode": "direct", "retrieved_on": "2026-10-10", "limitations": ["Pinned source inspection only; new arbitrary-radius mass/tail lemmas not compiled."]},
+    {"source_id": "S2", "title": "OutgoingProfile.lean", "url": "https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingProfile.lean", "source_class": "primary", "access_mode": "direct", "retrieved_on": "2026-10-10", "limitations": ["M_at_exp requires global log coordinate y >= 0; not a dilation/XR theorem."]},
+    {"source_id": "S3", "title": "LocalizedMomentRepair.lean", "url": "https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/LocalizedMomentRepair.lean", "source_class": "primary", "access_mode": "direct", "retrieved_on": "2026-10-10", "limitations": ["Support and matrix definitions do not themselves admit a source mass-zero proposition."]},
+    {"source_id": "S4", "title": "OutgoingPulseBounds.lean", "url": "https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean", "source_class": "primary", "access_mode": "direct", "retrieved_on": "2026-10-10", "limitations": ["Whole-line actual matrix entry must still be linked to the interval tail integral."]},
+    {"source_id": "S5", "title": "CorrectedPulseAmplitude.lean", "url": "https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/CorrectedPulseAmplitude.lean", "source_class": "primary", "access_mode": "direct", "retrieved_on": "2026-10-10", "limitations": ["Qualitative amplitude_pos is distinct from numerical specification/error bounds."]},
+    {"source_id": "S6", "title": "PulseAmplitude.lean", "url": "https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/PulseAmplitude.lean", "source_class": "primary", "access_mode": "direct", "retrieved_on": "2026-10-10", "limitations": ["mainPulse_nonneg requires a nonnegative argument."]}
+  ],
+  "claims": [
+    {"claim_id": "Z01-COORD", "text": "For fixed F and 1 <= r <= exp(c.pulseLength), the planned local mass at B+log r equals F.M eta (exp B*r), directly through M_at_exp; K is a pulse-integral prefactor, not a factor between those masses.", "status": "SUPPORTED", "source_refs": ["S1", "S2"], "counterevidence_refs": [], "remaining_falsifiers": ["A missed y >= 0 premise or inconsistent radial/log object in the external formal bridge."]},
+    {"claim_id": "Z01-SUPPORT", "text": "The main pulse ends before window 0; the separated open bump supports imply early correction zero and main/first-bump zero on the tail starting at upper(0), including that boundary.", "status": "SUPPORTED", "source_refs": ["S1", "S3"], "counterevidence_refs": [], "remaining_falsifiers": ["Failure to derive the stated pointwise reductions at the endpoints from support membership."]},
+    {"claim_id": "Z01-TAIL", "text": "The partial mass identity and endpoint cancellation supply a reusable arbitrary-radius tail identity on 1 <= r <= R; new external Lean assembly is still required.", "status": "SUPPORTED", "source_refs": ["S1", "S2"], "counterevidence_refs": [], "remaining_falsifiers": ["Unclosed interval-integrability, substitution or adjacent-interval obligations."]},
+    {"claim_id": "Z01-MATRIX", "text": "The weighted full second-bump integral is matrix entry (0,1), equal to a positive rowMoment times a positive exponential. It need not be reproved with a new general strict-integral-positivity argument.", "status": "SUPPORTED", "source_refs": ["S3", "S4"], "counterevidence_refs": [], "remaining_falsifiers": ["Failure to identify the upper-tail interval integral with this same whole-line matrix entry."]},
+    {"claim_id": "Z01-LOWER", "text": "The planned lower mass sign uses prefixM >= 4, positive actual amplitude and nonnegative main pulse before the first repair; all signs refer to the same Profile.", "status": "SUPPORTED", "source_refs": ["S1", "S3", "S5", "S6"], "counterevidence_refs": [], "remaining_falsifiers": ["A missed early-support or nonnegative-log premise, or failure of the partial-mass identity."]},
+    {"claim_id": "Z01-DOMAIN", "text": "The inspected exact ingredients for this route do not require eta^2 <= 1, amp > 9/10 or lam <= 1/120. This is not a proof that every future Z implementation can omit every domain condition.", "status": "SUPPORTED", "source_refs": ["S1", "S2", "S3", "S4", "S5", "S6"], "counterevidence_refs": [], "remaining_falsifiers": ["A future indispensable lemma requires an additional hypothesis not accounted for in the mapped route."]}
+  ],
+  "coverage": {
+    "searched_lanes": ["primary_pinned_source", "local_C04_receipt_and_exact_external_definition"],
+    "degraded": ["No independent evidence lane, literature review or new Lean execution; this is source alignment, not novelty or theorem admission."],
+    "stopping_reason": "Exact source declarations resolved the coordinate, support and matrix-entry paths; remaining work is external formal assembly."
+  },
+  "limitations": ["C04 admission remains bound to its separate dated receipt, not this inventory.", "Z signs, continuity/IVT and existence are not compiled or admitted by this source map.", "No source-wide absence claim or uniform/numerical epsilon is made.", "All inspection and synthesis share the current trust domain."],
+  "overall_status": "SUPPORTED"
+}

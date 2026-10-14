@@ -2,22 +2,41 @@
 
 <!-- MICA:INVOKE manifest="mica.yaml" -->
 
+NSRW investigates the moment structure of a pinned outgoing-profile construction.
+Its current result is a **mass cancellation without angular-history cancellation
+at the same point**, derived from two separated repair pulses and compiled as
+source-bound Lean propositions.
+
+For every fixed source `Profile F`, there exists a Profile-dependent
+`epsilon_F > 0` such that **every** `0 < eta < epsilon_F` admits
+`r ∈ (lower(0), upper(0))` with
+
+\[
+M_F(\eta,X_r)=0\quad\land\quad J_F(\eta,X_r)>0,
+\qquad X_r=\exp(B_F)r,\quad B_F=F.data.core.pulseStart.
+\]
+
+The witness may depend on eta. This is not a numerical root, uniform radius,
+first/unique zero or a Navier–Stokes solution. The result and its mechanism are
+explained below; receipts and reproduction tools document their bounded scope.
+
 [![Software CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
 [![Checkpoint tag](https://img.shields.io/github/v/tag/flamehaven01/NavierStokes-Research-Workbench?label=checkpoint)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/tags)
 [![Python requirement](https://img.shields.io/badge/Python-%E2%89%A53.10-blue)](pyproject.toml)
 [![Pinned Lean](https://img.shields.io/badge/pinned_Lean-4.34.0--rc2-blue)](formal/p2/README.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Software license: MIT](https://img.shields.io/badge/Software_license-MIT-yellow.svg)](LICENSE)
 
 Badges describe software CI, Git tags, environment requirements, and licensing.
 They do not certify a mathematical result. A checkpoint tag is not necessarily
 a published GitHub Release; P2 proof evidence lives in individual dated receipts.
+Software and Lean proof files remain MIT; the selected P01 manuscript text
+uses [CC BY 4.0](research-papers/LICENSE-PAPERS.md).
 
-NSRW is an open research-lab workbench investigating bounded mathematical
-consequences of a pinned Navier–Stokes construction. The current P2 study asks
-where a scale-invariant ratio fails, rather than treating scaling as sufficient
-evidence that the ratio is useful. Source analysis has rejected one of our own
-candidate assumptions; separate Lean modules have compiled narrow comparison
-and repair-coefficient results. Reproduction tools support this research.
+The pinned construction is from OpenAI's `NavierStokesAndEuler` repository at
+`8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538`. NSRW's investigation began with the
+candidate ratio `Q=J/(M H)`, but the M/J mismatch is a property of the source
+Profile that can be stated without introducing Q. It is not a finding that the
+upstream theorem is wrong, and literature novelty has not been established.
 
 **Start here:** [Research roadmap](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
 · [Current P2 work](#current-p2-research)
@@ -25,10 +44,12 @@ and repair-coefficient results. Reproduction tools support this research.
 · [Reproduce P2](#reproduce-the-current-p2-artifacts)
 · [Run software checks](#running-the-workbench)
 · [Documentation index](docs/README.md)
+· [Software citation](CITATION.cff)
+· [Research papers and review plan](research-papers/README.md)
 
 ## Current P2 research
 
-**Evidence snapshot: 2026-10-07.** The findings and table below describe that
+**Evidence snapshot: 2026-10-12.** The findings and table below describe that
 snapshot, not the live Colab VM. Consult the
 [dated checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) and individual
 receipts for subsequent execution history.
@@ -40,9 +61,31 @@ are not evidence of a current successful run. Use the
 [restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) and pinned
 inputs for execution; individual dated receipts record admitted proof evidence.
 
-The study follows `Q = J / (M H)` into the repair geometry of the pinned
-construction. Its [mathematical note](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md)
-distinguishes source-derived arguments from propositions with compiled receipts.
+### Why the two histories do not cancel together
+
+Let `c0,c1` be the actual axial repair coefficients. At an interior first-window
+mass zero, write `T0,T1` for the future bump moments with weight `x^a0`, and
+`S0,S1` for the corresponding moments with weight `x^(a0-lambda)`.
+Mass cancellation gives `c0*T0+c1*T1=0`. With `c1>0` and `T1>0`, it forces
+`T0>0` and `c0<0`. The first and second supports satisfy `u0<l1`, while
+`x^(-lambda)` strictly decreases for positive x:
+
+```text
+S0 >= u0^(-lambda)*T0;   S1 <= l1^(-lambda)*T1
+c0*S0+c1*S1 <= c1*T1*(l1^(-lambda)-u0^(-lambda)) < 0.
+```
+
+Source angular history is the negative of this tail times a positive factor,
+so **J is positive where M vanishes**. The conditional theorem requires the
+interior-window location, `M=0` and actual `c1>0`, but **not eta>0**. A separate
+coefficient-neighborhood theorem and IVT supply such a point for every
+sufficiently small positive eta of each fixed Profile.
+
+At that point our prospective `Q=J/(M H)` fails its nonzero-denominator
+condition. This does not prove a pole or divergence, nor show that the upstream
+proof relies on Q. See the [P2 argument](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md#c4b-separated-supports-and-different-weighted-cancellations)
+for definitions and the exact source-coordinate bridge. No velocity/vorticity,
+forcing, singularity mechanism or practical-solver conclusion follows here.
 
 ### Research findings so far
 
@@ -58,11 +101,27 @@ distinguishes source-derived arguments from propositions with compiled receipts.
 - **The main-only second repair coefficient is compiled positive.** C01 binds
   that result to the source repair system. This component is not actual
   `c1(0)` or `c1(eta)`.
-- **The actual-coefficient bridge is advancing, not closed.** C02's two
-  decomposition equalities passed development compilation on 2026-10-07;
-  commit-bound admission remains pending. Actual coefficient signs and the
-  first-repair interior-zero formal proof remain open. The small-positive-eta
-  zero argument is supported analytically, not yet formally admitted.
+- **The actual-coefficient decomposition is compiled.** C02's two
+  equalities were admitted after a separate clean commit-bound replay on
+  2026-10-07 and archive review; that receipt admits no sign claim.
+- **The actual coefficient is positive at zero and continuous.** C03's
+  separate 2026-10-08 receipt confirms the zero product identity, `c1(0) > 0`,
+  and continuity as a function of `eta`, for every pinned-source `Profile F`.
+- **A per-Profile positive neighborhood is compiled.** C04's separate
+  2026-10-10 receipt confirms: for every fixed source `Profile F`, there exists
+  `epsilon(F) > 0` such that `0 < eta < epsilon(F)` implies actual `c1(eta) > 0`.
+  No uniform or numerical radius is admitted. The first-repair interior-zero
+  claim is not thereby admitted.
+- **A first-window mass zero and angular mismatch are compiled and admitted.**
+  The [Z-core receipt](docs/stage_receipts/P2_Z_CORE_COLAB_2026-10-12.md) confirms
+  a source-facing interior M-zero for sufficiently small positive eta, with a
+  Profile-dependent epsilon. The [separate Z+J receipt](docs/stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md)
+  confirms conditional J positivity at every admissible first-window M-zero
+  with `c1 > 0`, and the final existence of **one shared point** with
+  `Profile.M = 0 ∧ Profile.J > 0`. Both scopes were reviewed against the same
+  preserved 2026-10-12 clean replay; separate receipts are not independent
+  executions or independent attestation. No numerical root, uniqueness or
+  Q pole/limit is admitted.
 
 We falsified one of **our own candidate assumptions**, not the upstream theorem.
 These findings do not establish a new Navier–Stokes solution, manuscript–Lean
@@ -93,24 +152,31 @@ and [D module](formal/p2/P2_D_DeltaMComposition.lean).
 
 ### Current mathematical chain
 
-Proof labels (`L1`, `F1`, `L2`, `L3`, `D`, `C01`, `C02`) name mathematical
-modules. Checklist labels `C-02A/B/C` instead distinguish implementation,
-development compilation, and commit-bound replay/admission of the **same C02
-module**; they are not three additional mathematical results.
+Proof labels (`L1`, `F1`, `L2`, `L3`, `D`, `C01`, `C02`, `C03`, `C04`) name mathematical
+modules. Checklist labels `C-02A/B/C`, `C-03A/B/C` and `C-04A/B/C` instead distinguish
+implementation, development compilation, and commit-bound replay/admission of
+the **same respective module**; they are not additional mathematical results.
 
 ```text
 L1 → F1 → strict L2 ─┐
                     ├→ D: deltaM < 0 → C01: main-only coefficient > 0
              L3 ────┘
 
-OutgoingProfile → C02: actual decomposition (development compile only)
-                    ↓ commit-bound replay still pending
-                 C03 / C04: actual sign and continuity → Z: first-window zero
+OutgoingProfile → C02: actual decomposition (two equalities confirmed)
+                    ↓ combined with C01 and the same Profile's amplitude
+                 C03: actual c1(0) > 0 and continuity (confirmed)
+                    ↓
+                 C04: per-Profile small-positive-eta sign (confirmed)
+                    ↓
+                 Z-core: first-window zero (confirmed)
+                    + Z+J: conditional local angular mismatch (confirmed)
+                    ↓
+                 same-point source M=0 and J>0 (confirmed; shared replay, separate reviews)
 ```
 
 The two branches have distinct compiled dependencies. C02 imports only the
-upstream `OutgoingProfile`, not the external F1/L2/L3/D/C01 chain; C03 is where
-its decomposition must be combined with main-only positivity.
+upstream `OutgoingProfile`, not the external F1/L2/L3/D/C01 chain; C03 combines
+its decomposition with main-only positivity and the same Profile's amplitude.
 
 | Step | Recorded result | Evidence / next gate |
 |---|---|---|
@@ -120,14 +186,25 @@ its decomposition must be combined with main-only positivity.
 | L3 | Template-moment comparison confirmed | [Compiled receipt](docs/stage_receipts/P2_L3_COLAB_2026-10-06.md) |
 | D | `NSRW.P2.deltaM c < 0` confirmed for the NSRW-defined difference above | [Compiled composition receipt](docs/stage_receipts/P2_D_COLAB_2026-10-06.md) |
 | C01 | Main-only repair coefficient positivity confirmed | [Compiled receipt](docs/stage_receipts/P2_C01_COLAB_2026-10-06.md); not actual `c1(eta)` |
-| C02 | Two decomposition equalities passed development compile; claim admission unverified | [Development handoff](colab/C02_DEVELOPMENT_2026-10-07.md); C-02C clean commit-bound replay pending |
-| C03–C04 / Z | Actual coefficient sign and first-repair zero formal closure open | Separate downstream amplitude, continuity, and partial-tail obligations |
+| C02 | Two decomposition equalities confirmed; no coefficient sign admitted | [Commit-bound receipt](docs/stage_receipts/P2_C02_COLAB_2026-10-07.md) |
+| C03 | Actual zero product identity, `c1(0) > 0`, and continuity on all `Real` confirmed for each source Profile | [Commit-bound receipt](docs/stage_receipts/P2_C03_COLAB_2026-10-08.md); not a uniform epsilon or neighborhood-sign theorem |
+| C04 | Per-Profile existential positive radius for `0 < eta < epsilon(F)` confirmed | [Commit-bound receipt](docs/stage_receipts/P2_C04_COLAB_2026-10-10.md); no uniform or numerical epsilon |
+| Z-core | Source-facing interior M-zero confirmed for per-Profile small-positive eta | [Scoped receipt](docs/stage_receipts/P2_Z_CORE_COLAB_2026-10-12.md); not a first/unique zero |
+| Z+J | Conditional angular mismatch and same-point source M=0/J>0 confirmed | [Separate scoped receipt](docs/stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md); same replay/trust domain as Z-core; no Q pole/limit |
 
-**At this snapshot, the next mathematical admission gate is C-02C**, not another
-C02 development compile. The original successful development evidence is
-preserved locally, but has `claim_authority: NONE`. A replay wrapper is now
-implemented at [the runner checkpoint](scripts/run-p2-c02-replay.py); its existence
-does not close that gate. The
+**At this snapshot, Z-core and bounded Z+J mathematical phase review is complete.**
+The [new clean replay](colab/Z_PHASE_REPLAY_2026-10-12.md), its private Drive/D:
+archive crosscheck, and separate receipts close the named mass-zero and M/J
+mismatch scopes. Original execution metadata remains `NONE / UNVERIFIED`;
+subsequent receipt review records claim admission. Next is the separately
+authorized public reproduction/technical-note preparation, not another Lean run.
+Raw archives are still private, external reproduction remains unperformed, and
+neither publication nor application readiness follows from this phase close.
+No epsilon common to all Profiles or numerical radius is admitted. C04's replay remains pinned to
+`10d5a1f517b8665137f2354746d70752f8ef67fd`; C03 retains its separate `d7e41b9...`
+checkpoint. Z's execution remains pinned to `3a50b5f50b034319a469b9de68f556be70fff02c`.
+Later documentation does not replace any execution pin. Runner metadata still has
+`claim_authority: NONE`; admission is recorded separately in the receipt. The
 [restart checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) separates
 implementation, development compilation, and receipt admission.
 
@@ -174,8 +251,8 @@ They do not install dependencies or admit claims automatically. See the
 and [Colab storage instructions](colab/README.md) for preservation.
 
 L2-A's normalized representation/positivity bridge is distinct from **strict
-L2's comparison theorem**. C02's development handoff is not a commit-bound
-receipt. No current P2 claim is established by running manufactured controls.
+L2's comparison theorem**. C02's development handoff is not its later, separate
+commit-bound receipt. No current P2 claim is established by running manufactured controls.
 
 ### Public evidence access and external review
 
@@ -187,11 +264,28 @@ reported run. The public inputs support a new replay, not direct inspection of
 our retained execution bundle. See the [storage policy](colab/README.md).
 
 A reviewed public evidence bundle could improve inspection of recorded runs,
-but none is promised here. Publishing one requires checking privacy, licensing,
-completeness and its exact relation to the receipt. It would still not be an
-independent reproduction or semantic proof audit by itself.
+and a local derivative has been assembled and checksum-checked as of
+2026-10-13. It is still quarantined, not a published download. Raw logs, runtime
+metadata and compiled binaries are deliberately excluded; the candidate contains
+exact inputs, post-execution receipts, selected axiom lines and a bounded stage
+summary. Publication still requires human privacy, redistribution-rights and
+content review. It would not be independent reproduction or semantic proof audit.
 
-External review is welcome, starting with two bounded targets:
+### Publication and release preparation
+
+The [v0.4.0 — Z-core / bounded Z+J](docs/releases/v0.4.0.md) release candidate
+packages the admitted mathematical phase and the P01 manuscript. Its package
+version is `0.4.0`; the tag and GitHub Release are issued only after the exact
+candidate's hosted CI succeeds. P02/P03 publication is deferred. The original
+execution checkpoint and historical tags/notes are unchanged.
+
+The [publication plan](docs/NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md)
+separates local assembly, human review, version/tag preparation and external
+publication. A later software/docs tag must not replace the proof execution
+checkpoint `3a50b5f50b034319a469b9de68f556be70fff02c`. No DOI, public ZIP URL,
+new hosted CI result or independent attestation is claimed here.
+
+External review is welcome, starting with these bounded targets:
 
 1. **Terminal zero plateau:** check the support intervals and exact endpoint
    cancellation in the [P2 study](docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md).
@@ -202,6 +296,12 @@ External review is welcome, starting with two bounded targets:
    definition, strict-L2/L3 inputs and positivity needed for division. To test
    reproduction, use the receipt's exact commit and pinned source/toolchain,
    retaining your own commands, logs and exit codes.
+3. **Final Z-core / Z+J statements:** inspect the two 2026-10-12 receipts linked
+   above. Check the per-Profile epsilon quantifier, strict first-window membership,
+   coefficient alias and M/J coordinate bridges, and that the final conjunction
+   uses the same witness. A new replay should use exact checkpoint `3a50b5f...`,
+   not combine fragments from different executions. No independent replay has
+   yet been recorded.
 
 Please identify the precise statement, source location and hypothesis at issue.
 For a replay, include input identities and distinguish an invocation/cache
@@ -301,6 +401,8 @@ statement.
 | `formal/p2/` | Source-bound external Lean modules and their reproduction guide |
 | `scripts/run-p2-*-replay.py` | Stage-specific commit-bound replay runners |
 | `docs/` | Designs, checklists, boundaries, receipts, and research map |
+| `docs/releases/` | Historical checkpoint notes and explicitly held release drafts |
+| `publication/` | Local publication preparation; unapproved candidates are Git-ignored |
 
 ## Installation
 
@@ -352,6 +454,14 @@ The GitHub Actions pipeline contains three job families:
 2. deterministic artifact replay, structural-check dependency identity, and mutation checks;
 3. pinned upstream Lean builds for the exact Navier--Stokes targets consumed by M4.
 
+Python jobs also check documentation/public-file boundaries and preserve JUnit/
+coverage reports on success or failure. Checks detect indexed files that bypass
+ignore rules and missing/mismatched declared Z replay inputs. Checkout credential
+persisting is disabled; action pins and read-only workflow permissions are retained.
+No job automatically tags, publishes a Release or distributes held evidence.
+See [CI/CD verification boundaries](docs/CI_CD_VERIFICATION_BOUNDARIES.md) for
+failure-report scope, unchecked anchors, dependency limits and the hosted gate.
+
 Generated runtime outputs are ignored by Git. Reviewable bounded receipts live
 under `docs/stage_receipts/`. A hosted CI PASS remains scoped to the workflow's
 declared targets and cannot establish paper correctness or theorem equivalence.
@@ -366,13 +476,18 @@ python -m compileall -q src
 
 ## Current mathematical frontier
 
-After C-02C's commit-bound decomposition replay, C03 must combine that equality
-with C01 and the **same fixed Profile's** corrected amplitude to establish
-actual `c1(0)` positivity and continuity. C04 then asks for a construction-dependent
-`epsilon > 0` with positivity for `0 < eta < epsilon`. Z must separately connect
-that sign to partial weighted tails and a first-repair-window mass zero.
-None of these downstream propositions is admitted by C01 or C02 development
-success. See the [active checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md).
+C-02C's decomposition receipt and the separate C03/C04 receipts are admitted. C03 combines
+that equality with C01 and the **same fixed Profile's** corrected amplitude:
+actual `c1(0)` positivity and continuity on all `Real` are confirmed.
+C04 confirms a Profile-dependent `epsilon(F) > 0` with positivity for
+`0 < eta < epsilon(F)`. The separate Z-core and Z+J receipts now confirm
+source M-zero existence and same-point M=0/J>0 in the first repair window.
+The bounded phase is closed; its public reproduction/technical-note preparation
+is the next work, under separate authorization. Remaining mathematical questions
+include negative/non-small eta geometry and possible quantitative or simple-zero
+strengthenings; none is required for this phase close or already admitted.
+The Z results are not inherited from C01/C02's receipts. See the
+[active checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md).
 
 ## Deferred numerical comparators
 
@@ -409,6 +524,7 @@ or held.
 - [Lean reproduction capsule](formal/p2/README.md)
 - [Research direction map](docs/NAVIER_STOKES_NORTH_STAR_MAP.md)
 - [Changelog](CHANGELOG.md)
+- [v0.4.0 release notes and distribution scope](docs/releases/v0.4.0.md)
 
 For AI maintainers: [AGENTS.md](AGENTS.md) identifies the
 [MICA manifest](mica.yaml), which selects short maintenance memory and a

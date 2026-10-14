@@ -6,6 +6,55 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+No additional changes are recorded above the v0.4.0 candidate below.
+
+## [0.4.0] - 2026-10-14
+
+Approved release candidate; tag/publication follows the exact commit's hosted CI.
+See [release notes](docs/releases/v0.4.0.md). The proof execution checkpoint is
+separate from the software release commit.
+
+### Added
+
+- Software citation metadata for Yun Kwansub, without invented affiliation,
+  ORCID, unpublished release date or DOI.
+- P01 mathematical manuscript with standalone LaTeX/PDF, CC BY 4.0 text,
+  MIT proof/code and a P01-only checksum manifest; P02/P03 remain deferred.
+- Separate C02, C03 and C04 receipts for actual coefficient decomposition,
+  positivity at zero/continuity, and a Profile-dependent positive-eta radius.
+- Z01–Z04 mass identities, boundary signs, conditional IVT and source-coordinate
+  bridges, plus conditional Z+J angular mismatch and same-witness source
+  `Profile.M = 0` / `Profile.J > 0` composition.
+- Separate 2026-10-12 Z-core and Z+J receipts from one shared clean replay at
+  `3a50b5f50b034319a469b9de68f556be70fff02c`; cache reuse and shared trust domain
+  are explicit. These are narrow named-proposition admissions, not independent
+  reproduction or new general Navier–Stokes conclusions.
+- A local, held reproduction derivative: exact committed inputs, receipt
+  snapshots, selected axiom output and a bounded stage summary, with internal
+  member checksums and a separate external ZIP digest. It is not a download asset.
+
+### Changed
+
+- CI checks public-file/index boundaries and declared Z input blobs, compiles
+  repository Python scripts/engines and preserves narrowly scoped JUnit/coverage
+  reports on failure. Checkout credential persistence is disabled; existing
+  action pins, Python matrix and read-only permissions are unchanged. No automatic
+  publication or P2 claim admission is introduced.
+- README, documentation index, formal capsule and restart/publication checklists
+  distinguish the completed bounded mathematical phase from held publication.
+- Keep local launch/restore/observe helpers, unapproved publication candidates
+  and raw evidence out of Git through narrow ignore rules. Proof engines,
+  replay runners, regression tests and dated receipts remain reviewable.
+- Preserve `v0.3.1`/`v0.3.2` and their historical scope. A future release/docs
+  commit and tag will retain, rather than replace, the original execution pin.
+
+### Held / not promoted
+
+- Public DOI assignment and external reproduction are not inferred from local
+  review or author approval. Hosted CI and actual release/deposit are observed separately.
+- No uniform/numerical epsilon, first/unique/simple zero, numerical J margin,
+  Q pole/limit, paper equivalence, literature novelty or practical solver claim.
+
 ## [0.3.2] - 2026-10-06
 
 ### Added
@@ -230,7 +279,9 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.2...v0.4.0
+[0.3.2]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.2.0...v0.2.3

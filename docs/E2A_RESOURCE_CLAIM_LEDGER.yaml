@@ -1,8 +1,14 @@
 schema: flamehaven.e2a-resource-claim-ledger.v1
-valid_as_of: "2026-10-06"
-reviewed_on: "2026-10-06"
+valid_as_of: "2026-10-12"
+reviewed_on: "2026-10-12"
 # Evidence index only. Each claim retains its own dated evidence boundary.
-# Strict L2, L3, D and C01 retain separate 10/6 compiled receipts; actual eta signs remain open.
+# Strict L2, L3, D and C01 retain separate 10/6 compiled receipts.
+# C02 admits only two equalities from a separate 10/7 replay reviewed on 10/8.
+# C03 admits zero identity, zero positivity and global continuity from its 10/8 replay.
+# C04 admits only its per-Profile existential positive-eta radius from the 10/10 replay.
+# Z-core and Z+J named scopes are admitted by separate 10/12 receipts after new replay/archive review.
+# Both share one execution/trust domain; original metadata remains NONE/UNVERIFIED.
+# Entries retain their individual evidence dates; no uniform/numerical epsilon or Q pole is admitted.
 # falsifier: claim-domain contradiction, not compile/identity failure.
 # admission_failure: reason an execution record cannot be accepted.
 # reopening_condition: prerequisite for resuming held work, not a falsifier.
@@ -267,30 +273,297 @@ claims:
     reopening_condition: null
     lineage:
       upstream: [nsrw/p2/deltam-negative]
+      downstream: [nsrw/p2/c03/actual-zero-positive]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/c02/actual-coefficient-decomposition
+    version: 1
+    valid_as_of: "2026-10-08"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "actualRepairCoefficient_decomposition: generic debt-to-affine repair coefficient equality for c, amp, eta and j; no sign claim"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      locators: [debt_eq_affine, affineCoefficients_decomposition]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C02_REPLAY]
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_C02_COLAB_2026-10-07.md
+      nsrw_commit: 01d2deae3534cba5a035e87ac1cbe37faac470ca
+      proof_sha256: a2ad4f0e47428c869873de96ba681d17f0d9299ae80094f9c40462b1a8cfd5f7
+      proof_git_blob_sha1: fe4c2d1e18c7fbe9db5b9ce36196a9c22184827c
+      archive_sha256: 4db24d83e915f0fa7f9da3f93fe602e0bc84b104a3a452f512f6d43b4656a0db
+      independent_attestation: false
+    non_claims: [actual_c1_zero_sign, actual_c1_eta_sign, repair_zero_compiled, paper_theorem]
+    falsifier: "admissible Parameters, amplitude, eta and repair index for which the stated equality fails under the pinned definitions"
+    admission_failure: "nonzero compile exit, identity mismatch, unreviewed stderr or failed archive cross-check; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: [nsrw/p2/c02/profile-second-coefficient-decomposition]
+    reverify_on: [proof_bytes_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/c02/profile-second-coefficient-decomposition
+    version: 1
+    valid_as_of: "2026-10-08"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "profile_secondRepairCoefficient_decomposition: a fixed Profile's second axial repair coefficient equals its prefix polynomial contribution plus its corrected-amplitude main-only contribution; no sign claim"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      locators: [Profile.amp, debt_eq_affine, affineCoefficients_decomposition]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C02_REPLAY]
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_C02_COLAB_2026-10-07.md
+      nsrw_commit: 01d2deae3534cba5a035e87ac1cbe37faac470ca
+      proof_sha256: a2ad4f0e47428c869873de96ba681d17f0d9299ae80094f9c40462b1a8cfd5f7
+      proof_git_blob_sha1: fe4c2d1e18c7fbe9db5b9ce36196a9c22184827c
+      archive_sha256: 4db24d83e915f0fa7f9da3f93fe602e0bc84b104a3a452f512f6d43b4656a0db
+      independent_attestation: false
+    non_claims: [actual_c1_zero_sign, actual_c1_eta_sign, uniform_epsilon, repair_zero_compiled, numerical_witness, paper_theorem]
+    falsifier: "a source Profile and eta for which the stated second axial coefficient equality fails"
+    admission_failure: "nonzero compile exit, identity mismatch or failed archive review; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/c02/actual-coefficient-decomposition]
+      downstream: [nsrw/p2/c03/actual-zero-identity, nsrw/p2/c03/actual-continuous]
+    reverify_on: [proof_bytes_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/c03/actual-zero-identity
+    version: 1
+    valid_as_of: "2026-10-08"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "forall F : Profile, actualSecondRepairCoefficient F 0 = F.amp 0 * affineCoefficients F.data.core 0 1 1"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      locators: [Profile.amp, debt_eq_affine, affineCoefficients_decomposition]
+      external_module: formal/p2/P2_C03_ActualCoefficientAtZero.lean
+      declaration: NSRW.P2.actualSecondRepairCoefficient_zero_eq
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_C03_COLAB_2026-10-08.md
+      nsrw_commit: d7e41b9b60ae7510e5b4cc67eb5d071df21bd73d
+      proof_sha256: c706e8a00f46670cacdea9056b1d51404f90e487f3e609afa02977ae68ca3110
+      proof_git_blob_sha1: a28d007dd1f84cd8a6e2fc4d03b540eea3ee9ad0
+      archive_sha256: b4b8f4293fd82cb0649690f5f5bd3e266a92cb2849a65c34f7590c3927d26699
+      independent_attestation: false
+    non_claims: [small_positive_eta_sign, uniform_epsilon, repair_zero_compiled, paper_theorem]
+    falsifier: "a pinned-source Profile for which the stated zero product identity fails"
+    admission_failure: "nonzero compile exit, committed input drift or failed archive review; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/c02/profile-second-coefficient-decomposition]
+      downstream: [nsrw/p2/c03/actual-zero-positive]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/c03/actual-zero-positive
+    version: 1
+    valid_as_of: "2026-10-08"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "forall F : Profile, 0 < actualSecondRepairCoefficient F 0"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      locators: [Profile.amp, CorrectedPulseAmplitude.amplitude_pos]
+      external_module: formal/p2/P2_C03_ActualCoefficientAtZero.lean
+      declaration: NSRW.P2.actualSecondRepairCoefficient_zero_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_C03_COLAB_2026-10-08.md
+      nsrw_commit: d7e41b9b60ae7510e5b4cc67eb5d071df21bd73d
+      proof_sha256: c706e8a00f46670cacdea9056b1d51404f90e487f3e609afa02977ae68ca3110
+      proof_git_blob_sha1: a28d007dd1f84cd8a6e2fc4d03b540eea3ee9ad0
+      archive_sha256: b4b8f4293fd82cb0649690f5f5bd3e266a92cb2849a65c34f7590c3927d26699
+      independent_attestation: false
+    non_claims: [small_positive_eta_sign, uniform_epsilon, all_positive_eta_sign, negative_eta_sign, repair_zero_compiled, paper_theorem]
+    falsifier: "a pinned-source Profile F with actualSecondRepairCoefficient F 0 <= 0"
+    admission_failure: "nonzero compile exit, committed input drift or failed archive review; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/c03/actual-zero-identity, nsrw/p2/c01/main-only-coefficient]
+      downstream: [nsrw/p2/c04/small-positive-eta-sign]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/c03/actual-continuous
+    version: 1
+    valid_as_of: "2026-10-08"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "forall F : Profile, Continuous (actualSecondRepairCoefficient F) on all real eta"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      locators: [Profile.amp, Profile.amp_contDiff]
+      external_module: formal/p2/P2_C03_ActualCoefficientAtZero.lean
+      declaration: NSRW.P2.actualSecondRepairCoefficient_continuous
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_C03_COLAB_2026-10-08.md
+      nsrw_commit: d7e41b9b60ae7510e5b4cc67eb5d071df21bd73d
+      proof_sha256: c706e8a00f46670cacdea9056b1d51404f90e487f3e609afa02977ae68ca3110
+      proof_git_blob_sha1: a28d007dd1f84cd8a6e2fc4d03b540eea3ee9ad0
+      archive_sha256: b4b8f4293fd82cb0649690f5f5bd3e266a92cb2849a65c34f7590c3927d26699
+      independent_attestation: false
+    non_claims: [small_positive_eta_sign, uniform_epsilon, repair_zero_compiled, numerical_witness, paper_theorem]
+    falsifier: "a pinned-source Profile whose actual second axial coefficient is discontinuous as a function of eta"
+    admission_failure: "nonzero compile exit, committed input drift or failed archive review; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/c02/profile-second-coefficient-decomposition]
+      downstream: [nsrw/p2/c04/small-positive-eta-sign]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/c04/small-positive-eta-sign
+    version: 2
+    valid_as_of: "2026-10-10"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "forall F : Profile, exists epsilon > 0, forall eta, 0 < eta < epsilon implies 0 < actualSecondRepairCoefficient F eta"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      external_module: formal/p2/P2_C04_SmallPositiveEta.lean
+      declaration: NSRW.P2.actualSecondRepairCoefficient_pos_small_positive
+      locators: [actualSecondRepairCoefficient_zero_pos, actualSecondRepairCoefficient_continuous]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_C04_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_C04_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/P2_C04_COLAB_2026-10-10.md
+      sha256: 768b951b9de92d6290270d08db5a866844bd974234fc39dc66e183461f18f1bf
+      nsrw_commit: 10d5a1f517b8665137f2354746d70752f8ef67fd
+      proof_sha256: 38cdf1bf01fd420795dc5331ad78ec64370fea34ac052bcbfce5053c39c7b50c
+      proof_git_blob_sha1: 63a1f00db5a38bdb0c9c93e15d2b3f9bc71f2b02
+      archive_sha256: 88b2c75508fe2f43d6ac6557e0d6896c530486d0c577fac447c05785160e934b
+      independent_attestation: false
+    non_claims: [uniform_epsilon, numerical_epsilon, all_positive_eta_sign, negative_eta_sign, repair_zero_compiled, uniqueness, first_zero, paper_lean_equivalence, upstream_theorem_verification, literature_novelty, millennium_problem]
+    falsifier: "a fixed pinned-source Profile for which no positive epsilon gives the stated small-positive-eta sign"
+    admission_failure: "nonzero compile exit, committed input drift or failed archive review; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/c03/actual-zero-positive, nsrw/p2/c03/actual-continuous]
       downstream: [nsrw/p2/l4/first-repair-zero]
     reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
 
   - resource_id: nsrw/p2/l4/first-repair-zero
-    version: 1
-    valid_as_of: "2026-10-05"
-    status: SUPPORTED
-    claim_type: source_definition_derivation
-    claim: "for sufficiently small positive eta, an interior mass zero occurs in the first repair window"
+    version: 4
+    valid_as_of: "2026-10-12"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "forall fixed source Profile F, exists epsilon(F) > 0, forall 0 < eta < epsilon(F), exists r strictly in the first repair window with F.M eta (exp(pulseStart)*r) = 0"
     source_pin:
-      document: docs/M5_P2_DILATION_RATIO_OBSTRUCTION_STUDY.md
-      locators: [mass_integrand_pulse, massMoment_endpoint, repair_bump_support]
-    gate_state: HELD[FORMAL_CLOSURE_OPEN]
-    oe_level: OE-1
-    evidence_class: [source_located_tail_argument]
-    receipt: null
-    non_claims: [global_zero_geometry, paper_theorem, millennium_problem]
+      module: NavierStokes.OutgoingProfile
+      external_module: formal/p2/P2_Z04_FirstRepairInteriorZero.lean
+      declaration: NSRW.P2.profileM_firstRepair_zero_small_positive
+      locators: [Profile.M_at_exp, localMass_eq_profileM, exists_firstRepair_zero_of_secondCoeff_pos]
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    development_record: colab/Z04_DEVELOPMENT_2026-10-10.md
+    execution_record: colab/Z_PHASE_REPLAY_2026-10-12.md
+    receipt:
+      path: docs/stage_receipts/P2_Z_CORE_COLAB_2026-10-12.md
+      sha256: 9fb919900dda8ea2450a0049f54b29dc711291f4639a27747c8dc7da66990d72
+      nsrw_commit: 3a50b5f50b034319a469b9de68f556be70fff02c
+      proof_sha256: f3bce7c0a6d28922bd592d6dbfb5b0735a058ffc84c2100bc4328be1df5b2d5d
+      proof_git_blob_sha1: 054eb77f015dd425b574b19b945d9f7e2aa9192f
+      archive_sha256: bd109a6f0db1eaaa1e6054d5ba16f8e07696434f7ffebb5527128f721267d74b
+      independent_attestation: false
+    non_claims: [uniform_epsilon, numerical_epsilon, numerical_witness, uniqueness, first_zero, simple_zero, q_pole, global_zero_geometry, independent_reproduction, literature_novelty, paper_theorem, millennium_problem]
     falsifier: "admissible fixed source parameters for which no epsilon > 0 gives a first-window mass zero for every 0 < eta < epsilon in the specification range"
-    admission_failure: "unclosed coefficient-sign, amplitude/continuity, or partial-tail/IVT proof obligations"
-    reopening_condition: "close DeltaM and the coefficient/amplitude/continuity/tail bridges to the stated zero"
+    admission_failure: "committed input drift, nonzero exit, failed archive review or mismatch of the exact named proposition; not a mathematical counterexample"
+    reopening_condition: null
     lineage:
-      upstream: [nsrw/p2/deltam-negative]
+      upstream: [nsrw/p2/c04/small-positive-eta-sign]
+      downstream: [nsrw/p2/zplus-j/source-mj-existence]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/zplus-j/conditional-angular-positive
+    version: 2
+    valid_as_of: "2026-10-12"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "for fixed source F, eta and first-window interior r, localMass F eta r = 0 and localSecondRepairCoefficient F eta > 0 imply localAngularMoment F eta r > 0"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      external_module: formal/p2/P2_ZPLUS_J_FirstRepairAngularMoment.lean
+      declaration: NSRW.P2.angularMoment_pos_of_firstRepair_mass_zero
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    development_record: colab/ZPLUS_J_DEVELOPMENT_2026-10-11.md
+    execution_record: colab/Z_PHASE_REPLAY_2026-10-12.md
+    receipt:
+      path: docs/stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md
+      sha256: 092c58849f2c4471b5662bfa4f9a3b19fc18f7b57009488b1a7b286f5ab69be4
+      nsrw_commit: 3a50b5f50b034319a469b9de68f556be70fff02c
+      proof_sha256: 2af3c68a73530a97421b3bd971bae5e63bbfb60c1abb7f40361d6d347e875d4a
+      proof_git_blob_sha1: 11ccd687f7157c7a1bb5529843344ce04373d7af
+      archive_sha256: bd109a6f0db1eaaa1e6054d5ba16f8e07696434f7ffebb5527128f721267d74b
+      independent_attestation: false
+    non_claims: [numerical_margin, uniqueness, simple_zero, q_pole, independent_reproduction, novelty, paper_theorem]
+    falsifier: "an admissible first-window mass zero with positive second coefficient but nonpositive local angular moment"
+    admission_failure: "committed input drift, nonzero exit or failed archive review; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: [nsrw/p2/zplus-j/source-mj-existence]
+    reverify_on: [proof_bytes_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p2/zplus-j/source-mj-existence
+    version: 2
+    valid_as_of: "2026-10-12"
+    status: CONFIRMED
+    claim_type: formal_lean
+    claim: "forall fixed source Profile F, exists epsilon(F) > 0, forall 0 < eta < epsilon(F), exists r strictly in the first repair window with F.M eta (exp(pulseStart)*r) = 0 and F.J eta (exp(pulseStart)*r) > 0 at the same point"
+    source_pin:
+      module: NavierStokes.OutgoingProfile
+      locators: [Profile.M_at_exp, Profile.J_at_exp]
+      external_module: formal/p2/P2_ZPLUS_J_SourceComposition.lean
+      declaration: NSRW.P2.profileMJ_firstRepair_zero_small_positive
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    development_record: colab/ZPLUS_J_COMPOSITION_DEVELOPMENT_2026-10-11.md
+    execution_record: colab/Z_PHASE_REPLAY_2026-10-12.md
+    receipt:
+      path: docs/stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md
+      sha256: 092c58849f2c4471b5662bfa4f9a3b19fc18f7b57009488b1a7b286f5ab69be4
+      nsrw_commit: 3a50b5f50b034319a469b9de68f556be70fff02c
+      proof_sha256: c3444fbe43c633ef1a0be0987cb42ab8264d4a92da81cf961ee647409c16bd89
+      proof_git_blob_sha1: 759b0ad12ed646d56388bf9c1bd92485d702bf07
+      archive_sha256: bd109a6f0db1eaaa1e6054d5ba16f8e07696434f7ffebb5527128f721267d74b
+      independent_attestation: false
+    non_claims: [uniform_epsilon, numerical_epsilon, certified_root, uniqueness, simple_zero, q_pole, q_limit, independent_reproduction, novelty, paper_theorem, practical_solver, millennium_problem]
+    falsifier: "a fixed admissible source Profile without the stated per-Profile small-positive-eta same-point M-zero/J-positive witness"
+    admission_failure: "committed input drift, nonzero exit, failed archive review or same-witness statement mismatch; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: [nsrw/p2/c04/small-positive-eta-sign, nsrw/p2/l4/first-repair-zero, nsrw/p2/zplus-j/conditional-angular-positive]
       downstream: []
-    reverify_on: [upstream_claim_change, source_repin]
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
 
   - resource_id: nsrw/m5/h-scaling-reconstruction
     version: 1

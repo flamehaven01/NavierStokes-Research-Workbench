@@ -232,9 +232,11 @@ template branch: L3 -------------------+       |
 
 source definition branch: C02 actual-coefficient decomposition
                               |
-                   C01 + C02 + amplitude / continuity bridges
+                   C01 + C02 + same Profile's amplitude
                               v
-                   C03-C04: actual c1(eta) > 0 for small positive eta
+                   C03: actual c1(0) > 0 and continuity
+                              v
+                   C04: per-Profile small-positive-eta sign
                               v
                    Z: first-repair interior zero
 ~~~
@@ -260,6 +262,12 @@ Selected numerical-witness extraction and external numerical comparators are
 separate tracks. Neither is a substitute for the parametric formal argument.
 
 This separation keeps the roadmap stable while execution status changes.
+
+Publication and international reproduction follow the separate
+[Zenodo-first publication plan](NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md).
+Artifact preservation, reader-facing explanation, and manuscript scope are
+distinct from mathematical closure. Access to arXiv or a broad social platform
+is not a prerequisite, and outreach does not promote a claim.
 
 ## 10. Progress representation
 

@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+type: software
+message: >-
+  If you use NSRW, cite this software together with the exact Git commit or
+  published release you used. Mathematical execution receipts retain their
+  own fixed checkpoints; the software release is not a new proof execution.
+title: Navier–Stokes Research Workbench
+authors:
+  - family-names: Yun
+    given-names: Kwansub
+repository-code: https://github.com/flamehaven01/NavierStokes-Research-Workbench
+url: https://github.com/flamehaven01/NavierStokes-Research-Workbench
+license: MIT
+version: 0.4.0
+abstract: >-
+  A research workbench for construction-specific, source-linked formal
+  consequences and reproducible bounded checks. The P2 study establishes a
+  first-repair mass zero and strictly positive angular history at the same
+  point for sufficiently small positive parameters of each fixed source
+  Profile. It does not claim general Navier–Stokes correctness, literature
+  novelty, independent reproduction or practical solver readiness.
+keywords:
+  - Navier–Stokes
+  - Lean
+  - formalization
+  - reproducibility

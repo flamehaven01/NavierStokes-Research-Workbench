@@ -1,0 +1,31 @@
+{
+  "format": "FH-RESEARCH-PACK/1",
+  "task_id": "NSRW-PUBLICATION-2026-10-08",
+  "question": "Which documented publication and artifact-sharing routes can support NSRW without depending on arXiv or broad social platforms?",
+  "research_level": "WORK",
+  "date_boundary": "2026-10-08",
+  "sources": [
+    {"source_id": "S1", "url": "https://help.zenodo.org/docs/deposit/about-records/", "title": "Zenodo: About records", "source_class": "primary", "access_mode": "direct", "limitations": ["Repository capability, not scientific peer review or a reach guarantee"]},
+    {"source_id": "S2", "url": "https://zenodo.org/help/versioning", "title": "Zenodo: DOI versioning", "source_class": "primary", "access_mode": "direct", "limitations": ["Citation/versioning semantics, not result correctness"]},
+    {"source_id": "S3", "url": "https://help.zenodo.org/docs/github/archive-software/github-upload/", "title": "Zenodo: Archive a release from GitHub", "source_class": "primary", "access_mode": "direct", "limitations": ["Does not establish inclusion of this project's ignored evidence"]},
+    {"source_id": "S4", "url": "https://help.zenodo.org/docs/share/submit-for-review/", "title": "Zenodo: Submit for review", "source_class": "primary", "access_mode": "direct", "limitations": ["No specific community scope or willingness to accept NSRW has been checked"]},
+    {"source_id": "S5", "url": "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages", "title": "GitHub: What is GitHub Pages?", "source_class": "primary", "access_mode": "direct", "limitations": ["Hosting capability, not site deployment or discovery evidence"]},
+    {"source_id": "S6", "url": "https://leanprover-community.github.io/", "title": "Lean community", "source_class": "primary", "access_mode": "direct", "limitations": ["No current account access, selected stream rules, or reviewer availability checked"]},
+    {"source_id": "S7", "url": "https://huggingface.co/docs/hub/en/spaces-sdks-static", "title": "Hugging Face: Static HTML Spaces", "source_class": "primary", "access_mode": "direct", "limitations": ["No Space was created; rules can change"]},
+    {"source_id": "S8", "url": "https://huggingface.co/docs/hub/en/paper-pages", "title": "Hugging Face: Paper Pages", "source_class": "primary", "access_mode": "direct", "limitations": ["Documented arXiv-centered indexing; no admission test of a Zenodo-only paper"]}
+  ],
+  "claims": [
+    {"claim_id": "C1", "text": "Zenodo documents publication/software records, DOI assignment, and new versions for changed published files.", "status": "SUPPORTED", "source_refs": ["S1", "S2"], "counterevidence_refs": [], "remaining_falsifiers": ["Recheck deposit rules and actual deposited contents before publication"]},
+    {"claim_id": "C2", "text": "Zenodo provides a GitHub-release archival route and a community draft-review route; neither guarantees independent mathematical validation.", "status": "SUPPORTED", "source_refs": ["S3", "S4"], "counterevidence_refs": [], "remaining_falsifiers": ["Verify integration/archive contents and the selected community's actual policy"]},
+    {"claim_id": "C3", "text": "GitHub documents project Pages and availability for public repositories on GitHub Free.", "status": "SUPPORTED", "source_refs": ["S5"], "counterevidence_refs": [], "remaining_falsifiers": ["Verify repository settings and deployment on the authorized account"]},
+    {"claim_id": "C4", "text": "The Lean community identifies Zulip and GitHub as primary community meeting places.", "status": "SUPPORTED", "source_refs": ["S6"], "counterevidence_refs": [], "remaining_falsifiers": ["Current access and suitability of a particular review request are unverified"]},
+    {"claim_id": "C5", "text": "Hugging Face documents free Static Spaces; its Paper Pages indexing instructions are arXiv-centered, so Zenodo-only paper indexing should not be assumed.", "status": "SUPPORTED", "source_refs": ["S7", "S8"], "counterevidence_refs": [], "remaining_falsifiers": ["Recheck current platform support before creating a Space or attempting paper indexing"]}
+  ],
+  "coverage": {
+    "searched_lanes": ["primary platform documentation", "direct official-page retrieval through Agent Reach web route"],
+    "degraded": ["One guessed Zenodo community URL was inaccessible; the official submit-for-review page was used instead", "No login-backed community access or audience measurement", "No scholarly novelty search"],
+    "stopping_reason": "Official documents resolve the bounded hosting, deposit, versioning, and channel-capability questions; response likelihood remains unverified"
+  },
+  "limitations": ["Strategy ordering is an author recommendation, not an empirically validated engagement forecast", "This source pack is not a research gate, proof receipt, or authorization for external writes"],
+  "overall_status": "SUPPORTED"
+}

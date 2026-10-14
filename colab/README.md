@@ -30,13 +30,12 @@ This directory is a storage location, not a source of mathematical authority.
 
 ## Local Python environment
 
-The verified activation script is `D:\Sanctum\venv\Scripts\Activate.ps1`.
-There is currently no `venv\Scripts\Activate.ps1` inside the NSRW checkout.
-From `D:\Sanctum`, this is the requested relative activation command:
+Use your already configured virtual environment and checkout, not a presumed
+environment inside the repository. Substitute your own approved paths below:
 
 ```powershell
-. .\venv\Scripts\Activate.ps1
-Set-Location D:\Sanctum\Flamehaven-Labs\NavierStokes-Research-Workbench
+. "<venv-path>\Scripts\Activate.ps1"
+Set-Location -LiteralPath "<checkout-path>"
 python -c "import sys; print(sys.executable)"
 python -m pytest --version
 ```
@@ -47,7 +46,20 @@ Virtual-environment activation does not configure Lean: Lean compilation still
 uses the pinned source-root Lean/Lake environment. Colab's Linux Python is also
 distinct from this Windows venv.
 
-## Next execution gate
+## Current phase and publication boundary — 2026-10-13
+
+Z-core and bounded Z+J have separate named-proposition receipts from the shared
+2026-10-12 replay. No new compile is scheduled solely for publication preparation.
+See [the current checklist](../docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md) and
+[draft release notes](../docs/releases/v0.4.0.md).
+
+Raw evidence and held publication ZIPs remain under ignored `colab/evidence/`.
+One-off launch/restore/observe helpers are also ignored; reviewed `run-*.py`
+engines, replay runners, tests and their required frozen-input fixtures remain
+eligible for Git. Ignore rules do not remove tracked files or protect against
+destructive cleanup. A local file must not be force-added to bypass review.
+
+## Historical C02 development example
 
 `run-c02-development.py` is a standalone, standard-library development runner.
 It does not bootstrap dependencies, require a clean NSRW checkout, or admit
@@ -87,5 +99,7 @@ Both original archives, exact inputs, raw logs, and the fresh `.olean` are saved
 locally under `colab/evidence/2026-10-07/c02-development-20261007T090736Z/`.
 Archive hashes match the Colab observations; extracted C02 input/log/artifact
 hashes match the run metadata. This is local preservation, not independent
-attestation or a backup. C-02C clean replay has not started.
-Actual coefficient positivity and first-repair zero remain unpromoted.
+attestation or a backup. At that 2026-10-07 development handoff, C-02C had not
+started and downstream sign/zero claims were unpromoted. Those are historical
+observations, not the current task: later separate C02/C03/C04/Z receipts are
+indexed in [the documentation status index](../docs/README.md).

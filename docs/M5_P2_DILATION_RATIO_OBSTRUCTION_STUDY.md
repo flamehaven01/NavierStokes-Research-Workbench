@@ -1,6 +1,6 @@
 # M5 P2 dilation-ratio obstruction study
 
-Status: active mathematical analysis with narrowly compiled auxiliary results;
+Status: construction-specific analysis with admitted Z-core and bounded Z+J results;
 no new Navier--Stokes solution, numerical witness, or source-bound ten-law atlas
 is claimed.
 
@@ -61,7 +61,8 @@ P2-B2  PRE-PULSE MASS SIGN
        ESTABLISHED[SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE]
 
 P2-C   PULSE-INTERVAL ZERO GEOMETRY
-       OPEN[PRIMARY_MATHEMATICAL_QUESTION]
+       PARTIALLY_RESOLVED[SMALL_POSITIVE_ETA_FIRST_WINDOW_CONFIRMED;
+       NEGATIVE_NON_SMALL_ETA_AND_FULL_ZERO_SET_OPEN]
 
 P2-C1  EARLY-PULSE NO-ZERO REGION
         ESTABLISHED[SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE]
@@ -73,7 +74,7 @@ P2-C3  TERMINAL ZERO PLATEAU
         ESTABLISHED[SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE]
 
 P2-C4  ACTIVE REPAIR-WINDOW ZERO GEOMETRY
-        ACTIVE[POSITIVE_SMALL_ETA_FIRST_WINDOW_ZERO_SUPPORTED;
+        PARTIALLY_RESOLVED[POSITIVE_SMALL_ETA_FIRST_WINDOW_ZERO_CONFIRMED;
         FULL_GEOMETRY_OPEN]
 
 P2-C4a MAIN-PULSE COMPONENT OF SECOND REPAIR COEFFICIENT
@@ -81,8 +82,12 @@ P2-C4a MAIN-PULSE COMPONENT OF SECOND REPAIR COEFFICIENT
         MAIN_ONLY_COMPONENT]
 
 P2-C4b POSITIVE-SMALL-ETA FIRST-REPAIR ZERO
-        SUPPORTED[PINNED_DEFINITIONS_AND_TAIL_ARGUMENT;
-        FORMALIZATION_OPEN]
+        CONFIRMED[COMMIT_BOUND_EXTERNAL_P2_Z_REPLAY;
+        PER_PROFILE_EXISTENTIAL_EPSILON; NOT_FIRST_OR_UNIQUE_ZERO]
+
+P2-Z+J FIRST-WINDOW MASS / ANGULAR MISMATCH
+        CONFIRMED[CONDITIONAL_J_POSITIVE;
+        SAME_POINT_SOURCE_M_ZERO_AND_J_POSITIVE; NO_Q_POLE_OR_LIMIT]
 
 P2-D   CONE / MOMENT USEFULNESS
        OPEN
@@ -117,6 +122,15 @@ P2-D   deltaM_neg and two source-debt identities
 
 P2-C01 mainOnly_separation_gap_pos, main-only coefficient formula and positivity
        CONFIRMED[PINNED_SOURCE_TOOLCHAIN_EXTERNAL_MODULE]
+
+P2-C02 generic and fixed-Profile actual coefficient decomposition equalities
+       CONFIRMED[COMMIT_BOUND_EXTERNAL_P2_C02_REPLAY]
+
+P2-C03 actualSecondRepairCoefficient_zero_eq, zero_pos, continuous
+       CONFIRMED[COMMIT_BOUND_EXTERNAL_P2_C03_REPLAY]
+
+P2-C04 actualSecondRepairCoefficient_pos_small_positive
+       CONFIRMED[COMMIT_BOUND_EXTERNAL_P2_C04_REPLAY]
 ```
 
 The P2-F1 receipt is
@@ -150,13 +164,26 @@ external F1/L2/L3/D artifacts freshly generated in one commit-bound run.
 name. The separate [C01 receipt](stage_receipts/P2_C01_COLAB_2026-10-06.md)
 confirms the source-indexed main-only coefficient formula and positivity,
 including the positive matrix gap. Main-only positivity is not actual
-`c1(0)` or `c1(eta)` positivity. Actual coefficient decomposition is implemented
-in `P2_C02_ActualCoefficientDecomposition.lean` but remains uncompiled after
-an external import failure. Environment recovery and C02 development compile,
-then a separate commit-bound receipt, precede the eta=0/amplitude/continuity and small-positive-eta
-bridges. Actual coefficient signs and first-repair-zero claims remain
-`SUPPORTED` with formalization open. Executor and artifact verifier share
-a session/trust domain.
+`c1(0)` or `c1(eta)` positivity. Actual coefficient decomposition is confirmed
+for the two named equalities in `P2_C02_ActualCoefficientDecomposition.lean`
+by the separate [C02 receipt](stage_receipts/P2_C02_COLAB_2026-10-07.md), after
+environment restoration, a new clean commit-bound replay and archive review.
+The earlier import failure and development compile remain separate history.
+The separate [C03 receipt](stage_receipts/P2_C03_COLAB_2026-10-08.md) confirms
+the actual coefficient's zero product identity, positivity at zero and
+continuity on all `Real`, for every fixed source Profile. The separate
+[C04 receipt](stage_receipts/P2_C04_COLAB_2026-10-10.md) confirms only
+`forall F : Profile, exists epsilon(F) > 0, forall eta,
+0 < eta < epsilon(F) -> actualSecondRepairCoefficient F eta > 0`.
+Status refresh 2026-10-12: the [Z-core receipt](stage_receipts/P2_Z_CORE_COLAB_2026-10-12.md)
+confirms the named per-Profile small-positive-eta source M-zero existence.
+The [separate Z+J receipt](stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md) confirms
+conditional local/source J positivity and same-point source M=0/J>0 existence.
+Both were reviewed against the preserved new 10/12 clean replay at `3a50b5f...`;
+separate claim reviews share execution and trust domain, not independent attestation.
+No common or numerical epsilon, broader eta sign
+behavior or mass-zero result is admitted by C04. Executor and artifact
+verifier share a session/trust domain; neither receipt is independent attestation.
 
 `SOURCE-LOCATED_ALGEBRAIC_CONSEQUENCE` is deliberately narrower than a source
 theorem: the result follows by combining pinned definitions and lemmas, but is
@@ -515,14 +542,21 @@ confirms `deltaM c < 0`, and the
 main-only coefficient formula and positivity. These named propositions are
 `CONFIRMED` at their recorded pinned-source compiled scopes. They are not
 theorems stated in the upstream source, evidence of independent novelty, or
-formal closure of the actual eta-dependent coefficient and mass-zero bridges.
+by themselves formal closure of the actual eta-dependent coefficient or mass-zero bridges.
 
-The following actual-coefficient and tail argument remains `SUPPORTED`, with
-formalization open. It is not admitted by the D or C01 receipts.
-The main-only coefficient contributing to `c1` is positive. Since `amp(0) > 0`
-and `q(0) = 0`, continuity gives `c1(eta) > 0` for all sufficiently small
-`|eta|`. For sufficiently small positive `eta`, the necessary second-window
-sign-preservation condition `eta * c1 < 0` therefore fails.
+The following **mass-tail and interior-zero** argument is formalized by Z01–Z04,
+with its named source-facing existence admitted by the separate 10/12 Z-core
+receipt. This does not admit the full repair-window zero geometry. C03 separately
+admits the actual coefficient's zero
+identity, `c1(0) > 0` and continuity, using the positive main-only component,
+the same Profile's `amp(0) > 0` and `q(0) = 0`. C04 now separately confirms
+`c1(eta) > 0` for `0 < eta < epsilon(F)`, with an existential radius for each
+fixed source Profile. Admission does not include two-sided sign behavior, a
+uniform radius, or a numerical radius. For such positive `eta`, the necessary
+second-window sign-preservation condition `eta * c1 < 0` fails algebraically.
+Its connection to source mass signs and the subsequent tail/zero conclusions
+are fresh compiled Z dependencies; the mass-zero result is admitted by Z-core,
+not by C04 or the earlier receipts.
 
 This also locates an interior zero more precisely than the initial
 obstruction. Let `a0 = exponents(0)`, choose sufficiently small positive
@@ -553,8 +587,11 @@ exists r_* in (lower(0), upper(0)), M_pulse(eta, r_*) = 0.
 
 Thus, for sufficiently small positive `eta`, the zero is not merely somewhere
 in the union of repair supports: it lies in the **first repair window**. This
-is a source-definition tail argument, not a source theorem or compiled Lean
-result. It is consequently `SUPPORTED`, with formalization still required.
+was initially a source-definition tail argument, not an upstream source theorem.
+It has since been compiled in the external Z01–Z04 modules and admitted as
+`NSRW.P2.profileM_firstRepair_zero_small_positive` by the 10/12 Z-core receipt.
+`CONFIRMED` is confined to that exact Profile-dependent existential statement,
+not a computed root, a common epsilon, uniqueness or a first-zero assertion.
 The relevant source identities are `mass_integrand_pulse`
 ([OutgoingSchedule 695--713](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingSchedule.lean#L695-L713)),
 endpoint cancellation
@@ -562,7 +599,82 @@ endpoint cancellation
 and the strict interior support/nonnegativity of the repair bumps
 ([LocalizedMomentRepair 25--68](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/LocalizedMomentRepair.lean#L25-L68)).
 
-The remaining promotion chain distinguishes completed inputs from open bridges:
+#### C4b: separated supports and different weighted cancellations
+
+Fix a source `Profile F` and write `c=F.data.core`, `B=c.pulseStart`,
+`R=exp(c.pulseLength)`, `l_j=c.lower j`, `u_j=c.upper j` and
+`b_j(x)=bump(l_j,u_j,x)`. For **any real eta**, take `l_0<r<u_0`,
+`localMass(F,eta,r)=0` and actual second axial coefficient `c1(eta)>0`.
+The actual first coefficient is `c0(eta)`; these are not `F.reset` coefficients.
+Define the four tails of the same two nonnegative bumps:
+
+\[
+T_j=\int_r^R x^{a_0}b_j(x)\,dx,\qquad
+S_j=\int_r^R x^{a_1}b_j(x)\,dx,\qquad
+a_1=a_0-\lambda,\quad\lambda>0.
+\]
+
+Endpoint cancellation gives `localMass=-K0*(c0*T0+c1*T1)` and
+`localAngularMoment=-K1*(c0*S0+c1*S1)`, where
+`K0=momentScale(c,0)*shape(eta)>0` and
+`K1=momentScale(c,1)*shape(eta)^2>0`. The second tail is its full positive
+weighted bump moment; the first is nonnegative. Thus
+
+\[
+c_0T_0+c_1T_1=0,\quad T_1>0,\quad T_0\ge0,\quad c_1>0
+\quad\Longrightarrow\quad T_0>0,\quad c_0<0.
+\]
+
+The strict support gap `u_0<l_1` and decreasing relative weight
+`x^{-lambda}` on the positive axis imply
+
+\[
+S_0\ge u_0^{-\lambda}T_0,\qquad
+S_1\le l_1^{-\lambda}T_1,\qquad
+l_1^{-\lambda}<u_0^{-\lambda}.
+\]
+
+Multiplication by the **negative** c0 reverses the first comparison, so
+
+\[
+c_0S_0+c_1S_1
+\le c_1T_1\bigl(l_1^{-\lambda}-u_0^{-\lambda}\bigr)<0,
+\qquad J_{\rm local}=-K_1(c_0S_0+c_1S_1)>0.
+\]
+
+This is the conditional result
+`angularMoment_pos_of_firstRepair_mass_zero`: it assumes c1 positivity, not
+eta positivity. Since `r>l_0>1`, the source coordinate identities give
+`localMass=F.M eta (exp(B)*r)` and
+`localAngularMoment=F.J eta (exp(B)*r)` without another scaling factor.
+C04 supplies c1 positivity for every `0<eta<epsilon_F`; the mass boundary
+signs and IVT supply r; this **same r** is passed to the conditional angular
+theorem. Hence the final source statement is
+
+\[
+\forall F\colon\mathrm{Profile},\quad\exists\epsilon_F>0,\quad
+\forall\eta\in(0,\epsilon_F),\quad\exists r\in(l_0,u_0):
+M_F(\eta,\exp(B)r)=0\ \land\ J_F(\eta,\exp(B)r)>0.
+\]
+
+The [conditional module](../formal/p2/P2_ZPLUS_J_FirstRepairAngularMoment.lean)
+and [source composition](../formal/p2/P2_ZPLUS_J_SourceComposition.lean) encode
+these steps; the [Z+J receipt](stage_receipts/P2_ZPLUS_J_COLAB_2026-10-12.md)
+admits the named scopes. T0 positivity does not imply positive bump density at
+r; uniqueness, simple-zero and a computed J-margin are not established.
+
+| Evidence role | Scope |
+|---|---|
+| Upstream definitions/identities, including endpoint cancellation and `after_pulse` | Inputs from the pinned construction, not NSRW-created theorems |
+| Terminal zero plateau | Source-located deduction; no separately compiled plateau theorem |
+| Z-core and Z+J | NSRW-assembled formal consequences with separate named receipt scopes; literature novelty and independent attestation remain unverified |
+
+The source M/J mismatch is the result; Q's denominator failure is a consequence
+for **our prospective ratio**. It is not a defect in the upstream theorem.
+These histories are not identified here with enstrophy or vorticity-concentration
+diagnostics, nor connected to a new velocity/forcing/singularity estimate.
+
+The compiled chain below records the completed small-positive-eta route:
 
 ```text
 P2-F1 compiled main-moment positivity; normalized positivity consumed by L2
@@ -570,28 +682,35 @@ L2    compiled normalized comparison: F0 < k*F1
 L3    compiled template bound: k*A1 <= A0
 D     compiled source-linked composition: DeltaM = F0/A0 - F1/A1 < 0
 C01   compiled main-only coefficient formula and positivity
-C02   IMPLEMENTED / UNVERIFIED[ENVIRONMENT_RECOVERY_REQUIRED]: decomposition equalities only
-C03-C04 OPEN eta=0/continuity, small-positive-eta sign
-L4    OPEN second-tail and first-window zero:
+C02   compiled commit-bound decomposition equalities only; no coefficient sign
+C03   compiled actual zero product identity, c1(0) > 0, continuity on all Real
+C04   compiled per-Profile small-positive-eta sign with existential epsilon(F)
+L4/Z  compiled and separately admitted per-Profile source existence:
     c1 > 0 -> M_pulse(eta, upper(0)) < 0
            -> exists r in (lower(0), upper(0)), M_pulse(eta, r) = 0.
+Z+J   compiled conditional J positivity and same-witness source M=0/J>0 existence
 k := exp(-(3/20)*lam); Fi := normalizedMainMoment c i
 ```
 
-The D composition is compiled. The remaining coefficient and tail bridges
-would close the positive-small-`eta` first-window zero, which is not yet
-compiled. No numerical `TailData` witness or new verifier framework is needed
-for these obligations.
+The D composition, C04 coefficient sign and Z-core source existence are admitted
+at separate scopes. The separate Z+J receipt admits J positivity at every
+admissible first-window M-zero with positive second coefficient, and the final
+per-Profile small-positive-eta existence of one shared source point with
+`Profile.M = 0 ∧ Profile.J > 0`. This is an obstruction to ordinary division by
+M*H at that point; it is not a formal Q-pole/limit or partial-division theorem.
+No numerical `TailData` witness or new verifier framework is supplied.
 
 The source provides exact full moments and uniform absolute correction-jet
 bounds under a small-`lam` hypothesis
 ([OutgoingPulseBounds 1134--1146](https://github.com/openai/NavierStokesAndEuler/blob/8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538/NavierStokes/OutgoingPulseBounds.lean#L1134-L1146)).
 The source does not provide a named theorem for the comparison above, nor does
-it settle the full `eta`-dependent coefficient signs or partial-tail
-domination. Those are the current analytic boundary.
+it settle the full `eta`-dependent coefficient signs or general partial-tail
+domination outside the admitted small-positive-eta/first-window scope.
+Those broader questions remain the analytic boundary.
 
-The primary open question is the geometry of the zero set between these two
-facts:
+The fixed-Profile small-positive-eta first-window existence and M/J mismatch
+are CLOSED at their named scopes. The following broader questions remain OPEN;
+they are not prerequisites for the v0.4.0 phase close:
 
 ```text
 - For negative or non-small `eta`, does M retain sign(eta) until it reaches
@@ -600,8 +719,9 @@ facts:
   repair supports, and what is the complete zero set?
 - What ordering of `DeltaP` and the full `eta`-dependent `z0 - z1` determines
   the signs of `c0` and `c1` away from the small-eta obstruction?
-- What partial-tail domination is needed in the first repair window?
-- What bound, if any, follows for Q - 5/8?
+- Away from the admitted small-positive-eta region, what partial-tail
+  domination is needed in the first repair window?
+- On regions with M*H != 0, what bound, if any, follows for Q - 5/8?
 ```
 
 The relevant source path is:
@@ -615,11 +735,12 @@ axial_pulse
   -> massMoment_endpoint
 ```
 
-The inspected source gives exact endpoint cancellation and the stronger
-terminal-zero plateau derived above, but it has not supplied a one-sided
-coefficient ordering or partial-tail domination lemma sufficient to settle
-the active repair windows. P2-C is therefore the first new analysis question
-in this lane, rather than a closure claim.
+Historically, endpoint cancellation and the terminal plateau left the active
+repair-window geometry open and motivated P2-C. The subsequent NSRW coefficient,
+mass-tail, IVT and weighted-angular comparison modules settle the stated
+small-positive-eta existence/mismatch question, not the full zero set or the
+negative/non-small-eta coefficient ordering. Those broader questions remain
+future research, while this bounded result is admitted.
 
 ## P2-D: Cone and Moment usefulness
 
