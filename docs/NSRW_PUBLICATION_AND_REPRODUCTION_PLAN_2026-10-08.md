@@ -385,6 +385,28 @@ authorize upload. The existing private originals and execution checkpoint stay f
 
 ## 9. What counts as engagement
 
+### Distribution observation — 2026-10-15
+
+The earlier preparation checklist is retained as a dated planning record.
+NSRW v0.4.0 was subsequently published on GitHub at software commit
+`6b81fc0c672ac8d5dd6cea9a7dbe7277ba8793bc`, after all six jobs of
+[the exact-commit CI run](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/38601396281)
+succeeded. The [Release](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.4.0)
+has four selected assets; GitHub digests and retrieved local hashes matched.
+Author approval and assisted file inspection are not independent legal review
+or external mathematical attestation.
+
+Zenodo's repository release webhook was enabled after that publication; the
+connection ping returned HTTP 202, but no release event was delivered at the
+pre-patch observation. The authorized [v0.4.1 distribution patch](releases/v0.4.1.md)
+updates software metadata and current documentation, preserving P01 v0.4 and
+the selected assets unchanged. Do not infer a DOI from webhook activation or
+from the software tag. Observe the actual Zenodo record, its archived files,
+version identity and retrievable checksums before marking archival complete.
+P01's separate preprint record remains a separate deposit; P02/P03 remain deferred.
+The proof execution checkpoint `3a50b5f50b034319a469b9de68f556be70fff02c`
+and the original receipts are not replaced by a distribution commit.
+
 The first useful outcome is one attributable external reproduction attempt or
 one technically specific correction, not a target number of views. Record:
 

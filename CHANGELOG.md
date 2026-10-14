@@ -6,7 +6,28 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
-No additional changes are recorded above the v0.4.0 candidate below.
+No additional changes are recorded above the v0.4.1 patch below.
+
+## [0.4.1] - 2026-10-15
+
+### Fixed
+
+- Replace stale release-preparation wording in current public pages with the
+  observed v0.4.0 GitHub publication and exact-commit CI records.
+- Document that the Zenodo release webhook was enabled after v0.4.0 was
+  published. This new patch release is the first release prepared with that
+  integration active; archival and DOI assignment still require observation.
+- Synchronize software version and citation metadata at 0.4.1. P01 remains
+  manuscript v0.4; existing reproduction/P01 assets are reused byte-for-byte.
+
+### Unchanged
+
+- Mathematical propositions, proof/runner inputs, dated execution receipts and
+  the Z execution checkpoint remain unchanged. This is a distribution/documentation
+  patch, not a new mathematical replay or independent reproduction.
+- No new P02/P03 publication, website deployment or PyPI distribution.
+
+See [v0.4.1 release notes](docs/releases/v0.4.1.md).
 
 ## [0.4.0] - 2026-10-14
 
@@ -279,7 +300,8 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.0...v0.3.1

@@ -263,27 +263,33 @@ hash alone does not let a third party inspect those bytes or authenticate the
 reported run. The public inputs support a new replay, not direct inspection of
 our retained execution bundle. See the [storage policy](colab/README.md).
 
-A reviewed public evidence bundle could improve inspection of recorded runs,
-and a local derivative has been assembled and checksum-checked as of
-2026-10-13. It is still quarantined, not a published download. Raw logs, runtime
-metadata and compiled binaries are deliberately excluded; the candidate contains
-exact inputs, post-execution receipts, selected axiom lines and a bounded stage
-summary. Publication still requires human privacy, redistribution-rights and
-content review. It would not be independent reproduction or semantic proof audit.
+The [v0.4.0 GitHub Release](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.4.0)
+now provides a selected reproduction ZIP, P01 PDF/source ZIP and checksum manifest.
+Those selected assets were retrieved and rehashed against the published GitHub
+digests. Raw logs, runtime metadata and compiled binaries remain private and are
+deliberately excluded; the reproduction subset contains exact inputs,
+post-execution receipts, selected axiom lines and a bounded stage summary.
+The subset is not the original complete execution archive, independent
+reproduction or a semantic proof audit.
 
 ### Publication and release preparation
 
-The [v0.4.0 — Z-core / bounded Z+J](docs/releases/v0.4.0.md) release candidate
-packages the admitted mathematical phase and the P01 manuscript. Its package
-version is `0.4.0`; the tag and GitHub Release are issued only after the exact
-candidate's hosted CI succeeds. P02/P03 publication is deferred. The original
-execution checkpoint and historical tags/notes are unchanged.
+The [v0.4.0 GitHub Release](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.4.0)
+was published on 2026-10-15 (Asia/Bangkok), at software commit
+`6b81fc0c672ac8d5dd6cea9a7dbe7277ba8793bc`, after
+[all six exact-commit CI jobs succeeded](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/38601396281).
+It packages the admitted mathematical phase and P01 manuscript v0.4.
+[v0.4.1](docs/releases/v0.4.1.md) is a software metadata/documentation patch
+prepared after Zenodo's release webhook was enabled. It reuses the selected
+v0.4.0 assets without changing their bytes. P02/P03 publication remains deferred.
+The original execution checkpoint and historical tags/notes are unchanged.
 
 The [publication plan](docs/NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md)
 separates local assembly, human review, version/tag preparation and external
 publication. A later software/docs tag must not replace the proof execution
-checkpoint `3a50b5f50b034319a469b9de68f556be70fff02c`. No DOI, public ZIP URL,
-new hosted CI result or independent attestation is claimed here.
+checkpoint `3a50b5f50b034319a469b9de68f556be70fff02c`. Zenodo software archival
+and DOI assignment must be verified separately; an active webhook alone proves
+neither. A software archive does not create P01's separate preprint record.
 
 External review is welcome, starting with these bounded targets:
 

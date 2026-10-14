@@ -34,10 +34,13 @@ Read these first:
   index checks, failure artifacts, scoped M4 Lean execution and explicitly held CD;
   local verification is not a current hosted run or a P2 proof receipt.
 
-- **Release scope — 2026-10-14:** NSRW software plus P01 are authorized for final
-  inspection and publication after exact-commit hosted CI. P02/P03 are deferred.
-  [v0.4.0 notes](releases/v0.4.0.md) retain the fixed proof checkpoint; actual
-  GitHub/Zenodo publication is verified separately. Private records remain Git-ignored.
+- **Distribution update — 2026-10-15:**
+  [v0.4.0 is published on GitHub](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.4.0)
+  with selected reproduction/P01 assets after all six exact-commit CI jobs passed.
+  [v0.4.1 patch notes](releases/v0.4.1.md) document the subsequently enabled
+  Zenodo webhook, unchanged mathematics and byte-identical asset reuse.
+  DOI assignment and a separate P01 preprint deposit remain separately observed
+  tasks; P02/P03 are deferred. Private records remain Git-ignored.
 
 - [Dated position snapshot](CURRENT_POSITION_2026-10-05.md): P2/strict-L2 snapshot, source pins,
   evidence classes, OE levels, and restart target; its dated 10/6 addendum links
@@ -55,8 +58,8 @@ Read these first:
   radius. Z-core and bounded Z+J are separately admitted after the new 10/12
   clean full-DAG replay and private Drive/D: archive review. The final source
   composition uses one shared M-zero/J-positive witness.
-  Next: final package content/privacy/rights review and separate release authorization;
-  local public-derivative assembly and checksum crosscheck are complete.
+  Next: Zenodo software archival verification and the separate P01 paper deposit;
+  v0.4.0 GitHub publication and selected-asset retrieval crosscheck are complete.
   Not itself an execution receipt.
 
 - [Z-01 source map — 2026-10-10](M5_P2_Z01_SOURCE_MAP_2026-10-10.md):

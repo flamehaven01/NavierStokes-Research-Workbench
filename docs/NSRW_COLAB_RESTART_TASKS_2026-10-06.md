@@ -760,12 +760,18 @@ source → fresh F1 → strict L2 → L3 → D가 같은 run에서 exit `0`이�
     자동 hash 검사는 사람의 개인정보·재배포 권리 검수나 독립 attestation이 아니다.
   - [ ] **NG-01B / 공개 내용·권리·개인정보 검수.** 최신 파생본의 실제 구성 파일,
     추출 후 링크와 checksum을 검수하고 human review를 기록한다. 이전 후보는 보존한다.
-  - [ ] **NG-01C / 버전·문서·배포.** [v0.4.0 초안](releases/v0.4.0.md)에 따라
-    정확한 변경 inventory와 software/docs 검증을 확인한 뒤 version/tag/Release를 결정한다.
-    2026-10-14에 NSRW + P01 최종 배포 점검, commit/push 및 exact-commit hosted CI
-    성공 후 v0.4.0 tag/Release·Zenodo 확인이 승인됐다. 패키지 버전은 0.4.0으로
-    준비한다. 실제 게시/DOI는 관측 후 기록하며 실행 checkpoint 3a50b5f...는 불변이다.
-    P02/P03·응용 초안·사이트 배포는 이번 공개에서 제외한다.
+  - [x] **NG-01C-01 / v0.4.0 GitHub 배포 관측 (2026-10-15).**
+    software commit `6b81fc0c672ac8d5dd6cea9a7dbe7277ba8793bc`의 hosted CI
+    6개 job이 성공한 뒤 annotated tag/Release가 게시됐다. 선택 asset 4개의
+    서버 digest 및 GitHub CLI 회수 후 로컬 hash가 일치했다. 이 관측은 독립
+    수학 재현이나 사람의 독립 권리 검수가 아니다. 원래 실행 pin/receipt는 불변이다.
+  - [ ] **NG-01C-02 / v0.4.1 배포 patch 및 Zenodo 관측.**
+    [patch notes](releases/v0.4.1.md)에 따라 version/citation/배포 문서를 정리하고
+    exact-commit CI 후 새 tag/Release를 게시한다. v0.4.0 이후 생성된 Zenodo
+    webhook은 active이며 ping HTTP 202가 관측됐다. 실제 software record/DOI와
+    보관 파일·hash는 별도 확인한다. 활성화만으로 archival 완료 표시하지 않는다.
+  - [ ] **NG-01C-03 / P01 별도 preprint deposit.** software archival과 별개다.
+    P01 원고 버전은 v0.4이며 P02/P03·응용 초안·사이트 배포는 계속 제외한다.
     uniqueness/simple-zero/Q pole/quantitative epsilon은 이번 phase 완료 조건이 아니다.
 
 ### 8.6 공통 gate — 새로운 named proposition마다 적용

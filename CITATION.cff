@@ -11,7 +11,7 @@ authors:
 repository-code: https://github.com/flamehaven01/NavierStokes-Research-Workbench
 url: https://github.com/flamehaven01/NavierStokes-Research-Workbench
 license: MIT
-version: 0.4.0
+version: 0.4.1
 abstract: >-
   A research workbench for construction-specific, source-linked formal
   consequences and reproducible bounded checks. The P2 study establishes a
