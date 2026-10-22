@@ -1,6 +1,6 @@
 schema: flamehaven.e2a-resource-claim-ledger.v1
-valid_as_of: "2026-10-12"
-reviewed_on: "2026-10-12"
+valid_as_of: "2026-10-22"
+reviewed_on: "2026-10-22"
 # Evidence index only. Each claim retains its own dated evidence boundary.
 # Strict L2, L3, D and C01 retain separate 10/6 compiled receipts.
 # C02 admits only two equalities from a separate 10/7 replay reviewed on 10/8.
@@ -8,6 +8,8 @@ reviewed_on: "2026-10-12"
 # C04 admits only its per-Profile existential positive-eta radius from the 10/10 replay.
 # Z-core and Z+J named scopes are admitted by separate 10/12 receipts after new replay/archive review.
 # Both share one execution/trust domain; original metadata remains NONE/UNVERIFIED.
+# P1's ten exact-real margin/normalization propositions have one scoped 10/22 receipt.
+# Each retains its own explicit hypotheses; OE-2 and numerical/non-claim boundaries remain.
 # Entries retain their individual evidence dates; no uniform/numerical epsilon or Q pole is admitted.
 # falsifier: claim-domain contradiction, not compile/identity failure.
 # admission_failure: reason an execution record cannot be accepted.
@@ -562,6 +564,346 @@ claims:
     reopening_condition: null
     lineage:
       upstream: [nsrw/p2/c04/small-positive-eta-sign, nsrw/p2/l4/first-repair-zero, nsrw/p2/zplus-j/conditional-angular-positive]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/margin/second-bump-tail-equality
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "repairBumpTail c 0 1 r equals the full source second-bump mass moment I01; no mass-zero or c1 hypothesis"
+    hypotheses: ["c : Parameters","r : Real","r < c.upper 0"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_QuantitativeMargin.lean
+      declaration: NSRW.P2.secondBump_massTail_eq_full
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 7a504d7c9cde6d76f2d0e826572fbbebeae905166802adc3e7b0d9b844e534b6
+      proof_git_blob_sha1: 16e0f2d48f0205db7a7d3bca9c1ab9262e7b925a
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/margin/weight-gap-positive
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < (c.upper 0)^(-c.lam) - (c.lower 1)^(-c.lam)"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_QuantitativeMargin.lean
+      declaration: NSRW.P2.firstRepair_weightGap_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 7a504d7c9cde6d76f2d0e826572fbbebeae905166802adc3e7b0d9b844e534b6
+      proof_git_blob_sha1: 16e0f2d48f0205db7a7d3bca9c1ab9262e7b925a
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/margin/angular-lower-bound
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "K1*c1*I01*Delta <= localAngularMoment F eta r, for the same F, eta and first-window mass zero r; aliases defined in the receipt"
+    hypotheses: ["F : Profile","eta r : Real","F.data.core.lower 0 < r","r < F.data.core.upper 0","localMass F eta r = 0","0 < localSecondRepairCoefficient F eta"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_QuantitativeMargin.lean
+      declaration: NSRW.P2.angularMoment_ge_firstRepair_margin
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 7a504d7c9cde6d76f2d0e826572fbbebeae905166802adc3e7b0d9b844e534b6
+      proof_git_blob_sha1: 16e0f2d48f0205db7a7d3bca9c1ab9262e7b925a
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p1/margin/second-bump-tail-equality"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/margin/positive-product
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < K1*c1*I01*Delta for the same F and eta; no radius or mass-zero hypothesis"
+    hypotheses: ["F : Profile","eta : Real","0 < localSecondRepairCoefficient F eta"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_QuantitativeMargin.lean
+      declaration: NSRW.P2.firstRepair_margin_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 7a504d7c9cde6d76f2d0e826572fbbebeae905166802adc3e7b0d9b844e534b6
+      proof_git_blob_sha1: 16e0f2d48f0205db7a7d3bca9c1ab9262e7b925a
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p1/margin/weight-gap-positive"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/normalization/weight-gap-exponential
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "Delta = exp(-13 + 23*c.lam/20)*(exp(17*c.lam/10)-1), an exact real identity"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_MarginNormalization.lean
+      declaration: NSRW.P2.firstRepair_weightGap_exp_eq
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 058ad35fca4228ea29773cef7c118dce7414745451f7f20361ca159d9a68ab8b
+      proof_git_blob_sha1: b3d8d48f9cd808a101540fff91f4314f921f6a0e
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/normalization/moment-interval
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "normalizedSecondBumpMoment c equals the interval integral from ell=exp(-23/20) to v=exp(-17/20) of z^(c.exponents 0)*bump(ell,v,z)"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_MarginNormalization.lean
+      declaration: NSRW.P2.normalizedSecondBumpMoment_eq_interval
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 058ad35fca4228ea29773cef7c118dce7414745451f7f20361ca159d9a68ab8b
+      proof_git_blob_sha1: b3d8d48f9cd808a101540fff91f4314f921f6a0e
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/normalization/second-bump-scaling
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "I01 = exp(c.pulseLength*(1/2-c.lam))*normalizedSecondBumpMoment c for the exact source bump"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_MarginNormalization.lean
+      declaration: NSRW.P2.secondBumpWeightedMoment_eq_normalized
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 058ad35fca4228ea29773cef7c118dce7414745451f7f20361ca159d9a68ab8b
+      proof_git_blob_sha1: b3d8d48f9cd808a101540fff91f4314f921f6a0e
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/normalization/row-moment-link
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "normalizedSecondBumpMoment c = exp(-(1/2-c.lam))*rowMoment(c.exponents 0)"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_MarginNormalization.lean
+      declaration: NSRW.P2.normalizedSecondBumpMoment_eq_rowMoment
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 058ad35fca4228ea29773cef7c118dce7414745451f7f20361ca159d9a68ab8b
+      proof_git_blob_sha1: b3d8d48f9cd808a101540fff91f4314f921f6a0e
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/normalization/plateau-lower-bound
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "(secondNormalizedUpper-secondNormalizedLower)/4 <= normalizedSecondBumpMoment c for the exact source cutoff"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_MarginNormalization.lean
+      declaration: NSRW.P2.normalizedSecondBumpMoment_ge_plateau
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 058ad35fca4228ea29773cef7c118dce7414745451f7f20361ca159d9a68ab8b
+      proof_git_blob_sha1: b3d8d48f9cd808a101540fff91f4314f921f6a0e
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p1/normalization/moment-interval"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/p1/normalization/angular-plateau-lower-bound
+    version: 1
+    valid_as_of: "2026-10-22"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "K1*c1*(exp(c.pulseLength*(1/2-c.lam))*((v-ell)/4))*Delta <= localAngularMoment F eta r for the same F, eta, r; c=F.data.core"
+    hypotheses: ["F : Profile","eta r : Real","F.data.core.lower 0 < r","r < F.data.core.upper 0","localMass F eta r = 0","0 < localSecondRepairCoefficient F eta"]
+    source_pin:
+      external_module: formal/p2/P2_ZPLUS_J_MarginNormalization.lean
+      declaration: NSRW.P2.angularMoment_ge_plateau_margin
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_P1_MARGIN_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    execution_record: colab/P1_MARGIN_COMMIT_BOUND_REPLAY_2026-10-22.md
+    receipt:
+      path: docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md
+      sha256: 60123123a7f2ab3424cd8c966c7e7927bcd8550828c648aac9fa35f52f0699b7
+      nsrw_commit: 7f29ebf0e2b894bf598144628230ae09df436c3d
+      proof_sha256: 058ad35fca4228ea29773cef7c118dce7414745451f7f20361ca159d9a68ab8b
+      proof_git_blob_sha1: b3d8d48f9cd808a101540fff91f4314f921f6a0e
+      archive_sha256: 9163d2ee67a4cab03c152151d1df7c3e4990306c6d2fa184b52d63e556aa52a5
+      independent_attestation: false
+    non_claims: [numerical_q, explicit_profile_certificate, computed_root, interval_arithmetic, source_profileJ_quantitative_wrapper, uniqueness, q_pole, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying this declaration's own hypotheses but violating its exact conclusion"
+    admission_failure: "input identity drift, failed execution/archive review or changed named statement; not a mathematical counterexample"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p1/margin/angular-lower-bound","nsrw/p1/margin/weight-gap-positive","nsrw/p1/normalization/second-bump-scaling","nsrw/p1/normalization/plateau-lower-bound"]
       downstream: []
     reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
 

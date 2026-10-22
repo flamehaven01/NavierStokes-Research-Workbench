@@ -263,6 +263,14 @@ separate tracks. Neither is a substitute for the parametric formal argument.
 
 This separation keeps the roadmap stable while execution status changes.
 
+The [post-Z+J computational bridge](NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md)
+details the intermediate research route before application transfer: mathematical
+reconstruction and a quantitative moment bound -> an admissible evaluable model
+and interval certificate -> a bounded scaling/localization extension -> selected
+verification and comparative utility testing. Source Profiles and explicitly
+restricted/manufactured models remain distinct. This specializes the existing
+route; it adds no maturity axis and does not certify an application capability.
+
 Publication and international reproduction follow the separate
 [Zenodo-first publication plan](NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md).
 Artifact preservation, reader-facing explanation, and manuscript scope are

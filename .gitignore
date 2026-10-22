@@ -6,6 +6,7 @@ htmlcov/
 dist/
 build/
 *.egg-info/
+# Local upstream and related-repository references; not NSRW dependencies.
 external_sources/
 .env
 .env.*
@@ -37,6 +38,15 @@ scripts/build-p2-z-held-derivative.*
 scripts/inspect-p2-z-private-evidence.*
 scripts/prepare-p2-z-publication-candidate.ps1
 scripts/check-p2-z-publication-candidate.ps1
+# Local P1 session tools, raw notebook export, and pre-admission working drafts.
+# Public replay inputs are the tracked scripts/run-p1-margin-replay.py and Lean modules.
+/colab/p1-*.py
+/colab/ZPLUS_J_COMPOSITION_DEVELOPMENT_2026-10-11.ipynb
+/docs/P1_MARGIN_DATED_RECEIPT_REVIEW_DRAFT_*.md
+/docs/NSRW_POST_Z_BREAKTHROUGH_AGENDA_DRAFT_2026-10-10.md
+/docs/NSRW_POST_Z_HARDENING_AND_TRANSLATION_DRAFT_2026-10-10.md
+/docs/NSRW_RESEARCH_MATERIALS_AI_INDEX_2026-10-15.md
+/docs/NSRW_RESEARCH_MATERIALS_MANIFEST_2026-10-15.yaml
 scripts/review-p2-z-held-derivative.ps1
 # Internal manuscript preparation/review records are not publication assets.
 /research-papers/private/

@@ -21,12 +21,13 @@ first/unique zero or a Navier–Stokes solution. The result and its mechanism ar
 explained below; receipts and reproduction tools document their bounded scope.
 
 [![Software CI](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/workflows/ci.yml)
+[![Software DOI](https://zenodo.org/badge/1364445063.svg)](https://doi.org/10.5281/zenodo.23381778)
 [![Checkpoint tag](https://img.shields.io/github/v/tag/flamehaven01/NavierStokes-Research-Workbench?label=checkpoint)](https://github.com/flamehaven01/NavierStokes-Research-Workbench/tags)
 [![Python requirement](https://img.shields.io/badge/Python-%E2%89%A53.10-blue)](pyproject.toml)
 [![Pinned Lean](https://img.shields.io/badge/pinned_Lean-4.34.0--rc2-blue)](formal/p2/README.md)
 [![Software license: MIT](https://img.shields.io/badge/Software_license-MIT-yellow.svg)](LICENSE)
 
-Badges describe software CI, Git tags, environment requirements, and licensing.
+Badges describe software CI, archival identity, Git tags, environment requirements, and licensing.
 They do not certify a mathematical result. A checkpoint tag is not necessarily
 a published GitHub Release; P2 proof evidence lives in individual dated receipts.
 Software and Lean proof files remain MIT; the selected P01 manuscript text
@@ -48,6 +49,15 @@ upstream theorem is wrong, and literature novelty has not been established.
 · [Research papers and review plan](research-papers/README.md)
 
 ## Current P2 research
+
+**Subsequent P1 extension, 2026-10-22:** four quantitative-margin and six exact
+normalization/plateau propositions are admitted in a
+[single scoped receipt](docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md).
+They provide a root-location-independent positive local-J bound under the
+same-Profile mass-zero and positive-c1 hypotheses. This is exact-real mathematics,
+not a numerical certificate. The [computational bridge plan](docs/NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md)
+records the next P0 admissibility and P2 computation work; independent reproduction
+has not been performed. The historical snapshot below is retained separately.
 
 **Evidence snapshot: 2026-10-12.** The findings and table below describe that
 snapshot, not the live Colab VM. Consult the
@@ -287,9 +297,13 @@ The original execution checkpoint and historical tags/notes are unchanged.
 The [publication plan](docs/NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md)
 separates local assembly, human review, version/tag preparation and external
 publication. A later software/docs tag must not replace the proof execution
-checkpoint `3a50b5f50b034319a469b9de68f556be70fff02c`. Zenodo software archival
-and DOI assignment must be verified separately; an active webhook alone proves
-neither. A software archive does not create P01's separate preprint record.
+checkpoint `3a50b5f50b034319a469b9de68f556be70fff02c`.
+[NSRW v0.4.1 is archived on Zenodo](https://doi.org/10.5281/zenodo.23381779).
+The badge links the [software's all-version concept DOI](https://doi.org/10.5281/zenodo.23381778);
+the version DOI identifies the v0.4.1 source snapshot. Its public ZIP was retrieved
+and all 270 regular files matched the release commit's Git export. This is an
+archival-integrity check, not independent mathematical reproduction.
+A software archive does not create P01's separate preprint record.
 
 External review is welcome, starting with these bounded targets:
 

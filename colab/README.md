@@ -1,6 +1,8 @@
 # Colab execution files and local evidence
 
-Local storage policy, effective 2026-10-07.
+Storage policy updated 2026-10-21: Google Drive is the primary preservation
+location for important future Colab experiments. This supersedes the earlier
+local-first archive procedure; historical evidence stays in place.
 
 Keep required Colab launchers, development runners, input manifests, notebook
 exports, logs, and handoff information in this repository's `colab/` directory,
@@ -10,9 +12,26 @@ This directory is a storage location, not a source of mathematical authority.
 ## Storage and publication
 
 - Keep reusable, reviewed launchers and instructions as ordinary tracked files.
-- Keep raw execution evidence under `colab/evidence/<date>/<unique-run-id>/`.
-  This subtree is ignored by Git. Save inputs, metadata, command exit codes,
-  stdout/stderr, artifact hashes, and archives there before handoff.
+- Execute and compile in the Colab VM's `/content` workspace. Preserve each
+  important authorized experiment, successful or failed, in the private Drive
+  folder `MyDrive/NSRW-evidence/<date>/<unique-run-id>/`. Do not compile directly
+  on the mounted Drive or copy entire toolchain/cache trees by default.
+- Archive the run's exact inputs, commands/exit codes, raw stdout/stderr,
+  metadata, axiom output and generated proof artifacts where applicable.
+  Record the original archive's size and SHA-256, copy without overwriting an
+  existing run, then reopen the Drive copy and compare its size and SHA-256.
+  Record the destination and verification outcome before releasing the VM.
+- Drive authentication/consent remains user-operated. A mount, copy or notebook
+  save alone is not verified archive preservation. If authentication, quota or
+  transfer fails, retain the live VM evidence and report preservation incomplete.
+  Private preservation does not authorize public sharing or claim admission.
+- Keep only the needed local launchers, small summaries and preservation
+  references under `colab/`. Download full archives to D: only when needed for
+  review or a secondary backup, using the Git-ignored
+  `colab/evidence/<date>/<unique-run-id>/` subtree. Do not use C:, Windows Temp
+  or the browser's default download folder as an archive staging location.
+  Verify any D: copy separately; Drive-copy verification is not a D: cross-check
+  or independent reproduction. Drive is the primary copy, not a second backup.
 - Git-ignored evidence is not protected by Git history. A destructive cleanup
   such as `git clean -fdx` can delete it; do not run cleanup against this subtree
   without first preserving and checking a separate copy. For long-term retention,
@@ -23,7 +42,7 @@ This directory is a storage location, not a source of mathematical authority.
 - Continue to place reviewed dated receipts in `docs/stage_receipts/`. A session
   index can link a run to its receipt; it does not replace receipt admission.
 - Colab's `/content` is the remote execution workspace, not durable storage.
-  Copy required evidence into this local directory before releasing the VM.
+  Copy required evidence to Drive and verify the saved archive before releasing the VM.
   If transfer fails, record that preservation is incomplete.
 - Do not migrate or delete historical evidence stores merely to apply this
   forward-looking policy.

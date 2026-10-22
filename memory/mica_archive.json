@@ -23,8 +23,8 @@
     },
     {
       "id": "execution-storage",
-      "remember": "Required local Colab files and execution information belong under colab/, not local Temp. Raw evidence belongs in the Git-ignored colab/evidence/ subtree. Colab /content is ephemeral execution storage. Historical evidence is preserved, not automatically migrated or deleted.",
-      "origin": "Repository storage procedure, 2026-10-07",
+      "remember": "For important future authorized Colab experiments, execute in /content and preserve successful and failed run archives primarily in private Google Drive under MyDrive/NSRW-evidence/<date>/<unique-run-id>/. Reopen the Drive copy and compare its size and SHA-256 before releasing the VM. Keep small local execution records under colab/; use D: colab/evidence/ only for needed verification copies or secondary backups, never C: or local Temp for archive staging. Drive verification is not independent reproduction or a D: cross-check. Historical evidence stays in place.",
+      "origin": "Repository storage policy updated, 2026-10-21",
       "references": ["colab/README.md"]
     },
     {
@@ -34,6 +34,6 @@
     }
   ],
   "operation_meta": {
-    "last_updated": "2026-10-07"
+    "last_updated": "2026-10-21"
   }
 }

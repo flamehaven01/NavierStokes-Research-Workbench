@@ -50,10 +50,17 @@ VM's actual source, toolchain, and dependency state before using historical
 notebook output. Environment recovery, compile, and receipt admission remain
 separate operations under the existing restart checklist.
 
-Keep local launchers and required execution information under `colab/` and raw
-evidence under `colab/evidence/<date>/<unique-run-id>/`. Transfer required VM
-evidence before releasing it; record incomplete transfer explicitly. Preserve
-failed runs. Do not combine logs from different runs to manufacture success.
+For important authorized experiments, execute in `/content`, archive the run,
+and preserve it primarily in private Google Drive at
+`MyDrive/NSRW-evidence/<date>/<unique-run-id>/`. Reopen the saved copy and compare
+size and SHA-256 before releasing the VM. Preserve failed runs too, without
+overwriting earlier evidence; record incomplete transfers explicitly.
+Keep local launchers and small execution/preservation records under `colab/`.
+Use D: `colab/evidence/<date>/<unique-run-id>/` for needed verification copies or
+secondary backups, not automatic full downloads. Do not stage archives on C:
+or in local Temp. Do not claim a D: cross-check without actually performing it.
+Leave historical evidence in place; do not combine logs from different runs to
+manufacture success. Private Drive storage is not public sharing or proof authority.
 
 ## Maintenance and handoff
 
