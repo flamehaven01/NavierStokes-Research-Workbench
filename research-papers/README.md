@@ -1,13 +1,14 @@
 # NSRW research papers
 
-작성일: 2026-10-14 (Asia/Bangkok)
+갱신일: 2026-10-28 (Asia/Bangkok)
 공개 저자: **Yun Kwansub**. 제공되지 않은 소속·ORCID는 기입하지 않는다.
 
 이 폴더는 논문 작성과 검수의 작업 공간이다. `docs/`의 프로그램·재현·운영
 문서와 구분한다. 논문 목록은 수학 claim ledger나 release 승인 시스템이 아니다.
-이번 최초 공개 대상은 **NSRW 소프트웨어와 P01 수학 원고 v0.4**다.
-P02는 다음 공개 단계, P03는 별도 개정·기여 검토 이후로 미룬다.
-내부 검수 기록과 후속 원고는 이 공개 tree에 포함하지 않는다.
+최초 공개는 **NSRW 소프트웨어와 P01 수학 원고 v0.4**였으며,
+이번에는 **P02 소프트웨어 사례연구 v0.5**를 추가한다.
+P03는 별도 개정·기여 검토 이후로 미룬다.
+내부 검수 기록과 유보 원고는 이 공개 tree에 포함하지 않는다.
 Zenodo 논문 레코드와 DOI는 실제 등록 후 연결한다.
 
 ## 현재 원고
@@ -15,17 +16,19 @@ Zenodo 논문 레코드와 DOI는 실제 등록 후 연결한다.
 | 원고 | 읽기 | 현재 상태 |
 |---|---|---|
 | P01 — 수학 | [Mass zero / angular mismatch](P01_MassZero_AngularMismatch.md) | v0.4: 정리 범위 유지; 논문 라이선스·재현 안내 보강 |
-| P02 — 코드·재현 | 후속 원고, 이번 공개 제외 | 구현과 실제 연구 사용 경험을 다룬다 |
+| P02 — 코드·재현 | [Source-bound reproducible research](P02_SourceBound_ReproducibleResearch.md) | v0.5: 10월 사례의 수치 유지, 공개 배포 현황과 후속 P1 구분 |
 | P03 — 의미 변환 사례연구 | 후속 원고, 이번 공개 제외 | 별도 기여 검토 후 공개 여부를 결정한다 |
 
-P01은 Markdown 원고와 standalone LaTeX 소스, 실제 PDF를 제공한다.
+P01과 P02는 Markdown 원고와 standalone LaTeX 소스, 실제 PDF를 제공한다.
 조판 검사는 수학적 실행 검증과 별개이며, 공개 승인 역시 외부 peer review를
-의미하지 않는다. 두 후속 원고는 소프트웨어·수학 원고와 별개의 출판물이다.
+의미하지 않는다. P02는 구현 사례연구이며 P01의 수학 논증과 구별된다.
 
 - P01: [LaTeX](latex/P01_MassZero_AngularMismatch.tex) / [PDF](pdf/P01_MassZero_AngularMismatch.pdf)
+- P02: [LaTeX](latex/P02_SourceBound_ReproducibleResearch.tex) / [PDF](pdf/P02_SourceBound_ReproducibleResearch.pdf) / [SHA-256 manifest](SHA256SUMS-P02-v0.5)
 - [조판 재현](latex/README.md) / [선정 배포 구성](PUBLICATION_CONTENTS.md)
 
-이번 P01 공개 파일의 manifest는 `SHA256SUMS-P01-v0.4`이다.
+P01 공개 파일의 manifest는 `SHA256SUMS-P01-v0.4`이며 변경하지 않았다.
+P02는 `SHA256SUMS-P02-v0.5`로 세 표현의 identity를 별도로 기록한다.
 이전 통합 manifest와 후보는 로컬에 보존되며 이번 공개 파일의 identity로
 사용하지 않는다. 원고 0.4와 소프트웨어 0.4.0은 서로 다른 버전 축이다.
 
@@ -36,8 +39,9 @@ P01은 Markdown 원고와 standalone LaTeX 소스, 실제 PDF를 제공한다.
 ## 작성 목록과 우선순위
 
 아래 세 편을 작성 대상으로 관리한다. 제목은 작업 제목이며, 지금 반드시
-완성할 첫 원고는 P01이다. P02/P03은 각각 별개의 기여와 근거가 있을 때
-완성한다. 같은 결과를 세 편으로 나누거나 논문 수를 채우지 않는다.
+처음 완성한 원고는 P01이다. P02는 구현과 사용 경험을 별도 사례연구로
+제공하고, P03는 독립된 기여가 확보될 때 재개한다.
+같은 결과를 세 편으로 나누거나 논문 수를 채우지 않는다.
 
 | ID / 순서 | 논문 / 작업 제목 | 중심 질문과 독립된 기여 | 현재 재료 | 작성·공개 전 남은 일 |
 |---|---|---|---|---|
@@ -123,11 +127,12 @@ P01 검수 결과가 P02/P03에 자동 상속되지 않는다.
 기존 초안·후보 ZIP은 이동·덮어쓰기하지 않았다. 원본 ZIP·raw logs·runtime
 metadata는 계속 `colab/evidence/`의 비공개 보존 대상이며 이 폴더로 복사하지 않는다.
 
-## 당장 다음 작업
+## 현재 배포와 후속 작업
 
-1. 승인된 NSRW 소프트웨어 release의 실제 identity와 Zenodo 보존 결과를 확인한다.
-2. P01을 별도 preprint 레코드로 연결한다. 발급되지 않은 DOI를 기입하지 않는다.
-3. P02는 다음 공개 단계, P03은 별도 패치와 독립 기여 검토로 진행한다. 내부 검사 도구명·
+1. 기존 소프트웨어 v0.4.1과 P01 v0.4의 tag·asset·manifest는 유지한다.
+2. P02 v0.5는 이번 GitHub 논문 공개 대상으로 추가한다. 별도 P02 DOI나
+   독립 재현을 수행한 것으로 표시하지 않는다.
+3. P03은 별도 패치와 독립 기여 검토로 진행한다. 내부 검사 도구명·
    출력·작업 기록은 논문이나 배포 패키지에 포함하지 않는다.
 
 v0.4.0은 현재 성과의 repository/artifact 기준점이다. 원고 v0.4와는 별도의

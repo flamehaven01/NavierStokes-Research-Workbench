@@ -1,6 +1,6 @@
-# Typeset the mathematical manuscript
+# Typeset the manuscripts
 
-The P01 `.tex` file is a standalone academic article with embedded references.
+The P01 and P02 `.tex` files are standalone academic articles with embedded references.
 No extra figures, bibliography database or external source file is required.
 The corresponding exported PDFs are in `../pdf/`.
 
@@ -9,6 +9,7 @@ working Tectonic installation and TeX resource bundle:
 
 ```sh
 tectonic research-papers/latex/P01_MassZero_AngularMismatch.tex
+tectonic research-papers/latex/P02_SourceBound_ReproducibleResearch.tex
 ```
 
 Use `--outdir` to place regenerated files outside the selected distribution.

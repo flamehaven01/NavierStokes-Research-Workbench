@@ -50,12 +50,15 @@ scripts/check-p2-z-publication-candidate.ps1
 scripts/review-p2-z-held-derivative.ps1
 # Internal manuscript preparation/review records are not publication assets.
 /research-papers/private/
-# P02/P03 manuscripts are deferred from the first Software + P01 publication.
+# Deferred manuscripts stay private; only the selected P02 publication is admitted.
 /research-papers/P02_*.md
+!/research-papers/P02_SourceBound_ReproducibleResearch.md
 /research-papers/P03_*.md
 /research-papers/latex/P02_*.tex
+!/research-papers/latex/P02_SourceBound_ReproducibleResearch.tex
 /research-papers/latex/P03_*.tex
 /research-papers/pdf/P02_*.pdf
+!/research-papers/pdf/P02_SourceBound_ReproducibleResearch.pdf
 /research-papers/pdf/P03_*.pdf
 /research-papers/SHA256SUMS-v0.2
 /research-papers/SHA256SUMS-v0.3

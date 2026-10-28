@@ -1,4 +1,23 @@
-# First publication: NSRW software and P01
+# Publication selections
+
+## P02 addition — 28 October 2026
+
+The second manuscript selection is *From Source-Bound Proofs to Reproducible
+Research Artifacts: An NSRW Case Study*, version 0.5. It includes only:
+
+- `P02_SourceBound_ReproducibleResearch.md`;
+- `latex/P02_SourceBound_ReproducibleResearch.tex`;
+- `pdf/P02_SourceBound_ReproducibleResearch.pdf`;
+- `SHA256SUMS-P02-v0.5`, identifying those three files.
+
+The paper retains the October 12 reference replay and October 14 software-test
+observations as dated evidence. Its updated distribution section identifies the
+already published software/P01 assets and distinguishes the later P1 extension.
+It does not supply new Lean execution, independent reproduction or a numerical
+certificate. The paper uses CC BY 4.0; software remains MIT. P03 and internal
+review records remain excluded. No historical software tag or P01 asset is replaced.
+
+## First selection: NSRW software and P01
 
 Selection date: 14 October 2026.
 
@@ -9,7 +28,7 @@ The first publication selects one mathematical manuscript:
 The authored P01 manuscript uses CC BY 4.0. NSRW code retains MIT. This selection
 is not an upload, DOI assignment, repository release or external review.
 
-## Included in the local candidate
+### Included in the first candidate
 
 - The current P01 Markdown manuscript and the manuscript license notice.
 - One standalone LaTeX source, one exported PDF, and typesetting instructions.
@@ -27,7 +46,7 @@ Its identity is listed separately from the Markdown and LaTeX sources in
 `SHA256SUMS-P01-v0.4`.
 This typesetting check is not a new Lean replay or independent mathematical review.
 
-## Excluded
+### Excluded from the first selection
 
 - P02 and P03 manuscripts, which remain later publication/revision tasks.
 - Internal manuscript reviews, preparation records, tool reports and local helpers.

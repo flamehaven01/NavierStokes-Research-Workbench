@@ -27,11 +27,26 @@ def test_release_versions_and_first_manuscript_selection() -> None:
         assert hashlib.sha256((ROOT / "research-papers" / name).read_bytes()).hexdigest() == expected
 
 
-def test_deferred_manuscripts_and_private_strategy_are_not_indexed() -> None:
+def test_only_selected_second_manuscript_and_no_private_strategy_are_indexed() -> None:
     result = subprocess.run(["git", "ls-files", "-z", "research-papers"], cwd=ROOT,
                             capture_output=True, check=True)
     names = result.stdout.decode("utf-8").split("\0")
-    assert not any("/private/" in name or "P02_" in name or "P03_" in name for name in names)
+    selected_p02 = {
+        "research-papers/P02_SourceBound_ReproducibleResearch.md",
+        "research-papers/latex/P02_SourceBound_ReproducibleResearch.tex",
+        "research-papers/pdf/P02_SourceBound_ReproducibleResearch.pdf",
+    }
+    assert not any("/private/" in name or "P03_" in name for name in names)
+    assert {name for name in names if "P02_" in name} == selected_p02
+    import hashlib
+
+    manifest = (ROOT / "research-papers/SHA256SUMS-P02-v0.5").read_text(encoding="utf-8")
+    listed = set()
+    for row in manifest.splitlines():
+        expected, name = row.split("  ", 1)
+        listed.add(f"research-papers/{name}")
+        assert hashlib.sha256((ROOT / "research-papers" / name).read_bytes()).hexdigest() == expected
+    assert listed == selected_p02
 
 
 def _markdown_files() -> list[Path]:
