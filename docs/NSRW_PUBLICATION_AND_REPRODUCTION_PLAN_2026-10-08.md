@@ -7,6 +7,15 @@ It does not authorize account creation, uploads, outreach, deployment, or releas
 
 ## 1. Decision and constraints
 
+Current addendum, 2026-10-28: software v0.4.1 and P01 v0.4 are the historical
+published distribution. P02 v0.5 was subsequently published in the GitHub tree
+at `da646614c7022777b0bd095eaf0111dcf1157e8f`. P1's ten quantitative/normalization
+propositions were admitted on 2026-10-22 under their separate replay checkpoint
+`7f29ebf0e2b894bf598144628230ae09df436c3d`. P01's quantitative revision is now
+prepared for external review; P03 is still deferred. No new tag, Zenodo deposit,
+website deployment or external attestation is implied by this addendum.
+The dated decisions below are publication history, not the live task queue.
+
 Historical scheduling decision (2026-10-08): **continue C04 -> Z first**, following C03C admission.
 Updated preparation position (2026-10-12): **Z-core and bounded Z+J have separate
 named-proposition admissions** from one shared exact commit-bound replay.
@@ -438,3 +447,8 @@ No account login, upload, message, release, or website deployment was performed
 while preparing this plan. No scholarly novelty search or external mathematical
 review was performed. arXiv and broad-social-channel availability were not
 investigated; they are simply not dependencies of this plan.
+
+
+## Current computational update - 31 October 2026
+
+The exact-rational core-scalar prototype is implemented and locally recomputed at 128/256/512 fractional bits. [core-scalar method](P2_CORE_SCALAR_METHOD_2026-10-31.md) · [observation](P2_CORE_SCALAR_OBSERVATION_2026-10-31.md). This advances core evaluation only; affine-coefficient integrals, numerical q>0, combinedScale/stepBound admissibility, ResetWitness/K and an explicit source Profile remain unresolved. The next mathematical/computational task is coefficient enclosure with the full assumptions retained. Existing exact-real receipts and execution pins are unchanged. P01 v0.5/P02 v0.6 are the selected new public editions; P03 remains deferred.

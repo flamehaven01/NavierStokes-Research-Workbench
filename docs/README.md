@@ -30,6 +30,16 @@ Read these first:
 
 ## Dated current status
 
+- **Research update — 2026-10-28:** the
+  [P1 receipt](stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md)
+  admits four quantitative-margin and six normalization/plateau propositions,
+  OE-2, at replay checkpoint `7f29ebf0e2b894bf598144628230ae09df436c3d`.
+  [P02 v0.5](../research-papers/P02_SourceBound_ReproducibleResearch.md) is
+  published in the GitHub source tree. P01 v0.4 remains the published mathematical
+  manuscript; P03 remains deferred. The next research task is the
+  [conditional numerical input/error contract](NSRW_P2_FIRST_INPUT_AND_ERROR_CONTRACT_2026-10-28.md),
+  with unresolved source-admissibility obligations explicitly retained.
+
 - [CI/CD verification boundaries](CI_CD_VERIFICATION_BOUNDARIES.md): Python/docs/
   index checks, failure artifacts, scoped M4 Lean execution and explicitly held CD;
   local verification is not a current hosted run or a P2 proof receipt.
@@ -49,7 +59,7 @@ Read these first:
 
 ## Restart tasks
 
-- [NSRW Colab restart tasks — updated 2026-10-12](NSRW_COLAB_RESTART_TASKS_2026-10-06.md):
+- [NSRW Colab restart tasks — current addendum 2026-10-28](NSRW_COLAB_RESTART_TASKS_2026-10-06.md):
   actual 10/6 restart record and closure conditions; T0–T5 completed at scoped
   strict-L2, L3, D and main-only C01 closure. C02's two decomposition equalities
   are separately admitted by the 10/7 commit-bound receipt. C03's 10/8 receipt
@@ -58,8 +68,8 @@ Read these first:
   radius. Z-core and bounded Z+J are separately admitted after the new 10/12
   clean full-DAG replay and private Drive/D: archive review. The final source
   composition uses one shared M-zero/J-positive witness.
-  Next: Zenodo software archival verification and the separate P01 paper deposit;
-  v0.4.0 GitHub publication and selected-asset retrieval crosscheck are complete.
+  The 10/28 current addendum supersedes the historical publication queue and
+  records P1 admission, P02 publication and the conditional numerical frontier.
   Not itself an execution receipt.
 
 - [Z-01 source map — 2026-10-10](M5_P2_Z01_SOURCE_MAP_2026-10-10.md):
@@ -179,3 +189,8 @@ For mathematical scope, read the exact source locator and current design.
 
 For current project position, read the dated snapshot rather than inferring
 status from a stable vision document.
+
+
+## Current computational update - 31 October 2026
+
+The exact-rational core-scalar prototype is implemented and locally recomputed at 128/256/512 fractional bits. [core-scalar method](P2_CORE_SCALAR_METHOD_2026-10-31.md) · [observation](P2_CORE_SCALAR_OBSERVATION_2026-10-31.md) · [v0.5.0 release](releases/v0.5.0.md). This advances core evaluation only; affine-coefficient integrals, numerical q>0, combinedScale/stepBound admissibility, ResetWitness/K and an explicit source Profile remain unresolved. The next mathematical/computational task is coefficient enclosure with the full assumptions retained. Existing exact-real receipts and execution pins are unchanged. P01 v0.5/P02 v0.6 are the selected new public editions; P03 remains deferred.

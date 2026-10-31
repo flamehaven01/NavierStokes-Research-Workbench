@@ -1,5 +1,29 @@
 # NSRW Colab 재점검과 재개 tasks
 
+## Current addendum — 2026-10-28 (Asia/Bangkok)
+
+This current addendum supersedes the historical next-task statements below;
+those dated entries remain execution and planning history.
+
+- [x] P0: restore the tracked checklist path and repair its 13 incoming references.
+- [x] P1 admission: ten exact-real quantitative/normalization propositions are
+  CONFIRMED / OE-2 by [the 2026-10-22 receipt](stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md).
+  Execution checkpoint: `7f29ebf0e2b894bf598144628230ae09df436c3d`.
+  Original metadata remains NONE / UNVERIFIED; independent reproduction is absent.
+- [x] P02 publication: manuscript v0.5 was pushed to GitHub at
+  `da646614c7022777b0bd095eaf0111dcf1157e8f`; published P01 v0.4 is unchanged.
+- [x] Current documentation: record P1 in Unreleased, the root/formal/index/study
+  entrypoints and the publication plan without altering historical receipts.
+- [x] P2 preparation: fix the [first conditional input and error contract](NSRW_P2_FIRST_INPUT_AND_ERROR_CONTRACT_2026-10-28.md).
+- [ ] P2 execution: validate the arithmetic backend, enclose the core coefficients
+  and q, and discharge or explicitly retain actual source-amplitude assumptions.
+- [ ] Explicit numerical Profile, narrow root bracket, independent reproduction
+  and application benefit: not established by P1 admission or this preparation.
+
+P01 quantitative and P03 scope revisions are local external-review candidates.
+P03 remains held for a separate contribution/publication decision. No new Lean
+run, numerical certificate, software tag or public release is created by this update.
+
 최초 재점검: `2026-10-05` / 문서 갱신·실제 재작업 시작: `2026-10-06`
 최근 상태 검수·동기화: `2026-10-13` (Asia/Bangkok), C02 실행일은 UTC `2026-10-07`, C03은 `2026-10-08`, C04는 `2026-10-10`.
 
@@ -847,3 +871,8 @@ Z01–Z03은 같은 replay의 fresh compiled supporting dependencies이며 별�
 C-01 receipt는 main-only 세 proposition만 닫았다. actual 계수의 작은 양의 eta 부호는
 별도 C04 receipt로 닫혔고 first-window zero는 별도 Z-core receipt로 닫혔다.
 이후 proof 구현·실행은 해당 작업의 승인 범위에 따라 진행한다.
+
+
+## Current computational update - 31 October 2026
+
+The exact-rational core-scalar prototype is implemented and locally recomputed at 128/256/512 fractional bits. [core-scalar method](P2_CORE_SCALAR_METHOD_2026-10-31.md) · [observation](P2_CORE_SCALAR_OBSERVATION_2026-10-31.md). This advances core evaluation only; affine-coefficient integrals, numerical q>0, combinedScale/stepBound admissibility, ResetWitness/K and an explicit source Profile remain unresolved. The next mathematical/computational task is coefficient enclosure with the full assumptions retained. Existing exact-real receipts and execution pins are unchanged. P01 v0.5/P02 v0.6 are the selected new public editions; P03 remains deferred.

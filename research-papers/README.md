@@ -1,17 +1,26 @@
 # NSRW research papers
 
-갱신일: 2026-10-28 (Asia/Bangkok)
+갱신일: 2026-10-31 (Asia/Bangkok)
 공개 저자: **Yun Kwansub**. 제공되지 않은 소속·ORCID는 기입하지 않는다.
 
 이 폴더는 논문 작성과 검수의 작업 공간이다. `docs/`의 프로그램·재현·운영
 문서와 구분한다. 논문 목록은 수학 claim ledger나 release 승인 시스템이 아니다.
 최초 공개는 **NSRW 소프트웨어와 P01 수학 원고 v0.4**였으며,
-이번에는 **P02 소프트웨어 사례연구 v0.5**를 추가한다.
+현재 선택 판본은 **P01 v0.5 / P02 v0.6**이며, 아래에서 이전 판본과 구분한다.
 P03는 별도 개정·기여 검토 이후로 미룬다.
 내부 검수 기록과 유보 원고는 이 공개 tree에 포함하지 않는다.
 Zenodo 논문 레코드와 DOI는 실제 등록 후 연결한다.
 
-## 현재 원고
+## Current public editions - 31 October 2026
+
+| Paper | Text | PDF | LaTeX | Checksums |
+|---|---|---|---|---|
+| P01 mathematics v0.5 | [Read](versions/P01-v0.5/P01_MassZero_AngularMismatch.md) | [PDF](versions/P01-v0.5/P01_MassZero_AngularMismatch.pdf) | [Source](versions/P01-v0.5/P01_MassZero_AngularMismatch.tex) | [SHA-256](SHA256SUMS-P01-v0.5) |
+| P02 research software v0.6 | [Read](versions/P02-v0.6/P02_SourceBound_ReproducibleResearch.md) | [PDF](versions/P02-v0.6/P02_SourceBound_ReproducibleResearch.pdf) | [Source](versions/P02-v0.6/P02_SourceBound_ReproducibleResearch.tex) | [SHA-256](SHA256SUMS-P02-v0.6) |
+
+P01 now includes the admitted quantitative and normalized plateau margins. P02 adds the bounded exact-rational core-scalar experiment with separate execution and software-test observations. P03 remains deferred. The original P01 v0.4 and P02 v0.5 files and manifests below remain unchanged historical editions. Manuscript, software-release and formal-execution versions are distinct.
+
+## Earlier public editions
 
 | 원고 | 읽기 | 현재 상태 |
 |---|---|---|

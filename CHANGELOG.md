@@ -6,7 +6,29 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
-No additional changes are recorded above the v0.4.1 patch below.
+## [0.5.0] - 2026-10-31
+
+### Added
+
+- Four quantitative local-angular-margin and six normalization/plateau Lean
+  propositions, fixed by proof checkpoint `fba27381bcfda3af6f03e2fbae82f6db016ca534`
+  and replay checkpoint `7f29ebf0e2b894bf598144628230ae09df436c3d`.
+- The 2026-10-22 P1 receipt admits exactly those ten exact-real propositions,
+  within the existing operator trust domain (OE-2). It does not certify a
+  numerical coefficient bound, explicit Profile, computed root or application.
+- P02 manuscript v0.5, with Markdown, standalone LaTeX, PDF and its own checksum
+  manifest, published on GitHub at `da646614c7022777b0bd095eaf0111dcf1157e8f`.
+
+### Changed
+
+- Synchronize current research documentation with P1 admission and the next
+  conditional-family numerical-input contract. Earlier P01 v0.4 remains unchanged; versioned P01 v0.5 explains the admitted quantitative extension.
+
+- Exact-rational core-scalar enclosures at 128/256/512 fractional bits, deterministic JSON output and a recomputing verifier. The experiment does not compute affine coefficients, numerical q>0, an explicit Profile or a numerical J certificate.
+- P01 v0.5 and P02 v0.6 as versioned Markdown/LaTeX/PDF files with new manifests; earlier paper files and manifests remain unchanged.
+- A GitHub Pages research website built from an explicit public-file allowlist. No private archives or deferred P03 manuscript enter its output.
+
+These changes follow v0.4.1; historical tags, formal execution checkpoints, Lean proofs and dated receipts are preserved. P03 remains deferred. See [release notes](docs/releases/v0.5.0.md).
 
 ## [0.4.1] - 2026-10-15
 
@@ -300,7 +322,8 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.2...v0.4.0
 [0.3.2]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.1...v0.3.2

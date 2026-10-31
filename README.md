@@ -48,6 +48,14 @@ upstream theorem is wrong, and literature novelty has not been established.
 · [Software citation](CITATION.cff)
 · [Research papers and review plan](research-papers/README.md)
 
+## Latest research and computation - 31 October 2026
+
+- **P01 v0.5:** the same-point M-zero/J-positive theorem, now with the admitted quantitative angular-history margin and normalized cutoff-plateau bound. [Read the paper](research-papers/versions/P01-v0.5/P01_MassZero_AngularMismatch.pdf).
+- **P02 v0.6:** the research-software case study, including a separately identified exact-rational core-scalar experiment. [Read the paper](research-papers/versions/P02-v0.6/P02_SourceBound_ReproducibleResearch.pdf).
+- **Executable numerical step:** rigorous outward enclosures of plateau width, weight gap and the main denominator at 128/256/512 fractional bits. [Method](docs/P2_CORE_SCALAR_METHOD_2026-10-31.md) · [observed run](docs/P2_CORE_SCALAR_OBSERVATION_2026-10-31.md) · [example outputs](examples/p2-core-scalars/).
+
+The numerical experiment is core-only: affine-coefficient integrals, numerical q>0, selected-constant admissibility and an explicit source Profile remain open. The formal quantitative result retains its original exact-real scope. P03 remains deferred.
+
 ## Current P2 research
 
 **Subsequent P1 extension, 2026-10-22:** four quantitative-margin and six exact
@@ -502,10 +510,13 @@ actual `c1(0)` positivity and continuity on all `Real` are confirmed.
 C04 confirms a Profile-dependent `epsilon(F) > 0` with positivity for
 `0 < eta < epsilon(F)`. The separate Z-core and Z+J receipts now confirm
 source M-zero existence and same-point M=0/J>0 in the first repair window.
-The bounded phase is closed; its public reproduction/technical-note preparation
-is the next work, under separate authorization. Remaining mathematical questions
-include negative/non-small eta geometry and possible quantitative or simple-zero
-strengthenings; none is required for this phase close or already admitted.
+The subsequent P1 receipt of 2026-10-22 admits a quantitative local-J margin,
+exact normalization identities and a conservative cutoff-plateau lower bound.
+The next research task is the remaining numerical-admissibility analysis and
+the first conditional-family computation described in the
+[computational bridge plan](docs/NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md).
+Negative/non-small eta geometry, uniqueness and simple-zero statements remain
+open. The admitted exact-real margins are not numerical certificates.
 The Z results are not inherited from C01/C02's receipts. See the
 [active checklist](docs/NSRW_COLAB_RESTART_TASKS_2026-10-06.md).
 

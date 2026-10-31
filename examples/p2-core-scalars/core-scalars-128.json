@@ -1,0 +1,62 @@
+{
+  "arithmetic": "exact Fraction series/remainder and dyadic outward rounding",
+  "ell": {
+    "lower": "107745909338503559800433299028993859095/340282366920938463463374607431768211456",
+    "upper": "13468238667312944975054162378624232387/42535295865117307932921825928971026432"
+  },
+  "formal_basis": {
+    "gap": "NSRW.P2.firstRepair_weightGap_exp_eq",
+    "normalization": "NSRW.P2.secondBumpWeightedMoment_eq_normalized",
+    "p1_execution_commit": "7f29ebf0e2b894bf598144628230ae09df436c3d",
+    "plateau": "NSRW.P2.normalizedSecondBumpMoment_ge_plateau",
+    "source_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538"
+  },
+  "format": "nsrw-p2-core-scalars-v1",
+  "i01_lower_bound": {
+    "exponent": "6499999999987",
+    "mantissa_lower": "9423963840590248204390476374765401975/340282366920938463463374607431768211456",
+    "meaning": "lower bound only; no upper enclosure for I01 and no evaluated logarithm",
+    "representation": "exp(exponent)*mantissa_lower"
+  },
+  "inputs": {
+    "K": null,
+    "P": "1",
+    "eta": "1/1048576",
+    "h": "1/4000000000000",
+    "lambda": "1/1000000000000",
+    "m": "1",
+    "wait": "60*log(1000000000000)"
+  },
+  "main_denominator": {
+    "lower": "1849966749086890774054553381/340282366920938463463374607431768211456",
+    "upper": "1849966749086890774054553385/340282366920938463463374607431768211456"
+  },
+  "main_denominator_identity": {
+    "basis": "exp(a)-exp(b)=exp(b)*(exp(a-b)-1); not an added Lean admission",
+    "two_beta0_minus_two_beta1": "1/500000000000",
+    "two_beta1": "249999999999/250000000000"
+  },
+  "outward_quantum": "1/340282366920938463463374607431768211456",
+  "plateau_width": {
+    "lower": "9423963840590248204390476374765401975/340282366920938463463374607431768211456",
+    "upper": "9423963840590248204390476374765401977/340282366920938463463374607431768211456"
+  },
+  "precision_fractional_bits": 128,
+  "scope": "CORE_SCALAR_ENCLOSURES_ONLY",
+  "unresolved": [
+    "CORE_AFFINE_COEFFICIENTS_NOT_ENCLOSED",
+    "Q_LOWER_NOT_ESTABLISHED",
+    "UNRESOLVED_COMBINED_SCALE_STEPBOUND",
+    "UNASSIGNED_RESET_K",
+    "UNCONSTRUCTED_SOURCE_PROFILE",
+    "LOCAL_TO_PROFILE_J_QUANTITATIVE_WRAPPER_NOT_COMPILED"
+  ],
+  "v": {
+    "lower": "145441764700864552617995204528055466999/340282366920938463463374607431768211456",
+    "upper": "18180220587608069077249400566006933375/42535295865117307932921825928971026432"
+  },
+  "weight_gap": {
+    "lower": "653777704535544773427/170141183460469231731687303715884105728",
+    "upper": "1307555409071089546855/340282366920938463463374607431768211456"
+  }
+}

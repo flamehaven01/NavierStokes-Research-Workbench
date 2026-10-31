@@ -1,8 +1,31 @@
 # M5 P2 dilation-ratio obstruction study
 
-Status: construction-specific analysis with admitted Z-core and bounded Z+J results;
+Status, 2026-10-28: construction-specific analysis with admitted Z-core, bounded
+Z+J and the ten P1 quantitative-margin/normalization propositions;
 no new Navier--Stokes solution, numerical witness, or source-bound ten-law atlas
 is claimed.
+
+## Subsequent quantitative result — 2026-10-22
+
+For a fixed source Profile, a first-window local mass zero and positive actual
+second axial coefficient, the admitted P1 result gives
+
+\[
+0<K_1c_1I_{01}G_\lambda\le J_{local},\qquad
+G_\lambda=u_0^{-\lambda}-l_1^{-\lambda}>0.
+\]
+
+The same receipt admits `I01 = exp(L(1/2-lambda))*mu01` and
+`mu01 >= (exp(-17/20)-exp(-23/20))/4`, with exact-real normalization and
+plateau identities. The lower bound is independent of the qualifying zero's
+location; eta>0 is not a hypothesis of these conditional J inequalities.
+Here `G_lambda` denotes the positive weight gap, not the negative normalized
+main-moment difference `deltaM` used later in this study.
+See the [named-proposition receipt](stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md)
+for its ten separate scopes and checkpoint. This is not a numerical evaluation,
+an explicit source instance or a new uniqueness/pole result. The dated analyses
+below retain their historical derivations. The historical P1 scaling-metadata
+lane mentioned below is distinct from the post-Z quantitative-margin stage P1.
 
 This note studies one question created by the reviewed-static P1 scaling
 metadata. It is deliberately independent of the held same-raw export/ledger

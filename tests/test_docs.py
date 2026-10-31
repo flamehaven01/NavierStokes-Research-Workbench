@@ -37,7 +37,10 @@ def test_only_selected_second_manuscript_and_no_private_strategy_are_indexed() -
         "research-papers/pdf/P02_SourceBound_ReproducibleResearch.pdf",
     }
     assert not any("/private/" in name or "P03_" in name for name in names)
-    assert {name for name in names if "P02_" in name} == selected_p02
+    assert {name for name in names if "P02_" in name} == selected_p02 | {
+        "research-papers/versions/P02-v0.6/P02_SourceBound_ReproducibleResearch." + ext
+        for ext in ("md", "tex", "pdf")
+    }
     import hashlib
 
     manifest = (ROOT / "research-papers/SHA256SUMS-P02-v0.5").read_text(encoding="utf-8")
@@ -189,3 +192,33 @@ def test_ci_checkout_and_report_safety_contract() -> None:
     assert "outputs/ci-report/coverage.xml" in report
     assert "include-hidden-files: false" in report
     assert "colab/evidence" not in report and "publication/" not in report
+
+
+@pytest.mark.parametrize("version", ["P01-v0.5", "P02-v0.6"])
+def test_current_manuscript_manifest(version: str) -> None:
+    import hashlib
+    rows = (ROOT / "research-papers" / f"SHA256SUMS-{version}").read_text(encoding="utf-8").splitlines()
+    assert len(rows) == 3
+    for row in rows:
+        digest, name = row.split("  ", 1)
+        assert name.startswith(f"versions/{version}/")
+        assert hashlib.sha256((ROOT / "research-papers" / name).read_bytes()).hexdigest() == digest
+
+
+def test_public_site_allowlist_and_relative_links(tmp_path: Path) -> None:
+    from html.parser import HTMLParser
+    spec = importlib.util.spec_from_file_location("research_site", ROOT / "scripts/build-research-site.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    output = tmp_path / "site"
+    module.build(output)
+    assert not any("private" in str(p) or "P03" in str(p) for p in output.rglob("*"))
+    class Links(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            for key, value in attrs:
+                if key in ("href", "src") and value and not value.startswith(("https:", "http:", "#")):
+                    assert (output / value).is_file(), value
+    Links().feed((output / "index.html").read_text(encoding="utf-8"))
+    (output / "unapproved.txt").write_text("synthetic unapproved output", encoding="utf-8")
+    with pytest.raises(ValueError, match="Unexpected file"):
+        module.build(output)

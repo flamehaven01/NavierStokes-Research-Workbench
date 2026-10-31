@@ -17,6 +17,8 @@ Decision: adopt this bounded research direction; implementation and experiments
 are not started merely by this document. Claims outside the named P1 receipt
 remain unverified. Existing Z-core/Z+J receipts retain their exact scopes.
 
+Current input selection, 2026-10-28: the [first-input/error contract](NSRW_P2_FIRST_INPUT_AND_ERROR_CONTRACT_2026-10-28.md) fixes one conditional source-family tuple, operation/error obligations and a bounded precision schedule. Arithmetic execution and explicit source admissibility remain unresolved.
+
 ## 1. Purpose and place in the program
 
 **목표:** Z+J의 존재·부호 결과를, 명시적인 입력에서 재검사할 수 있는
@@ -787,3 +789,8 @@ Record its result in the existing task trail. Create code only after that choice
 Do not add more downloaded repositories, more proof-checking infrastructure or a
 new paper quota to demonstrate progress. The deliverable is a mathematically
 meaningful computation, or an equally precise result explaining why it fails.
+
+
+## Current computational update - 31 October 2026
+
+The exact-rational core-scalar prototype is implemented and locally recomputed at 128/256/512 fractional bits. [core-scalar method](P2_CORE_SCALAR_METHOD_2026-10-31.md) · [observation](P2_CORE_SCALAR_OBSERVATION_2026-10-31.md). This advances core evaluation only; affine-coefficient integrals, numerical q>0, combinedScale/stepBound admissibility, ResetWitness/K and an explicit source Profile remain unresolved. The next mathematical/computational task is coefficient enclosure with the full assumptions retained. Existing exact-real receipts and execution pins are unchanged. P01 v0.5/P02 v0.6 are the selected new public editions; P03 remains deferred.

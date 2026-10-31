@@ -69,3 +69,8 @@ research-papers/AUTHOR_PREPARATION_RECORD_*.md
 research-papers/REVISION_NOTES_*.md
 research-papers/RELEASE_PREPARATION_*.md
 # Ignore is not erasure or a privacy guarantee; tracked files remain tracked.
+
+# Typesetting intermediates are local, not publication assets.
+/research-papers/versions/**/*.log
+/research-papers/versions/**/*.aux
+/research-papers/versions/**/*.out

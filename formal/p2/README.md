@@ -61,13 +61,24 @@ P2-C04  per-Profile existential radius: 0 < eta < epsilon(F) -> actual c1(eta) >
 P2-Z-core source-facing per-Profile small-positive-eta interior M-zero
 P2-Z+J    conditional first-window local M-zero + c1>0 -> local J>0
           source-facing same-point Profile.M=0 and Profile.J>0
+P1-margin four local-J quantitative-margin/tail/gap propositions
+P1-normalization six exact normalization/plateau propositions
 
 Compiled supporting dependency modules:
 Z01–Z03 mass identities, boundary signs and conditional IVT
 
-Next work (not another mathematical admission):
-Public reproduction package / technical-note scope review; separate authorization
+Next research work:
+P0 numerical-admissibility obligations and P2 conditional-family input/error contract
 ```
+
+The ten P1 propositions are admitted by the
+[2026-10-22 receipt](../../docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md),
+OE-2, from replay checkpoint `7f29ebf0e2b894bf598144628230ae09df436c3d`.
+The modules are [QuantitativeMargin](P2_ZPLUS_J_QuantitativeMargin.lean) and
+[MarginNormalization](P2_ZPLUS_J_MarginNormalization.lean). Their two J bounds
+retain the same fixed Profile, parameter and first-window mass zero with c1>0;
+they do not require eta>0. No explicit numerical Profile, q>0 certificate,
+computed epsilon/root or independent reproduction is supplied by this receipt.
 
 The P2-L1 compile gate is satisfied by the dated
 [`P2_L1_COLAB_2026-09-12.md`](../../docs/stage_receipts/P2_L1_COLAB_2026-09-12.md)
@@ -191,3 +202,8 @@ that is a check for introduced proof placeholders, not a semantic proof audit.
 A successful compilation establishes only the named Lean proposition under the
 pinned source, toolchain, and manifest; it neither verifies the paper as a
 whole nor completes P2.
+
+
+## Current computational update - 31 October 2026
+
+The exact-rational core-scalar prototype is implemented and locally recomputed at 128/256/512 fractional bits. [core-scalar method](../../docs/P2_CORE_SCALAR_METHOD_2026-10-31.md). This advances core evaluation only; affine-coefficient integrals, numerical q>0, combinedScale/stepBound admissibility, ResetWitness/K and an explicit source Profile remain unresolved. The next mathematical/computational task is coefficient enclosure with the full assumptions retained. Existing exact-real receipts and execution pins are unchanged. P01 v0.5/P02 v0.6 are the selected new public editions; P03 remains deferred.
