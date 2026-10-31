@@ -1,6 +1,8 @@
 # CI/CD scope and publication boundary
 
-Updated: 2026-10-13. The repository currently provides CI, **not automatic CD**.
+Updated: 2026-10-31. The repository provides software/research CI and a bounded GitHub Pages deployment workflow. Release and paper publication use separately authorized operations; pushing code does not automatically publish a new software Release or paper.
+
+The [research-site workflow](../.github/workflows/pages.yml) builds from an explicit file allowlist. Build permissions are read-only; only the deploy job has pages-write and OIDC permissions. The site includes two selected PDFs and three scalar JSON files, not raw logs, caches, private reviews or unselected manuscripts. Its deployment does not admit a new mathematical claim. [Software v0.5.0](releases/v0.5.0.md) was published after six exact-commit CI jobs passed. The historical 13 October snapshot below describes the earlier CI-only state.
 Workflow edits do not authorize commit/push, a hosted run, tag, Release, Zenodo
 deposit, website deployment or independent mathematical attestation.
 
@@ -83,8 +85,8 @@ Review the staged inventory with `git diff --cached --name-only`; ordinary
 `git status --short` must include new files. Ignore does not untrack existing
 files, remove secrets from history, or preserve ignored evidence against cleanup.
 
-Release approval, 2026-10-14, covers NSRW software plus P01, with P02/P03 deferred.
+Historical release approval, 2026-10-14, covered NSRW software plus P01, with P02/P03 deferred.
 The [publication plan](NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md)
 and [v0.4.0 scope](releases/v0.4.0.md) retain exact-commit hosted CI and actual
 post-upload checksum/access checks as separate observations. No automated CD
-workflow is introduced. No additional Lean replay is required just to change CI/docs.
+workflow was introduced by that historical change. No additional Lean replay is required just to change CI/docs.

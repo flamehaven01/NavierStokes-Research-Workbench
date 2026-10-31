@@ -1,5 +1,15 @@
 # NSRW publication and international reproduction plan
 
+## Current publication and computation - 31 October 2026
+
+- [Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0) is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`; [all six exact-commit CI jobs passed](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
+- Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) and [P02 v0.6](https://doi.org/10.5281/zenodo.23835112), PDF plus source, CC BY 4.0. P03 remains deferred.
+- The [GitHub research website](https://flamehaven01.github.io/NavierStokes-Research-Workbench/) is deployed from a public-file allowlist. Its PDFs match the local SHA-256 and the public core record recomputes successfully.
+- Core scalars are numerically enclosed at 128/256/512 fractional bits. Affine coefficients, numerical q>0, selected constants/ResetWitness and an explicit source Profile remain unresolved. Next research: coefficient enclosure with the full source assumptions retained.
+
+This supersedes earlier current-task/publication statements below, which are retained as dated history. Original Lean inputs, receipts, claim ledger and execution checkpoints remain unchanged; software publication is not independent reproduction.
+
+
 Date: 2026-10-08 (Asia/Bangkok)
 Scope: publication planning for an independently maintained research project.
 This is not a proof receipt, a second claim ledger, or an execution gate.
@@ -7,7 +17,7 @@ It does not authorize account creation, uploads, outreach, deployment, or releas
 
 ## 1. Decision and constraints
 
-Current addendum, 2026-10-28: software v0.4.1 and P01 v0.4 are the historical
+Historical addendum, 2026-10-28: software v0.4.1 and P01 v0.4 are the historical
 published distribution. P02 v0.5 was subsequently published in the GitHub tree
 at `da646614c7022777b0bd095eaf0111dcf1157e8f`. P1's ten quantitative/normalization
 propositions were admitted on 2026-10-22 under their separate replay checkpoint

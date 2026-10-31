@@ -39,7 +39,8 @@ candidate ratio `Q=J/(M H)`, but the M/J mismatch is a property of the source
 Profile that can be stated without introducing Q. It is not a finding that the
 upstream theorem is wrong, and literature novelty has not been established.
 
-**Start here:** [Research roadmap](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
+**Start here:** [Research website](https://flamehaven01.github.io/NavierStokes-Research-Workbench/)
+· [Research roadmap](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
 · [Current P2 work](#current-p2-research)
 · [Install](#installation)
 · [Reproduce P2](#reproduce-the-current-p2-artifacts)
@@ -290,7 +291,17 @@ post-execution receipts, selected axiom lines and a bounded stage summary.
 The subset is not the original complete execution archive, independent
 reproduction or a semantic proof audit.
 
-### Publication and release preparation
+### Published distribution - 31 October 2026
+
+[Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0)
+is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`, after
+[all six exact-commit CI jobs succeeded](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
+It includes P01 v0.5, P02 v0.6, new paper manifests and the exact-rational core-scalar prototype.
+The [research website](https://flamehaven01.github.io/NavierStokes-Research-Workbench/)
+is deployed; its two PDF hashes match the final files. See [release notes](docs/releases/v0.5.0.md).
+The following paragraphs preserve the earlier distribution lineage.
+
+### Earlier publication lineage
 
 The [v0.4.0 GitHub Release](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.4.0)
 was published on 2026-10-15 (Asia/Bangkok), at software commit
@@ -299,7 +310,8 @@ was published on 2026-10-15 (Asia/Bangkok), at software commit
 It packages the admitted mathematical phase and P01 manuscript v0.4.
 [v0.4.1](docs/releases/v0.4.1.md) is a software metadata/documentation patch
 prepared after Zenodo's release webhook was enabled. It reuses the selected
-v0.4.0 assets without changing their bytes. P02/P03 publication remains deferred.
+v0.4.0 assets without changing their bytes. That was the earlier distribution;
+P01 v0.5 and P02 v0.6 are now published separately. P03 remains deferred.
 The original execution checkpoint and historical tags/notes are unchanged.
 
 The [publication plan](docs/NSRW_PUBLICATION_AND_REPRODUCTION_PLAN_2026-10-08.md)

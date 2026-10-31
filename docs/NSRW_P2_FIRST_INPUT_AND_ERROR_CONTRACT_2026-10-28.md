@@ -1,6 +1,6 @@
 # First conditional numerical experiment: input and error contract
 
-Date: 2026-10-28 (Asia/Bangkok). Status: DESIGN FIXED; EXECUTION NOT PERFORMED.
+Original design snapshot: 2026-10-28 (Asia/Bangkok), before arithmetic execution.
 Update, 2026-10-31: the bounded exact-rational **core-scalar** experiment is now
 implemented and locally recomputed. Coefficient/moment evaluation and the full
 conditional-family computation remain unperformed. The historical design date

@@ -1,8 +1,18 @@
 # Post-Z+J research bridge: Certified First-Repair Moment Witness
 
+## Current publication and computation - 31 October 2026
+
+- [Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0) is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`; [all six exact-commit CI jobs passed](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
+- Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) and [P02 v0.6](https://doi.org/10.5281/zenodo.23835112), PDF plus source, CC BY 4.0. P03 remains deferred.
+- The [GitHub research website](https://flamehaven01.github.io/NavierStokes-Research-Workbench/) is deployed from a public-file allowlist. Its PDFs match the local SHA-256 and the public core record recomputes successfully.
+- Core scalars are numerically enclosed at 128/256/512 fractional bits. Affine coefficients, numerical q>0, selected constants/ResetWitness and an explicit source Profile remain unresolved. Next research: coefficient enclosure with the full source assumptions retained.
+
+This supersedes earlier current-task/publication statements below, which are retained as dated history. Original Lean inputs, receipts, claim ledger and execution checkpoints remain unchanged; software publication is not independent reproduction.
+
+
 Design date: 2026-10-21 (Asia/Bangkok).
 Execution-design revision: P0-P4 priorities, 2026-10-21.
-Current status, 2026-10-22: P1's ten exact-real margin/normalization propositions
+Historical status, 2026-10-22: P1's ten exact-real margin/normalization propositions
 are admitted by the [scoped receipt](stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md),
 OE-2, after clean replay and direct archive review. P0 numerical admissibility
 remains partial; P2-P4 computations/experiments have not been performed.
@@ -17,7 +27,7 @@ Decision: adopt this bounded research direction; implementation and experiments
 are not started merely by this document. Claims outside the named P1 receipt
 remain unverified. Existing Z-core/Z+J receipts retain their exact scopes.
 
-Current input selection, 2026-10-28: the [first-input/error contract](NSRW_P2_FIRST_INPUT_AND_ERROR_CONTRACT_2026-10-28.md) fixes one conditional source-family tuple, operation/error obligations and a bounded precision schedule. Arithmetic execution and explicit source admissibility remain unresolved.
+Input-selection snapshot, 2026-10-28: the [first-input/error contract](NSRW_P2_FIRST_INPUT_AND_ERROR_CONTRACT_2026-10-28.md) fixes one conditional source-family tuple, operation/error obligations and a bounded precision schedule. Arithmetic execution and explicit source admissibility remain unresolved.
 
 ## 1. Purpose and place in the program
 
