@@ -1,0 +1,35 @@
+name: Research review or reproduction
+description: Review a mathematical statement, source correspondence, numerical bound, or reproduction.
+title: "[Research review] "
+body:
+  - type: dropdown
+    id: target
+    attributes:
+      label: Review target
+      options:
+        - Same-witness theorem and quantifiers
+        - Source-coordinate correspondence
+        - Weighted-tail or quantitative inequality
+        - Exact-rational enclosure algorithm
+        - Separately operated Lean replay
+    validations:
+      required: true
+  - type: input
+    id: identity
+    attributes:
+      label: Exact input or publication
+      description: Paper version and section, theorem name, commit, or JSON file.
+    validations:
+      required: true
+  - type: textarea
+    id: finding
+    attributes:
+      label: Finding or question
+      description: State the argument or observation and the specific step it concerns.
+    validations:
+      required: true
+  - type: textarea
+    id: execution
+    attributes:
+      label: Execution details, if applicable
+      description: Commands, environment, observed result and expected result. Remove credentials and private information before attaching files.

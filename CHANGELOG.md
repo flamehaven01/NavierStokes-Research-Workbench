@@ -6,6 +6,13 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+### Changed
+
+- Research website now leads with NSRW's mathematical findings and the Equation → Proof → Code → Scientific Use roadmap. Add Navier–Stokes context, exact source notation and a stronger desktop/mobile menu.
+- Display retained core-scalar values, exact interval widths and expandable rational endpoints; link mathematical statements, receipts and reproduction instructions at fixed commits.
+- Add individual paper citation pages, sharing metadata, sitemap and a structured research-review issue form. Existing paper/proof/result bytes and v0.5.0 tag are unchanged.
+
+
 ## [0.5.0] - 2026-10-31
 
 ### Added

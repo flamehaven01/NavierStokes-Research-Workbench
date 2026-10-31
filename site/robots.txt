@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://flamehaven01.github.io/NavierStokes-Research-Workbench/sitemap.xml

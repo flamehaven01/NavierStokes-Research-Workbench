@@ -222,3 +222,71 @@ def test_public_site_allowlist_and_relative_links(tmp_path: Path) -> None:
     (output / "unapproved.txt").write_text("synthetic unapproved output", encoding="utf-8")
     with pytest.raises(ValueError, match="Unexpected file"):
         module.build(output)
+
+
+def test_site_scalar_widths_match_retained_exact_records(tmp_path: Path) -> None:
+    import json
+    from fractions import Fraction
+    from html.parser import HTMLParser
+
+    spec = importlib.util.spec_from_file_location("site_widths", ROOT / "scripts/build-research-site.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    output = tmp_path / "site"
+    module.build(output)
+    observed = {}
+
+    class Widths(HTMLParser):
+        bits = None
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "tr" and "data-precision" in attrs:
+                self.bits = int(attrs["data-precision"])
+            if tag == "td" and "data-width" in attrs:
+                observed[self.bits, attrs["data-quantity"]] = Fraction(attrs["data-width"])
+
+    page = (output / "index.html").read_text(encoding="utf-8")
+    Widths().feed(page)
+    assert len(observed) == 9
+    for bits in (128, 256, 512):
+        record = json.loads((ROOT / f"examples/p2-core-scalars/core-scalars-{bits}.json")
+                            .read_text(encoding="utf-8"))
+        for key in ("plateau_width", "weight_gap", "main_denominator"):
+            expected = Fraction(record[key]["upper"]) - Fraction(record[key]["lower"])
+            assert observed[bits, key] == expected > 0
+            if bits != 128:
+                assert observed[bits, key] < observed[bits // 2, key]
+    assert "{{" not in page
+    assert "/blob/main/" not in page and "/tree/main/" not in page
+
+
+def test_paper_landing_metadata_identifies_one_actual_pdf(tmp_path: Path) -> None:
+    from html.parser import HTMLParser
+    from urllib.parse import urlsplit
+
+    spec = importlib.util.spec_from_file_location("site_papers", ROOT / "scripts/build-research-site.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    output = tmp_path / "site"
+    module.build(output)
+
+    class Metadata(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.fields = {}
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "meta" and attrs.get("name", "").startswith("citation_"):
+                assert attrs["name"] not in self.fields
+                self.fields[attrs["name"]] = attrs.get("content", "")
+
+    for name in ("p01", "p02"):
+        metadata = Metadata()
+        metadata.feed((output / "papers" / (name + ".html")).read_text(encoding="utf-8"))
+        fields = metadata.fields
+        assert fields["citation_author"] == "Yun, Kwansub"
+        assert fields["citation_doi"].startswith("10.5281/zenodo.")
+        assert (output / "papers" / Path(urlsplit(fields["citation_pdf_url"]).path).name).is_file()
+        assert fields["citation_publication_date"] == "2026/10/31"
