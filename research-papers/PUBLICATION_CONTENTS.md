@@ -1,5 +1,10 @@
 # Publication selections
 
+## Current selection - 31 October 2026
+
+P01 v0.5 and P02 v0.6 are versioned under `versions/`, each with Markdown, standalone LaTeX, PDF and a separate checksum manifest. Zenodo preprints are [P01](https://doi.org/10.5281/zenodo.23835054) and [P02](https://doi.org/10.5281/zenodo.23835112). Software v0.5.0 includes the exact-rational core-scalar prototype and public example JSON. The GitHub research site copies only the explicit allowlist in `scripts/build-research-site.py`. Original v0.4/v0.5 paper assets, historical tags and formal execution checkpoints are preserved. P03, local reviews, raw logs/metadata/binaries, credentials and private archives are excluded. The earlier selections below are historical records.
+
+
 ## P02 addition — 28 October 2026
 
 The second manuscript selection is *From Source-Bound Proofs to Reproducible

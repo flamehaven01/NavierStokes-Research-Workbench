@@ -154,3 +154,6 @@ Fuller P2 study는 P01과 겹치지 않는 추가 결과가 생길 때 재검토
 응용 논문은 별도 domain·baseline·실험 근거가 생긴 이후의 후보이며, 현재
 필수 원고 목록에 넣지 않는다. 웹사이트·홍보·새 framework는 원고 완성을
 대체하는 작업이 아니다.
+
+
+Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) · [P02 v0.6](https://doi.org/10.5281/zenodo.23835112). Software archive: [NSRW](https://doi.org/10.5281/zenodo.23381778).

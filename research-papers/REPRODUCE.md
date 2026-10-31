@@ -78,3 +78,38 @@ The authored P01 manuscript uses [CC BY 4.0](LICENSE-PAPERS.md).
 NSRW code uses MIT. Upstream source is linked rather than bundled and retains
 its own license. Internal review records and the deferred P03 manuscript are
 not part of this distribution selection.
+
+
+## Quantitative margin and normalized plateau extension
+
+The ten later exact-real propositions use a different, separately fixed replay at `7f29ebf0e2b894bf598144628230ae09df436c3d`; do not change the qualitative replay checkout above. In another clean NSRW checkout and with the same pinned upstream environment, run the following POSIX shell commands:
+
+```sh
+git clone https://github.com/flamehaven01/NavierStokes-Research-Workbench.git nsrw-margin
+git -C nsrw-margin checkout --detach 7f29ebf0e2b894bf598144628230ae09df436c3d
+python3 nsrw-margin/scripts/run-p1-margin-replay.py \
+  --source-root ./source \
+  --nsrw-root ./nsrw-margin \
+  --output-dir ./run-margin \
+  --expected-nsrw-commit 7f29ebf0e2b894bf598144628230ae09df436c3d
+```
+
+The new output directory must be absent. This command builds the source target and five fresh external modules, and checks the ten named quantitative/normalization axiom surfaces. Compare with the [22 October receipt](../docs/stage_receipts/P1_QUANTITATIVE_MARGIN_COLAB_2026-10-22.md). Its post-execution document identity is separate from the execution commit. Neither the reference nor a new same-operator replay is an independent external reproduction.
+
+## Exact-rational core-scalar experiment
+
+This is a separate Python experiment, not a Lean replay or full source-instance certificate. At software release v0.5.0, from the repository root with Python >=3.10:
+
+```sh
+PYTHONPATH=src python3 -m nsrw.math_kernel.p2_core_scalars produce --precision 128 --output core.json
+PYTHONPATH=src python3 -m nsrw.math_kernel.p2_core_scalars verify --input core.json
+```
+
+PowerShell uses `$env:PYTHONPATH = "src"` followed by the same `python -m ...` commands. Repeat with 256 or 512 fractional bits. The verifier recomputes all exact-rational bounds and rejects changed fields/inputs/scope. It shares the producer algorithm and does not independently establish source admissibility. See the [method](../docs/P2_CORE_SCALAR_METHOD_2026-10-31.md) and [public records](../examples/p2-core-scalars/).
+
+## Published paper records - 31 October 2026
+
+- P01 mathematics v0.5: [10.5281/zenodo.23835054](https://doi.org/10.5281/zenodo.23835054).
+- P02 software case study v0.6: [10.5281/zenodo.23835112](https://doi.org/10.5281/zenodo.23835112).
+
+These are separate preprints, linked to the [software archive](https://doi.org/10.5281/zenodo.23381778). A publication DOI is not a new proof execution or an independent validation.

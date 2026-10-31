@@ -605,3 +605,6 @@ this workbench or imply upstream endorsement.
 Original code and documentation in this repository are licensed under the
 [MIT License](LICENSE). External papers, datasets, formal repositories, and
 other referenced artifacts retain their own licenses and are not relicensed here.
+
+
+Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) · [P02 v0.6](https://doi.org/10.5281/zenodo.23835112). Software archive: [NSRW](https://doi.org/10.5281/zenodo.23381778).
