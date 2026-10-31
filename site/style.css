@@ -195,3 +195,35 @@ footer>div:last-child{margin-top:25px}
 @media(max-width:760px){header{flex-wrap:wrap}
 .mobile-nav{margin-left:auto}
 }
+
+/* Research library: document navigation, readable body, local section index. */
+.desktop-nav{gap:16px}
+.reader{display:grid;grid-template-columns:210px minmax(0,740px) 190px;gap:32px;max-width:1280px;margin:0 auto;padding:45px 30px 80px;align-items:start}
+.doc-nav,.doc-toc{position:sticky;top:24px;font-size:13px;max-height:90vh;overflow:auto}
+.doc-nav nav,.doc-toc nav{display:flex;flex-direction:column;gap:12px}
+.doc-nav a,.doc-toc a{text-decoration:none;overflow-wrap:anywhere}
+.doc-nav a[aria-current]{font-weight:700;color:#416140;border-left:3px solid #6c9658;padding-left:10px}
+.doc-nav summary{font-weight:650;margin-bottom:18px}
+.doc-toc{font-size:12px;border-left:1px solid var(--line);padding-left:18px}
+.doc-body{min-width:0;width:100%;max-width:740px;overflow-wrap:anywhere}
+.doc-body h1{font-size:48px;margin-top:0}
+.doc-body h2{font-size:30px;margin:46px 0 20px;scroll-margin-top:24px}
+.doc-body h3{font-size:24px}
+.doc-body p,.doc-body li{font-size:16px}
+.doc-body pre{max-width:100%;overflow:auto;white-space:pre;padding:18px;background:#e9ecdf;font-size:12px}
+.doc-body table{display:block;max-width:100%;overflow:auto;border-collapse:collapse;font-size:13px}
+.doc-body td,.doc-body th{border:1px solid var(--line);padding:12px;min-width:110px}
+.doc-body img{max-width:100%}
+.document-source{margin-top:50px;padding-top:20px;border-top:1px solid var(--line);font-size:13px}
+.library-list{list-style:none;padding:0}
+.library-list li{padding:18px 0;border-bottom:1px solid var(--line);font-size:20px}
+.essay{margin:40px 0;padding:30px;background:#e9eddf}
+.bridge-image{overflow:auto;margin-top:28px}
+.bridge-image img{display:block;width:100%;height:auto;min-width:620px}
+.backend-check{grid-column:1/-1;padding:28px 32px;background:#e8efdd;margin-top:16px}
+.backend-check h3{margin-top:18px}
+@media(max-width:1100px){.reader{grid-template-columns:180px minmax(0,1fr)}.doc-toc{display:none}.desktop-nav{gap:11px;font-size:12px}}
+@media(max-width:760px){.reader{display:block;padding:25px 24px}.doc-nav{position:static;max-height:none;margin-bottom:40px;padding-bottom:20px;border-bottom:1px solid var(--line)}.doc-body h1{font-size:37px}.reader header nav{font-size:12px}.backend-check{padding:22px}.bridge-image img{min-width:620px}}
+
+.doc-mobile{display:none}
+@media(max-width:760px){.doc-nav .doc-desktop{display:none}.doc-mobile{display:block}.doc-mobile summary{margin:0}.doc-mobile[open] summary{margin-bottom:20px}}

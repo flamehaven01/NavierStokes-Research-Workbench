@@ -2,7 +2,7 @@ name: Research website
 on:
   push:
     branches: [main]
-    paths: ["site/**", "scripts/build-research-site.py", "research-papers/versions/**", "examples/p2-core-scalars/**", ".github/workflows/pages.yml"]
+    paths: ["site/**", "docs/NSRW_RESEARCH_GUIDE.md", "docs/NSRW_MATH_TO_CODE_BRIDGE.md", "docs/NSRW_CORE_SCALAR_CROSSCHECK.md", "docs/P2_CORE_SCALAR_METHOD_2026-10-31.md", "research-papers/REPRODUCE.md", "scripts/build-research-site.py", "research-papers/versions/**", "examples/p2-core-scalars/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,6 +17,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
+      - run: python3 -m pip install markdown-it-py==4.0.0
       - run: python3 scripts/build-research-site.py
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:

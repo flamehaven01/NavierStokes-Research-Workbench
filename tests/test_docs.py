@@ -217,11 +217,69 @@ def test_public_site_allowlist_and_relative_links(tmp_path: Path) -> None:
         def handle_starttag(self, tag, attrs):
             for key, value in attrs:
                 if key in ("href", "src") and value and not value.startswith(("https:", "http:", "#")):
-                    assert (output / value).is_file(), value
+                    target = output / value
+                    assert target.is_file() or (target / "index.html").is_file(), value
     Links().feed((output / "index.html").read_text(encoding="utf-8"))
     (output / "unapproved.txt").write_text("synthetic unapproved output", encoding="utf-8")
     with pytest.raises(ValueError, match="Unexpected file"):
         module.build(output)
+
+
+def test_all_library_pages_have_working_navigation_and_toc(tmp_path: Path) -> None:
+    from html.parser import HTMLParser
+    from urllib.parse import unquote, urlsplit
+
+    spec = importlib.util.spec_from_file_location("library_site", ROOT / "scripts/build-research-site.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    output = tmp_path / "site"
+    module.build(output)
+
+    class Page(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.links, self.ids = [], set()
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if attrs.get("id"):
+                assert attrs["id"] not in self.ids
+                self.ids.add(attrs["id"])
+            self.links.extend(attrs[k] for k in ("href", "src") if k in attrs)
+
+    for path in output.rglob("*.html"):
+        page = Page()
+        page.feed(path.read_text(encoding="utf-8"))
+        for link in page.links:
+            url = urlsplit(link)
+            if url.scheme or url.netloc:
+                continue
+            target = (path.parent / unquote(url.path)).resolve() if url.path else path
+            if target.is_dir():
+                target /= "index.html"
+            assert target.is_relative_to(output.resolve()), link
+            assert target.is_file(), (path.name, link)
+            if url.fragment and target.suffix == ".html":
+                target_page = Page()
+                target_page.feed(target.read_text(encoding="utf-8"))
+                assert unquote(url.fragment) in target_page.ids, (path.name, link)
+    assert (output / "docs/crosscheck.html").is_file()
+    assert "Flamehaven Writing" in (output / "writing/index.html").read_text(encoding="utf-8")
+
+
+def test_site_rejects_crosscheck_input_drift(tmp_path: Path) -> None:
+    import shutil
+    spec = importlib.util.spec_from_file_location("crosscheck_display", ROOT / "scripts/build-research-site.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.ROOT = tmp_path
+    dest = tmp_path / "examples/p2-core-scalars"
+    shutil.copytree(ROOT / "examples/p2-core-scalars", dest)
+    assert module.crosscheck_summary() == "15 / 15"
+    path = dest / "core-scalars-128.json"
+    path.write_bytes(path.read_bytes().replace(b'"K": null', b'"K": 1'))
+    with pytest.raises(ValueError, match="identity drift"):
+        module.crosscheck_summary()
 
 
 def test_site_scalar_widths_match_retained_exact_records(tmp_path: Path) -> None:

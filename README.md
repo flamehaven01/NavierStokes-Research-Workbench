@@ -297,6 +297,8 @@ reproduction or a semantic proof audit.
 is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`, after
 [all six exact-commit CI jobs succeeded](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
 It includes P01 v0.5, P02 v0.6, new paper manifests and the exact-rational core-scalar prototype.
+Browse the [research library](https://flamehaven01.github.io/NavierStokes-Research-Workbench/docs/), [ongoing writing](https://flamehaven01.github.io/NavierStokes-Research-Workbench/writing/) and [math-to-code bridge](docs/NSRW_MATH_TO_CODE_BRIDGE.md). The [second-backend scalar check](docs/NSRW_CORE_SCALAR_CROSSCHECK.md) uses mpmath interval arithmetic independently of the Fraction producer.
+
 The [research website](https://flamehaven01.github.io/NavierStokes-Research-Workbench/)
 is deployed; its two PDF hashes match the final files. See [release notes](docs/releases/v0.5.0.md).
 The following paragraphs preserve the earlier distribution lineage.

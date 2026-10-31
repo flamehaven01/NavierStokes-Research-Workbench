@@ -4,7 +4,7 @@ The site introduces NSRW's mathematical findings and the path from equations to 
 
 ## Build and preview
 
-From the repository root, with Python >=3.10:
+From the repository root, with Python >=3.10 and the pinned site dependency (`python -m pip install -e ".[site]"`):
 
 ```text
 python scripts/build-research-site.py
@@ -24,3 +24,7 @@ python -m pytest tests/test_docs.py --no-cov
 ```
 
 Inspect desktop and narrow-screen layouts, mobile navigation, MathML, contained table scrolling, exact-endpoint expanders, paper links and the roadmap. Before deployment, compare displayed interval widths with the retained JSON and preserve existing paper hashes. After deployment, inspect the public URL and verify its source commit footer.
+
+The public document reader is generated from the five explicit `DOCS` entries in the builder. It rewrites links to either another reader page or the exact build commit. Add a Writing essay only after its real URL exists. `site/bridge.json` is the sole diagram source; EQA links to NSRW rather than keeping a second editable architecture.
+
+The optional verification dependency is separate from the site build. `scripts/check-core-scalars-mpmath.py` checks retained records without importing the producer. Its retained execution is linked from EQA; it is a same-operator second-backend cross-check. Published paper and software release bytes are preserved.

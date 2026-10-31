@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "records": [
+    {
+      "format": "nsrw-core-scalar-crosscheck-v1",
+      "status": "PASS",
+      "scope": "CORE_SCALAR_ENCLOSURES_ONLY",
+      "backend": "mpmath.iv 1.3.0",
+      "working_precision_bits": 320,
+      "fractional_bits": 128,
+      "input_sha256": "27d182e419b5d0e09a97730a8b6661bc835115abad730f2ca3bb650420f99c60",
+      "checks": [
+        {
+          "quantity": "ell",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "v",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "plateau_width",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "weight_gap",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "main_denominator",
+          "status": "PASS",
+          "relation": "contained"
+        }
+      ],
+      "input_lf_sha256": "e641cefc5ed3ee4cae29214e350738abc8b29a4cb0601536225c1c6f3e8fb94a",
+      "algorithm": "direct interval exponential differences",
+      "producer_imported": false,
+      "independent_operator": false,
+      "numerical_J_certificate": false
+    },
+    {
+      "format": "nsrw-core-scalar-crosscheck-v1",
+      "status": "PASS",
+      "scope": "CORE_SCALAR_ENCLOSURES_ONLY",
+      "backend": "mpmath.iv 1.3.0",
+      "working_precision_bits": 448,
+      "fractional_bits": 256,
+      "input_sha256": "70ee4778a309ca63b93989273c4ef0f31dd9564e5eeb732fab550356f1147448",
+      "checks": [
+        {
+          "quantity": "ell",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "v",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "plateau_width",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "weight_gap",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "main_denominator",
+          "status": "PASS",
+          "relation": "contained"
+        }
+      ],
+      "input_lf_sha256": "3066ff45062d49e7e16226e1578afe4bdd64309eb4dc4b0895294465ad86d716",
+      "algorithm": "direct interval exponential differences",
+      "producer_imported": false,
+      "independent_operator": false,
+      "numerical_J_certificate": false
+    },
+    {
+      "format": "nsrw-core-scalar-crosscheck-v1",
+      "status": "PASS",
+      "scope": "CORE_SCALAR_ENCLOSURES_ONLY",
+      "backend": "mpmath.iv 1.3.0",
+      "working_precision_bits": 704,
+      "fractional_bits": 512,
+      "input_sha256": "ea4cb63e7fcb723c87dc6fe70dfebab118722faffe83d2666958737307ca5314",
+      "checks": [
+        {
+          "quantity": "ell",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "v",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "plateau_width",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "weight_gap",
+          "status": "PASS",
+          "relation": "contained"
+        },
+        {
+          "quantity": "main_denominator",
+          "status": "PASS",
+          "relation": "contained"
+        }
+      ],
+      "input_lf_sha256": "33ec9df27c8e131b96b917f82cc422707b6640f130dcd5093fc32c4470950696",
+      "algorithm": "direct interval exponential differences",
+      "producer_imported": false,
+      "independent_operator": false,
+      "numerical_J_certificate": false
+    }
+  ]
+}

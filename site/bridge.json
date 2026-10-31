@@ -1,0 +1,14 @@
+{
+  "title": "From exact-real mathematics to a numerical J certificate",
+  "canonical_owner": "NSRW",
+  "snapshot_date": "2026-10-31",
+  "nodes": [
+    {"id":"lean","status":"ESTABLISHED","title":"Lean moment geometry","detail":"Same-zero theorem + J margin","x":20,"y":20},
+    {"id":"scalar","status":"IMPLEMENTED","title":"Core scalar enclosures","detail":"Fraction + mpmath interval check","x":20,"y":200},
+    {"id":"coefficient","status":"NEXT","title":"Coefficients + assumptions","detail":"Positive q, reset and model choice","x":345,"y":105},
+    {"id":"certificate","status":"NEXT","title":"Numerical J certificate","detail":"Mass bracket + same-zero J bound","x":670,"y":105},
+    {"id":"primitive","status":"PLANNED","title":"Reusable scientific operation","detail":"Cancellation / denominator diagnostic","x":670,"y":370}
+  ],
+  "edges": [["lean","coefficient"],["scalar","coefficient"],["coefficient","certificate"],["certificate","primitive"]],
+  "arrow_meaning": "Research inputs and next work, not automatic proof implications"
+}

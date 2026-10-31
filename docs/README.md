@@ -1,5 +1,7 @@
 # Documentation status index
 
+The [research library](https://flamehaven01.github.io/NavierStokes-Research-Workbench/docs/) offers a document sidebar and section TOC. Start with the [research guide](NSRW_RESEARCH_GUIDE.md), [math-to-code architecture](NSRW_MATH_TO_CODE_BRIDGE.md) or [second-backend scalar check](NSRW_CORE_SCALAR_CROSSCHECK.md).
+
 ## Current publication and computation - 31 October 2026
 
 - [Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0) is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`; [all six exact-commit CI jobs passed](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).

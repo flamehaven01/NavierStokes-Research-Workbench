@@ -6,6 +6,11 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+### Added
+
+- Separate mpmath 1.3.0 interval cross-check of all five core scalars at 128/256/512 fractional bits, with fifteen retained containment checks and rejection controls. Same operator; no numerical J certificate is inferred.
+- Research library with document sidebar and section TOC, linked Writing section, and a canonical math-to-code bridge diagram connected to the Flamehaven EQA ledger.
+
 ### Changed
 
 - Research website now leads with NSRW's mathematical findings and the Equation → Proof → Code → Scientific Use roadmap. Add Navier–Stokes context, exact source notation and a stronger desktop/mobile menu.
