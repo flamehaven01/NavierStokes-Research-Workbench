@@ -11,6 +11,8 @@ header,main,footer{max-width:1280px;margin:auto}
 header{padding:27px 50px;display:flex;justify-content:space-between;align-items:center;gap:28px;border-bottom:1px solid var(--line)}
 .brand{font-size:25px;font-weight:750;text-decoration:none;letter-spacing:-1px;line-height:1.25;flex-shrink:0}
 .brand span{display:block;font-size:12px;font-weight:400;letter-spacing:.6px;margin-top:7px}
+.brand-with-icon{display:flex;align-items:center;gap:12px}
+.brand-icon{display:block;width:40px;height:40px;flex-shrink:0;object-fit:contain}
 .desktop-nav{display:flex;gap:23px;font-size:13px}
 .desktop-nav a{text-decoration:none}
 .mobile-nav{display:none}
@@ -148,6 +150,9 @@ footer p{font-size:12px;margin:7px 0}
 @media(max-width:760px){header{padding:23px 24px;display:flex;align-items:start}
 .brand{font-size:23px}
 .brand span{font-size:12px;max-width:175px;line-height:1.6}
+header .brand-with-icon{gap:10px}
+header .brand-with-icon span{max-width:135px}
+header .brand-icon{width:32px;height:32px}
 .desktop-nav{display:none}
 .mobile-nav{display:block;border:0;margin:0;position:relative;min-width:125px}
 .mobile-nav summary{padding:2px 0;font-size:13px;text-align:right;list-style:none}

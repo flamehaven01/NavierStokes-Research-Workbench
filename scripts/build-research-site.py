@@ -17,6 +17,7 @@ OUTPUT = ROOT / "outputs/site"
 FILES = {
     "site/index.html": "index.html",
     "site/style.css": "style.css",
+    "site/flamehaven-icon.png": "flamehaven-icon.png",
     "site/citations.js": "citations.js",
     **{f"site/citations/{key}.bib": f"citations/{key}.bib" for key in ("p01", "p02", "software")},
     "site/social-preview.png": "social-preview.png",
@@ -82,8 +83,8 @@ def reading_page(title: str, content: str, revision: str, active="", toc="") -> 
     menu = "".join(f'<a {"aria-current=page" if slug == active else ""} href="../docs/{slug}.html">{escape(label)}</a>' for slug, label, _ in DOCS)
     menu += '<hr><a href="../index.html#papers">Papers &amp; citations</a><a href="../index.html#evidence">Proof records</a><a href="https://flamehaven01.github.io/Flamehaven-Verification-Ledger/eqa.html#toe-test-0061">EQA cross-check ↗</a><a href="../writing/">Research writing</a>'
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{escape(title)} · NSRW</title><link rel="stylesheet" href="../style.css"></head><body>
-<a class="skip" href="#content">Skip to document</a><header><a class="brand" href="../index.html">NSRW<span>Research library</span></a><nav aria-label="Primary"><a href="../index.html">Research</a> · <a href="../docs/">Documents</a> · <a href="../writing/">Writing</a></nav></header>
+<title>{escape(title)} · NSRW</title><link rel="icon" type="image/png" href="../flamehaven-icon.png"><link rel="stylesheet" href="../style.css"></head><body>
+<a class="skip" href="#content">Skip to document</a><header><a class="brand brand-with-icon" href="../index.html"><img class="brand-icon" src="../flamehaven-icon.png" alt="" width="40" height="40"><div>NSRW<span>Research library</span></div></a><nav aria-label="Primary"><a href="../index.html">Research</a> · <a href="../docs/">Documents</a> · <a href="../writing/">Writing</a></nav></header>
 <div class="reader"><aside class="doc-nav"><nav class="doc-desktop" aria-label="Document library"><strong>Research documents</strong>{menu}</nav><details class="doc-mobile"><summary>Research documents</summary><nav aria-label="Mobile document library">{menu}</nav></details></aside>
 <main id="content" class="doc-body">{content}</main><aside class="doc-toc"><nav aria-label="On this page"><strong>On this page</strong>{toc}</nav></aside></div>
 <footer><p>NSRW · Equation → Proof → Code → Scientific Use</p><p>Source <a href="https://github.com/flamehaven01/NavierStokes-Research-Workbench/tree/{revision}">{revision[:8]}</a></p></footer></body></html>'''
