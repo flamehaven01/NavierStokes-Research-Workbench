@@ -227,3 +227,36 @@ footer>div:last-child{margin-top:25px}
 
 .doc-mobile{display:none}
 @media(max-width:760px){.doc-nav .doc-desktop{display:none}.doc-mobile{display:block}.doc-mobile summary{margin:0}.doc-mobile[open] summary{margin-bottom:20px}}
+
+/* Paper discovery: concise abstracts, artifact links and official citations. */
+.papers article{min-width:0;scroll-margin-top:25px}
+.papers article p{min-height:0}
+.papers .paper-meta,.papers .paper-release{font-size:12px;color:var(--muted);line-height:1.8}
+.papers .paper-evidence{font-size:13px;padding-left:14px;border-left:3px solid #a1b48c}
+.paper-terminology,.version-note{font-size:14px;max-width:970px}
+.coverage-links{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0}
+.coverage-links a{font-size:12px;background:#e6ebdb;border:1px solid #cbd4bf;padding:6px 10px;text-decoration:none}
+.coverage-links a:hover{background:#dce5ce}
+.paper-incident{font-size:13px!important;color:var(--muted)}
+.paper-links{flex-wrap:wrap;gap:12px 22px}
+.paper-revision,.citation-details{margin-top:22px;border-top:1px solid var(--line);padding-top:17px;font-size:14px;min-width:0}
+.paper-revision summary,.citation-details summary,.paper-map summary{cursor:pointer;font-weight:600}
+.paper-revision p{font-size:13px!important}
+.citation-details pre{padding:18px;background:#e9ecdf;overflow:auto;max-width:100%;font-size:11px;line-height:1.8;text-align:left}
+.citation-tools{display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin:17px 0;font-size:12px}
+.citation-tools button{padding:9px 13px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;font:inherit}
+.citation-tools button:focus-visible{outline:3px solid #538d22;outline-offset:4px}
+.citation-tools [role=status]{flex-basis:100%;color:#315343;min-height:1.2em}
+.citation-origin{font-size:12px!important;color:var(--muted)}
+.paper-map{margin:30px 0;padding:22px;border:1px solid var(--line);scroll-margin-top:25px}
+.paper-map table{min-width:680px;margin-top:25px}
+.paper-map code{font-size:12px}
+.software-citation{margin-top:30px;padding:24px;background:#e8eddf}
+.software-citation h3{font-size:26px;margin-top:0}
+.software-citation p{font-size:14px}
+.scalar-paper-link{display:block;font-size:12px;margin-top:9px}
+.paper-context{padding:20px 0}
+.paper-context h2{font-size:34px}
+.paper-context h3{font-size:25px}
+.paper-context table{font-size:13px;min-width:560px}
+@media(max-width:760px){.paper-map{padding:18px}.software-citation{padding:21px}.paper-context h2{font-size:30px}}

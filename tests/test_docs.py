@@ -207,6 +207,7 @@ def test_current_manuscript_manifest(version: str) -> None:
 
 def test_public_site_allowlist_and_relative_links(tmp_path: Path) -> None:
     from html.parser import HTMLParser
+    from urllib.parse import urlsplit
     spec = importlib.util.spec_from_file_location("research_site", ROOT / "scripts/build-research-site.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -217,7 +218,7 @@ def test_public_site_allowlist_and_relative_links(tmp_path: Path) -> None:
         def handle_starttag(self, tag, attrs):
             for key, value in attrs:
                 if key in ("href", "src") and value and not value.startswith(("https:", "http:", "#")):
-                    target = output / value
+                    target = output / urlsplit(value).path
                     assert target.is_file() or (target / "index.html").is_file(), value
     Links().feed((output / "index.html").read_text(encoding="utf-8"))
     (output / "unapproved.txt").write_text("synthetic unapproved output", encoding="utf-8")
@@ -348,3 +349,49 @@ def test_paper_landing_metadata_identifies_one_actual_pdf(tmp_path: Path) -> Non
         assert fields["citation_doi"].startswith("10.5281/zenodo.")
         assert (output / "papers" / Path(urlsplit(fields["citation_pdf_url"]).path).name).is_file()
         assert fields["citation_publication_date"] == "2026/10/31"
+
+
+def test_published_citations_preserve_official_exports_and_versions(tmp_path: Path) -> None:
+    from html.parser import HTMLParser
+
+    spec = importlib.util.spec_from_file_location("paper_citations", ROOT / "scripts/build-research-site.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    output = tmp_path / "site"
+    module.build(output)
+
+    class Citations(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.current, self.texts = None, {}
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "code" and attrs.get("id", "").startswith("cite-"):
+                self.current = attrs["id"][5:]
+                assert self.current not in self.texts
+                self.texts[self.current] = ""
+
+        def handle_data(self, data):
+            if self.current:
+                self.texts[self.current] += data
+
+        def handle_endtag(self, tag):
+            if tag == "code":
+                self.current = None
+
+    parsed = Citations()
+    parsed.feed((output / "index.html").read_text(encoding="utf-8"))
+    assert set(parsed.texts) == {"p01", "p02", "software"}
+    for name, doi, version in (("p01", "23835054", "0.5"),
+                               ("p02", "23835112", "0.6"),
+                               ("software", "23835493", "v0.5.0")):
+        official = (ROOT / f"site/citations/{name}.bib").read_text(encoding="utf-8")
+        assert parsed.texts[name] == official
+        assert f"doi          = {{10.5281/zenodo.{doi}}}" in official
+        assert f"version      = {{{version}}}" in official
+        assert (output / f"citations/{name}.bib").read_text(encoding="utf-8") == official
+        if name != "software":
+            landing = Citations()
+            landing.feed((output / f"papers/{name}.html").read_text(encoding="utf-8"))
+            assert landing.texts == {name: official}

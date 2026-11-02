@@ -17,6 +17,8 @@ OUTPUT = ROOT / "outputs/site"
 FILES = {
     "site/index.html": "index.html",
     "site/style.css": "style.css",
+    "site/citations.js": "citations.js",
+    **{f"site/citations/{key}.bib": f"citations/{key}.bib" for key in ("p01", "p02", "software")},
     "site/social-preview.png": "social-preview.png",
     "site/robots.txt": "robots.txt",
     "site/sitemap.xml": "sitemap.xml",
@@ -37,6 +39,17 @@ DOCS = (
 )
 GENERATED = {"docs/index.html", "writing/index.html", "bridge.svg",
              *(f"docs/{slug}.html" for slug, _, _ in DOCS)}
+
+
+def citation_block(key: str, prefix: str = "") -> str:
+    """Use the retained official Zenodo export, not an inferred citation."""
+    title = {"p01": "P01 v0.5", "p02": "P02 v0.6", "software": "Software v0.5.0"}[key]
+    bib = (ROOT / f"site/citations/{key}.bib").read_text(encoding="utf-8")
+    return (f'<details class="citation-details"><summary>Cite {title} · BibTeX</summary>'
+            f'<div class="citation-tools"><button type="button" data-copy-citation="cite-{key}">Copy BibTeX</button>'
+            f'<a href="{prefix}citations/{key}.bib" download>Download .bib</a><span role="status" aria-live="polite"></span></div>'
+            f'<pre><code id="cite-{key}">{escape(bib)}</code></pre>'
+            '<p class="citation-origin">Official Zenodo export · version-specific DOI. Use the all-versions link to discover later editions.</p></details>')
 
 
 def bridge_svg() -> str:
@@ -201,12 +214,19 @@ def build(output: Path = OUTPUT) -> None:
         "{{CORE_SCALAR_VALUES}}": values, "{{CORE_SCALAR_TABLE}}": table,
         "{{SITE_REVISION_SHORT}}": revision[:8],
         "{{BACKEND_CHECK_STATUS}}": crosscheck_summary(),
+        **{f"{{{{CITATION_{key.upper()}}}}}": citation_block(key) for key in ("p01", "p02", "software")},
         "{{SITE_SOURCE_URL}}": "https://github.com/flamehaven01/NavierStokes-Research-Workbench/tree/" + revision,
     }.items():
         page = page.replace(token, content)
     if "{{" in page:
         raise ValueError("Unresolved site template field")
     (output / "index.html").write_text(page, encoding="utf-8", newline="\n")
+    for key in ("p01", "p02"):
+        path = output / f"papers/{key}.html"
+        paper = path.read_text(encoding="utf-8").replace("{{CITATION}}", citation_block(key, "../"))
+        if "{{" in paper:
+            raise ValueError("Unresolved paper citation field")
+        path.write_text(paper, encoding="utf-8", newline="\n")
     (output / ".nojekyll").write_text("", encoding="utf-8")
     actual = {p.relative_to(output).as_posix() for p in output.rglob("*") if p.is_file()}
     if actual != {*FILES.values(), *GENERATED, ".nojekyll"}:
