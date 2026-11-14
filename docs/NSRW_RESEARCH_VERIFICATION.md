@@ -93,7 +93,11 @@ nsrw-verify forced-shear --input fixture=examples/research-verification/forced-s
 The manifest binds the report digest and input digests to the selected
 implementation files, observed runtime and available package metadata.
 The runner compares those identities before and after executing the
-check. A package RECORD digest identifies installed metadata and is
+check. If a required implementation file or the pinned interval
+dependency identity is unavailable, the command exits with code 2
+before emitting the report or manifest. The inverse checker can use
+a local source checkout, whose implementation file is hashed.
+A package RECORD digest identifies installed metadata and is
 not a fresh integrity check of every file in that package. A manifest
 records a local execution and is not an independent attestation.
 CI runs the installed shear and interval checks using tracked examples.

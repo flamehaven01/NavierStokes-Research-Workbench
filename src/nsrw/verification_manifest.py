@@ -10,7 +10,10 @@ import zlib
 from importlib.metadata import PackageNotFoundError, distribution
 from pathlib import Path
 
-COMMON = ("nsrw", "nsrw.research_verification_cli", "nsrw.research_verification")
+COMMON = (
+    "nsrw", "nsrw.research_verification_cli", "nsrw.research_verification",
+    "nsrw.verification_manifest",
+)
 IMPLEMENTATIONS = {
     "mb08-inverse": ("nsrw.mb08_inverse_diagnostic", "fhval.exact_inverse"),
     "mb06-ratio": ("nsrw.mb06_ratio_crosscheck", "mpmath", "mpmath.ctx_iv", "mpmath.libmp.libmpi"),
@@ -20,6 +23,22 @@ IMPLEMENTATIONS = {
     ),
     "p1-lean-margin": ("nsrw.lean_archive_verification", "nsrw.strict_json"),
 }
+
+# The inverse checker supports an unpackaged local FHVAL checkout. Its
+# implementation file is required even when distribution metadata is absent.
+REQUIRED_PACKAGES = {"mb06-ratio": {"mpmath": "1.3.0"}}
+
+
+def require_complete_identity(check_id: str, identity: dict) -> None:
+    """Reject an execution manifest when a required identity cannot be measured."""
+    expected = set(COMMON) | set(IMPLEMENTATIONS[check_id])
+    missing = expected - identity["implementation_files"].keys()
+    if missing or identity["unavailable_implementation_files"]:
+        missing.update(identity["unavailable_implementation_files"])
+        raise ValueError("required implementation unavailable: " + ", ".join(sorted(missing)))
+    for package, version in REQUIRED_PACKAGES.get(check_id, {}).items():
+        if identity["dependencies"].get(package, {}).get("version") != version:
+            raise ValueError(f"required dependency identity unavailable: {package}=={version}")
 
 
 def implementation_identity(check_id: str) -> dict:
@@ -31,7 +50,7 @@ def implementation_identity(check_id: str) -> dict:
             if spec is None or spec.origin is None:
                 raise ModuleNotFoundError(name)
             raw = Path(spec.origin).read_bytes()
-        except (ImportError, FileNotFoundError):
+        except (ImportError, OSError):
             missing.append(name)
         else:
             files[name] = {"sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw)}

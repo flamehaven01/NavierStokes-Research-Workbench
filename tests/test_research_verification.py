@@ -130,6 +130,34 @@ def test_manifest_binds_report_inputs_and_implementation(runner, tmp_path):
     assert record["runtime"]["python"]
 
 
+@pytest.mark.parametrize(
+    ("check_id", "input_spec", "component"),
+    [
+        ("forced-shear", "fixture=examples/research-verification/forced-shear.json", "module"),
+        ("mb06-ratio", "record=examples/research-verification/mb06-ratio-20261113.json", "package"),
+    ],
+)
+def test_manifest_rejects_incomplete_identity(runner, tmp_path, monkeypatch, capsys, check_id,
+                                             input_spec, component):
+    from nsrw import verification_manifest
+
+    identity = verification_manifest.implementation_identity(check_id)
+    if component == "module":
+        identity["implementation_files"].pop("nsrw.math_kernel.operators")
+        identity["unavailable_implementation_files"] = ["nsrw.math_kernel.operators"]
+    else:
+        identity["dependencies"]["mpmath"]["version"] = None
+    monkeypatch.setattr(verification_manifest, "implementation_identity", lambda _name: identity)
+    output, manifest = (tmp_path / name for name in ("report.json", "manifest.json"))
+    with pytest.raises(SystemExit) as raised:
+        runner.main([check_id, "--input", input_spec, "--output", str(output),
+                     "--manifest", str(manifest)])
+    assert raised.value.code == 2
+    assert "execution manifest blocked" in capsys.readouterr().err
+    assert not output.exists()
+    assert not manifest.exists()
+
+
 def test_inverse_adapter_dispatch_and_source_pin(runner, monkeypatch, capsys):
     import sys
 

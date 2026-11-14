@@ -162,9 +162,13 @@ def main(argv: list[str] | None = None) -> int:
             blocked[name] = str(exc)
     check = CHECKS[args.check]
     if args.manifest is not None:
-        from nsrw.verification_manifest import implementation_identity
+        from nsrw.verification_manifest import implementation_identity, require_complete_identity
 
         before = implementation_identity(args.check)
+        try:
+            require_complete_identity(args.check, before)
+        except ValueError as exc:
+            parser.exit(2, f"execution manifest blocked: {exc}\n")
     report = run_verification(check, evidence)
     if unavailable:
         report["details"]["unavailable_files"] = unavailable
