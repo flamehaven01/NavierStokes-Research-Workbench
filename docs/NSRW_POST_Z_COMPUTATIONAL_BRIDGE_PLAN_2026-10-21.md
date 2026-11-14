@@ -1,6 +1,24 @@
 # Post-Z+J research bridge: Certified First-Repair Moment Witness
 
-## Current publication and computation - 31 October 2026
+## Current handoff — 12 November 2026
+
+Read [the current-position reassessment](CURRENT_POSITION_2026-11-02.md) and the
+active section of the [restart checklist](NSRW_COLAB_RESTART_TASKS_2026-10-06.md)
+first. P1 is admitted; P2 has implemented and cross-checked core scalars. The
+active task is a justified main-coefficient lower bound and prefix-coefficient
+absolute upper bound, sufficient to decide a conservative q bound. Test the
+explicit analytic route in the [input/error contract](NSRW_P2_FIRST_INPUT_AND_ERROR_CONTRACT_2026-10-28.md#31-analytic-first-coefficient-route--12-november-2026)
+before implementing general quadrature. Source-instance admissibility remains
+unresolved in parallel. Section 7 is the canonical P0-P4 work breakdown;
+earlier dated snapshots below preserve the planning and execution history.
+
+The implementation package is [NSRW MomentBound](momentbound/README.md).
+Its [detailed design](momentbound/IMPLEMENTATION_PLAN.md) specializes P2 with a
+positive-scale reduction and a coarse rational baseline; [TASKS](momentbound/TASKS.md)
+provides the coding handoff. It preserves P0-P4 and is not a new project-wide
+framework. The new source-to-bound bridge is still a proof obligation.
+
+## Historical publication and computation — 31 October 2026
 
 - [Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0) is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`; [all six exact-commit CI jobs passed](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
 - Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) and [P02 v0.6](https://doi.org/10.5281/zenodo.23835112), PDF plus source, CC BY 4.0. P03 remains deferred.
@@ -484,21 +502,26 @@ fixed-force dynamics, or unforced global regularity.
 P0-P4 are local work priorities, not manuscript versions, the historical P2
 proof stages, or a new maturity axis. This section supersedes the earlier
 BR-only work ordering without changing the mathematical scope. All execution
-boxes remain unchecked. Selected-result review accompanies every priority.
+boxes below distinguish completed and remaining work. The dated handoff above
+identifies the active task. Selected-result review accompanies every priority.
 
 | Priority | One principal output | Existing work mapping | Exit decision |
 | --- | --- | --- | --- |
-| P0 | Source computability map + conditional-family contract first | BR-01 | All amplitude hypotheses tracked, including hidden selected constants; instance route separately decided |
-| P1 | Named root-independent quantitative J-margin theorem | BR-01 + proof portion of BR-04 | Development compile of the stated theorem, not automatic claim admission |
-| P2 | Core-factor/q enclosure first; full evaluator only if justified | Evaluator portion of BR-02 | Complete error contract and explicit unresolved source assumptions |
-| P3 | Conditional-family certificate, then explicit-instance bracket | Certificate portion of BR-02 + BR-04 | Exact certificate scope and valid margin/sign evidence; no family-to-instance promotion |
-| P4 | One bounded preservation or practical-use experiment | BR-03 / BR-05 + separate review | Scoped theorem/counterexample or measured utility; no automatic deployment |
+| P0 | PARTIAL: source/model assumptions and numerical contract | BR-01 | Core calculation inputs fixed; actual reset/K/combinedScale obligations recorded separately and discharged before an unconditional source-instance claim |
+| P1 | COMPLETE: ten admitted quantitative/normalization propositions | BR-01 + proof portion of BR-04 | Preserve admitted bytes and scopes; verify any new computational bridge separately |
+| P2 | ACTIVE: coefficient bounds and positive q, initially in scaled form if needed | Evaluator portion of BR-02 | Justified one-sided coefficient bounds and positive q bound, or precise unresolved outcome under the fixed budget |
+| P3 | PLANNED: conditional local-J margin, then source-J/instance work | Certificate portion of BR-02 + BR-04 | Checkable conditional bound first; an actual instance and numerical bracket require their own assumptions and endpoint evidence |
+| P4 | PLANNED: select preservation A or practical comparison B | BR-03 / BR-05 + separate review | Scoped extension result or measured utility; B is the recommended next transfer direction |
 
-Critical path: P0 -> P1 -> P2 -> P3. A restricted-model result also needs a
-theorem applicable to that model; the Profile-typed P1 theorem alone does not
-cover arbitrary explicit functions. The full gluing branch is not a prerequisite
-for a meaningful P3 result. P4 contains separately selected follow-ons, not an
-instruction to implement both at once.
+Current dependency order: the fixed P0 core contract + completed P1 support
+P2; successful P2 bounds support the conditional part of P3. P0 source-instance
+construction proceeds alongside this path, rather than blocking all P2 work.
+The explicit-instance part of P3 additionally requires that construction.
+A restricted-model result needs a theorem applicable to its actual functions.
+P4-B may use a separately justified explicit model after the coefficient
+milestone, without waiting for a full source Profile. P4-A remains an optional
+extension. Select one branch; full PDE gluing is not a prerequisite for either
+the first conditional margin or a controlled diagnostic experiment.
 
 ### P0 — Resolve the first real computability obstacle
 
@@ -515,20 +538,24 @@ Completed static subchecks, 2026-10-21 (not completion of P0):
 - [ ] P0-01: complete each source inventory row with formula/dependency, needed
       hypothesis, proposed analytic reduction and exact unresolved bound. Separate
       local M/J use from full-Profile construction requirements.
-- [ ] P0-02: compare first-repair/moment definitions with Lei-Ren locators;
-      record a conversion or a difference, not assumed equivalence of expositions.
+- [ ] P0-02 (deferred comparison): compare first-repair/moment definitions
+      with Lei-Ren locators and record a conversion or difference. This is not a
+      prerequisite for computing the already pinned source-defined coefficients.
 - [ ] P0-03: trace stepBound and reset-energy dependence to the actual requested
       value. Decide if a source identity removes it. Do not replace a chosen
       constant/function without proving the relevant bridge.
-- [ ] P0-04: fix the P1 statement, I_01 integral, c_1 alias, prefactors and
-      coordinate convention; verify dimensions/normalization against the source.
-- [ ] P0-05: finalize the selected conditional source-family contract and its
-      assumptions/nonemptiness boundary. Keep explicit Source / Restricted / Toy
-      instance decisions separate. For a restricted model list exactly which
-      theorem assumptions it can establish. Do not mix outcomes.
-- [ ] P0-06: inspect available approved arithmetic dependencies read-only; fix
-      one development input, one held-out input, eta, precision schedule, error
-      target, time/memory limits and reference method before reported computation.
+- [x] P0-04: P1 statements, I_01 integral, c_1 alias, prefactors and
+      coordinate convention are fixed by the ten-proposition P1 receipt. This
+      closes statement binding, not numerical source-instance admissibility.
+- [x] P0-05: the conditional source-family route, fixed tuple and explicit
+      assumptions/nonemptiness boundary are selected in the 2026-10-28 input/error
+      contract. Actual source-instance admissibility remains open. Restricted/toy
+      substitutions require their own applicable mathematical assumptions.
+- [ ] P0-06: retain the fixed first input and 128/256/512-bit, 120-second-per-level
+      contract; justify any additional operations required for coefficient bounds.
+      The five-scalar backend has already been executed and cross-checked.
+      A separate held-out input is required before a multi-input certificate or
+      utility claim, not as a prerequisite for the first fixed-input q result.
 
 **Output:** one completed table and a model contract in this plan's task trail,
 not a new ledger. Initial source feasibility stops at the two-session limit
@@ -539,8 +566,10 @@ Keep source admission held until all its obligations are justified.
 
 **Development file:**
 [P2_ZPLUS_J_QuantitativeMargin.lean](../formal/p2/P2_ZPLUS_J_QuantitativeMargin.lean).
-The four declarations below are implemented as uncompiled development source,
-not compiled claims. No amplitude-bound corollary or numerical evaluator is added.
+The four declarations below and the six normalization/plateau declarations
+were compiled, replayed and admitted by the 2026-10-22 scoped receipt. The
+description below explains their construction; it is not a request to repeat
+P1. An amplitude-bound corollary and numerical evaluator remain separate work.
 
 1. `secondBump_massTail_eq_full`: expose the arbitrary-r equality currently
    proved locally inside secondBump_massTail_pos. Use the existing support
@@ -660,21 +689,30 @@ code in the same trust domain. See the
       Replay metadata remains claim_authority NONE / claim_status UNVERIFIED;
       separate receipt/atomic ledger entries admit only the ten named scopes.
 
-Next is the unresolved P0 admissibility/model/input decision and the smallest
-rigorous P2 computation contract, not another replay or a full Profile evaluator.
+Next is P2-02 normalized moment/coefficient enclosure with the selected input,
+while the unresolved P0 source-admissibility obligations remain explicit.
+This is not another replay or a full Profile evaluator.
 Development, replay execution, archive review and claim admission remain
-distinct. P1 formal admission is complete; no independent attestation, numerical
-q certificate or numerical admissibility is asserted. P2 execution is not started.
+distinct. P1 formal admission is complete. P2 core-scalar execution and its
+second-backend check are complete; full coefficient/moment computation, numerical
+q and source-instance admissibility remain outstanding.
 
 ### P2 — Build a small evaluator, not a solver platform
 
-**Proposed surface:** `profile_evaluator.py` plus focused tests, at a location
+**Current implemented surface:** `p2_core_scalars.py` and the separate
+`check-core-scalars-mpmath.py` cover the bounded core experiment. The next task
+is normalized moment/coefficient enclosure, not a full Profile evaluator.
+
+**Later proposed surface:** `profile_evaluator.py` plus focused tests, at a location
 chosen after inspecting existing NSRW numerical code. Do not create stub files
 to represent progress. Source and restricted evaluators expose different model IDs.
 
-First implement only template integrals, K_1, Delta, C_main/C_prefix and q for
-the conditional-family route if justified arithmetic is available. Do not make
-a full reset/Profile evaluator a prerequisite for symbolic margin extraction.
+First obtain the coefficient lower/upper bounds needed for q. Existing analytic
+inequalities may avoid evaluating every template/main/prefix integral. Use
+validated quadrature only for the bounds still missing after that reduction.
+K_1 and the remaining factors belong to the later composed local-J margin;
+do not require a numerical K_1 or a full reset/Profile evaluator for the
+core-dependent coefficient calculation.
 If combinedScale or witness existence cannot be discharged, return a conditional
 result with those assumptions open, not a source-instance certificate. The
 full-evaluator tasks below remain later work unless a concrete route is established.
@@ -682,14 +720,22 @@ full-evaluator tasks below remain later work unless a concrete route is establis
 - [ ] P2-01: implement the z/t chart, exact positive scale factors and their
       conversion obligations. Use the source radial bump, not a different bump
       defined by convenience in log coordinates.
-- [ ] P2-02: enclose normalized bump moments and main/prefix moments needed by
-      the chosen model. Include truncation/quadrature error, not just rounding.
+- [ ] P2-02A: bind main/prefix coefficient identities, source inequalities,
+      exact positive scales and all assumptions. The input/error contract holds
+      the proposed L2/L3 analytic reduction; it has not been newly compiled.
+- [ ] P2-02B: justify computable analytic bounds first, and integral enclosures
+      only where needed. Account for every approximation and rounding error.
+- [ ] P2-02C: implement and test only those bound operations. One-sided lower
+      C_main / upper abs(C_prefix) bounds suffice for the first q target; they
+      are not full two-sided coefficient evaluations.
 - [ ] P2-03: solve the row-normalized 2x2 repair system with an interval
-      determinant away from zero and a residual/error enclosure. Use actual debt
-      and corrected amplitude for source mode; explicit alternative inputs must
-      carry the restricted-model label and theorem.
-- [ ] P2-04: return M/J enclosures, c_1, K_1, I_01 and Delta in a common chart,
-      with separated error contributions and finite checked scale representation.
+      determinant away from zero, or use its exact scalar identities to bound
+      the main-only and prefix-only coefficients and q. A scaled sign decision
+      must include the exact conversion to an actual positive q bound. Applying
+      it to actual c_1 additionally requires the same source amplitude conditions.
+- [ ] P2-04 (later evaluator): return M/J enclosures, c_1, K_1, I_01 and Delta
+      in a common chart if their model inputs become evaluable; preserve separate
+      error contributions. This is not required for the first coefficient bound.
 - [ ] P2-05: test known-reference manufactured cases, input intervals touching
       forbidden boundaries, matrix near-singularity, cancellation and overflow.
 
@@ -706,36 +752,49 @@ identity; either bound the exact solution or rederive the changed-model identiti
 **Proposed surface:** `interval_certificate.py`, `verify_certificate.py` and
 focused adversarial tests. Reuse the P1 mathematical bound, continuity and IVT.
 
-The first record must distinguish conditional-family margin from explicit-instance
-and numerical localization. For the first kind, [l_0,u_0] with theorem-derived
-strict signs is allowed. Narrow-bracket search, observed endpoint evaluations
-and explicit-instance success below must not be marked complete on that basis.
+First output: combine a positive q bound with the P1 plateau/gap factors into a
+conditional local-J lower bound, preserving any unevaluated positive factors and
+all amplitude assumptions. A symbolic product with a numerical positive factor
+must be identified as such. A fully evaluated numerical J bound additionally
+requires bounds for all its factors. A quantitative source-Profile.J statement
+also requires its explicit local-to-source conversion.
 
-- [ ] P3-01: search only inside the declared first window, in the chosen chart.
+Later output: an admissible evaluable instance and a numerical same-zero bracket.
+For a conditional family, [l_0,u_0] with theorem-derived strict signs is allowed;
+it is not an observed endpoint evaluation or a numerical localization.
+
+- [ ] P3-01 (explicit-instance route): search only inside the declared first window, in the chosen chart.
       Refine endpoint evaluations/brackets within the fixed budget; uniqueness
       is not needed for bisection of a continuous sign-changing bracket.
-- [ ] P3-02: require strict endpoint M signs, c_1 lower bound > 0 and a rigorous
+- [ ] P3-02 (explicit-instance route): require strict endpoint M signs, c_1 lower bound > 0 and a rigorous
       root-applicable J lower bound > 0. A zero-containing M range is insufficient.
 - [ ] P3-03: emit the minimum record: model/input identities and class, chart,
-      bracket, continuity justification, endpoint enclosures, coefficient/moment/
-      gap bounds, error budgets, precision/backend identity, theorem references,
-      checked scale conversion and explicit failure reason when not certified.
+      coefficient/moment/gap bounds, error budget, precision/backend identity,
+      theorem references and checked scale conversion. For a conditional record,
+      identify theorem-derived signs and unresolved factors/assumptions; for an
+      instance record, include bracket, continuity and actual endpoint enclosures.
 - [ ] P3-04: make the verifier recompute/check the bound evidence and input
       binding without calling the certificate producer to obtain its verdict.
       Share only reviewed arithmetic primitives; disclose shared trusted code
       and operator. Hash matching alone is not mathematical verification.
-- [ ] P3-05: obtain one development and one held-out valid certificate for the
+- [ ] P3-05 (later multi-input validation): obtain one development and one held-out valid certificate for the
       chosen model class; reject fabricated margin, changed eta/reset, same-sign
       endpoints, missing continuity/error evidence and a singular matrix interval.
 
-**Proposed initial execution limits:** at most three predeclared precision
+**Later bracket-search proposal, not the active P2 budget:** at most three predeclared precision
 levels, 40 bracket bisections per level and 4096 quadrature subdivisions per
 integral. Before running, freeze actual backend-supported precision values and
 wall-time/memory limits in P0's contract. Reaching a limit produces a held result,
 not weaker acceptance or automatic unlimited refinement. These are proposed
 resource limits, not measured feasibility or a convergence guarantee.
 
-**Exit:** at least the two declared valid examples and all required rejection
+The active P2 limit remains 2048 integration subintervals if required and 120
+seconds per precision level. The proposed 4096-subdivision bracket budget must
+not silently replace it.
+
+**First exit:** one bounded conditional-family result with a recomputed margin
+and explicitly checked conversion/assumptions. **Later multi-input exit:**
+at least the two declared valid examples and all required rejection
 controls pass, with zero false certificates on that declared test set. This
 does not establish a population-wide false-positive rate. An exact/analytic or
 rigorously enclosed reference is needed; arbitrary high-precision digits do not
@@ -759,6 +818,12 @@ cases. Predeclare useful output/error criteria, false-certification checks,
 runtime/memory overhead allowance and a stopping rule. A source certificate is
 not evidence of benefit for a different physical model.
 
+Recommendation, 12 November 2026: pursue B after the coefficient milestone,
+with cancellation/denominator diagnostics as the first candidate. A remains
+available but deferred. This selects a planning direction, not a completed
+experiment. Give all comparison methods the same analytic information, including
+the plateau bound where relevant; compare a plateau-aware standard baseline.
+
 - [ ] P4-01: select A or B explicitly; do not launch both by default. Full PDE
       gluing need not precede an independently justified bounded diagnostic trial.
 - [ ] P4-02: review the selected mathematical mapping, licenses and assumptions;
@@ -779,7 +844,10 @@ integration/deployment requires its own evidence and authority.
 
 ## 8. Working boundaries and immediate next task
 
-Future local Python uses the configured D: venv; approved Lean experiments use
+Before sustained local implementation, restore/verify a working D: project
+environment: the 12 November check found the old shared venv launcher broken.
+That check used an isolated dependency overlay and did not repair the launcher.
+Approved Lean experiments use
 the pinned Colab environment. Follow [Colab storage practice](../colab/README.md):
 execute in /content, preserve success/failure archives primarily to private Drive,
 reopen/hash the saved copy, keep small records under colab/, and use D: only for
@@ -789,16 +857,19 @@ Existing source snapshots remain ignored references. Review licenses before
 copying code and preserve attribution. No installs, third-party script execution,
 new Colab run, commit/push/release or publication occurs through adopting this plan.
 
-**Next task is the remaining P0 contract, not three empty Python modules:**
-finish the source correspondence and amplitude-hypothesis discharge analysis
-for the selected conditional-family bound. The newly traced combinedScale
-dependency prevents declaring a numerical source instance ready. P1's exact
-conditional margin/normalization is already admitted without a full evaluator;
-numerical q, explicit-instance and narrow-bracket claims remain separate.
-Record its result in the existing task trail. Create code only after that choice.
-Do not add more downloaded repositories, more proof-checking infrastructure or a
-new paper quota to demonstrate progress. The deliverable is a mathematically
-meaningful computation, or an equally precise result explaining why it fails.
+**Next task: P2-02A/B, then P2-02C/P2-03.** Fix the coefficient identities and
+positive scale factors; assess the explicit analytic lower/upper bounds first.
+Justify integral enclosures only for any remaining needed quantities. Compute
+a conservative q bound or its rigorously linked scaled form at the fixed input.
+P0's selected-constant/reset/amplitude obligations remain a parallel source
+admissibility investigation. Their unresolved state must remain explicit, but
+need not block a core-dependent conditional calculation. The dated
+[current-position reassessment](CURRENT_POSITION_2026-11-02.md) specifies the
+outputs and stopping conditions.
+
+Do not repeat P1 or build empty evaluator/certificate modules. The next result
+is a mathematically meaningful coefficient computation, or a precise statement
+of which bound could not be closed within the declared budget.
 
 
 ## Current computational update - 31 October 2026

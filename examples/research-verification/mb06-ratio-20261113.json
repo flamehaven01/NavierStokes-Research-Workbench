@@ -1,0 +1,48 @@
+{
+  "analytic_rational_bracket": {
+    "lower": "8499999999983/10000000000000",
+    "upper": "8500000000000/9999999999983"
+  },
+  "claim_authority": "NONE",
+  "claim_status": "UNVERIFIED",
+  "expm1_factors": {
+    "denominator_lower": "680564733842557491660591545/340282366920938463463374607431768211456",
+    "denominator_upper": "340282366921278745830295773/170141183460469231731687303715884105728",
+    "numerator_lower": "578480023766087095907937867/340282366920938463463374607431768211456",
+    "numerator_upper": "144620005941521773976984467/85070591730234615865843651857942052864"
+  },
+  "formal_bridge": "NOT_COMPILED_OR_ADMITTED",
+  "format": "nsrw-mb06-normalized-j-factor-v1",
+  "input": {
+    "B_coarse": "207522463005781740692370179/2305843009213693952",
+    "P": "1",
+    "eta": "1/1048576",
+    "lambda": "1/1000000000000",
+    "m": "1"
+  },
+  "method": "positive-expm1-fraction-enclosures-v1",
+  "precision_fractional_bits": 128,
+  "ratio": "expm1(17*lambda/10)/expm1(2*lambda)",
+  "required_for_J": [
+    "SAME_SOURCE_PROFILE_F",
+    "F_AMP_ETA_GT_9_OVER_10",
+    "EXACT_FIRST_WINDOW_LOCAL_MASS_ZERO",
+    "LOCAL_J_NORMALIZATION_BRIDGE_NOT_COMPILED",
+    "SOURCE_PROFILE_FIXED_TUPLE_NOT_CONSTRUCTED",
+    "COMBINED_SCALE_AND_RESET_K_UNRESOLVED"
+  ],
+  "rigorous_B_times_R_bracket": {
+    "lower": "40015866443860517169488047139850386135505896165222731/523091811282746488797598357776253588040843264",
+    "upper": "30011899832895387877116035406768405353074857297009593/392318858462059866598198767755729438727208960"
+  },
+  "rigorous_R_bracket": {
+    "lower": "192826674588695698635979289/226854911280852497220197182",
+    "upper": "578480023766087095907937868/680564733842557491660591545"
+  },
+  "scope": "NORMALIZED_J_FACTOR_ENCLOSURES_ONLY",
+  "source_binding": {
+    "momentbound_execution_commit": "fb5ad6001f1637417efda6ef34f3b75c8266c059",
+    "p1_execution_commit": "7f29ebf0e2b894bf598144628230ae09df436c3d",
+    "upstream_commit": "8937a8f4cbc7abaab5e9e97d1cc7f5d2319d9538"
+  }
+}

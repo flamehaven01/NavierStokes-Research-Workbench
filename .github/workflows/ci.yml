@@ -94,6 +94,19 @@ jobs:
           cmp outputs/math-a.json outputs/math-b.json
           cmp outputs/analytic-a.json outputs/analytic-b.json
           cmp outputs/m3-a.json outputs/m3-b.json
+      - name: Run installed research verification checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          nsrw-verify forced-shear --input fixture=examples/research-verification/forced-shear.json --output outputs/verify-shear.json --manifest outputs/verify-shear-manifest.json
+          nsrw-verify mb06-ratio --input record=examples/research-verification/mb06-ratio-20261113.json --output outputs/verify-ratio.json --manifest outputs/verify-ratio-manifest.json
+      - name: Preserve research verification reports and manifests
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: research-verification-reports
+          path: outputs/verify-*.json
+          if-no-files-found: warn
       - name: Verify required M4 checks, dependency identity, and mutations
         run: >-
           python -c "from pathlib import Path; from nsrw.m4_audit import inspect_spar_identity,load_manifest,run_m4_audit,verify_compiled_evidence;

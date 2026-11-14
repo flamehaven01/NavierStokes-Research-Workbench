@@ -1,6 +1,72 @@
 # NSRW Colab 재점검과 재개 tasks
 
-## Current publication and computation - 31 October 2026
+## Current position and next work — 13 November 2026
+
+The [current-position reassessment, including its 12 November addendum](CURRENT_POSITION_2026-11-02.md#9-reassessment--12-november-2026)
+is the current research handoff. The [bridge plan, section 7](NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md#7-p0-p4-execution-proposal-and-ai-checklist)
+defines P0-P4; these identifiers are not paper numbers or a new priority system.
+The dated sections below remain historical records.
+
+**Active research target: fixed source-instance admissibility.**
+The upstream `combinedScale` sufficient condition fails at the fixed input.
+MB-07 completed the internal ratio benchmark.
+[Threshold finding](momentbound/FIXED_PROFILE_THRESHOLD_FINDING_2026-11-14.md)
+· [Benchmark results](momentbound/MB07_DIAGNOSTIC_BENCHMARK_RESULT_2026-11-14.md)
+
+MB-05 admitted fourteen coefficient propositions after a clean pinned
+replay and same-session archive review.
+[MomentBound dated receipt](stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md)
+
+MB-06 admitted four normalized angular-moment propositions at OE-2 after
+clean replay and private Drive archive review.
+[MB-06 dated receipt](stage_receipts/MOMENTBOUND_NORMALIZED_J_COLAB_2026-11-13.md)
+
+**Named implementation work: [NSRW MomentBound](momentbound/README.md).**
+[MB-00 through MB-03](momentbound/TASKS.md) completed on 12 November:
+dedicated environment, source algebra review, fixed-input rational producer
+and recomputing verifier. See the [execution review](momentbound/IMPLEMENTATION_REVIEW_2026-11-12.md).
+MB-04 passed development compilation on 13 November. The Lean result derives
+both source coefficient estimates and connects the fixed positive B to actual
+coefficient positivity under the stated Profile and amplitude conditions.
+See the [development record](momentbound/MB04_DEVELOPMENT_2026-11-13.md).
+
+- [x] Qualitative Z-core/Z+J source statements and ten P1 quantitative/normalization
+  propositions: admitted by their existing scoped receipts.
+- [x] P2 core-only calculation: exact-rational 128/256/512-bit records and fifteen
+  second-backend interval-containment checks retained. This is partial P2,
+  not a full Profile/moment evaluator.
+- [x] Public supporting artifacts: software v0.5.0, P01 v0.5, P02 v0.6,
+  research site/library, official citations and EQA 0061. P03 remains deferred.
+- [x] **12 November local code check:** 673 tests passed, 3 external-export
+  checks skipped, coverage 90.53%; Ruff/diff checks passed. Fresh core records
+  matched retained outputs; fifteen second-backend containments passed. No
+  Lean replay or new mathematical admission was performed.
+- [ ] **Environment:** restore/verify a working D: project interpreter before
+  sustained implementation. The check used an isolated pinned-dependency overlay;
+  the shared venv launcher remains broken. Avoid modifying other project environments.
+- [ ] **P2-02A:** bind the exact coefficient identities, analytic bounds and
+  positive scale factors to source locators. The proposed L2/L3/F1 reduction is
+  statically derived; its computational bridge still needs implementation/review.
+- [ ] **P2-02B:** justify one-sided main/prefix bounds and their error contract.
+  Use an actual-source integral enclosure only for quantities still needed.
+  Keep the fixed input, 128/256/512 bits, at most 2048 subintervals if applicable,
+  and 120 seconds per precision level.
+- [ ] **P2-02C / P2-03:** implement those bounds, separate the determinant from
+  zero, compute conservative coefficient bounds and q (or an exactly linked
+  scaled bound), and retain either a positive bound or a precise unresolved result.
+- [ ] **P0-03:** resolve the same reset/K/combinedScale/selected-constant
+  assumptions, or retain them explicitly for a conditional-family result.
+- [ ] **P3:** after a positive q result, assemble the conditional local-J margin,
+  identifying evaluated and symbolic factors. A source-J quantitative wrapper
+  and an explicit-instance bracket remain separate additional tasks.
+- [ ] **P4:** choose A (bounded preservation) or B (practical comparison).
+  Recommend B: one cancellation/denominator workload after the coefficient
+  milestone, compared with equally informed standard baselines. A stays deferred.
+
+No repeat of the closed proof chain, fresh publication campaign, new generic
+verifier, or additional repository intake is the next research task.
+
+## Historical publication and computation — 31 October 2026
 
 - [Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0) is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`; [all six exact-commit CI jobs passed](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
 - Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) and [P02 v0.6](https://doi.org/10.5281/zenodo.23835112), PDF plus source, CC BY 4.0. P03 remains deferred.
@@ -51,7 +117,7 @@ run, numerical certificate, software tag or public release is created by this up
 상세 경계는 [Colab 저장·실행 규칙](../colab/README.md)을 따른다.
 이 규칙은 환경 설치 승인이나 C-02B compile 성공을 뜻하지 않는다.
 
-## 1. 현재 위치와 다음 한 가지
+## 1. Historical position and next task — October 2026
 
 **strict-L2, L3, D, C-01, C-02, C-03, C-04의 별도 commit-bound receipts는 닫혔다.
 C-03은 actual coefficient의 eta=0 등식·양수성·eta 전체에서의 연속성만 admission했다.

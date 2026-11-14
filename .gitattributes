@@ -6,3 +6,5 @@
 *.gif binary
 *.pdf binary
 *.ipynb text eol=lf
+# Historical input identity is byte-based.
+examples/research-verification/mb06-ratio-20261113.json -text whitespace=cr-at-eol

@@ -1,8 +1,39 @@
 # Documentation status index
 
+## Research verification — 14 November 2026
+
+The [verification workflow](NSRW_RESEARCH_VERIFICATION.md) covers the
+installed command, execution manifests and how to add a new check.
+See the [v0.6.0 release notes](releases/v0.6.0.md) for software changes.
+
+## Active research
+
+[Current position and next work](CURRENT_POSITION_2026-11-02.md): Z+J and the
+quantitative/normalization results are established; core-scalar calculation and
+its second arithmetic path are implemented and locally rechecked. The next
+deliverable is justified coefficient bounds and q, trying existing analytic
+inequalities before quadrature, with source admissibility tracked in parallel.
+The [restart checklist](NSRW_COLAB_RESTART_TASKS_2026-10-06.md) holds the active
+actions. The stable direction is mathematics → checked computation → measured
+scientific use. Publications and website support this research.
+
+The [P0-P4 execution plan](NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md#7-p0-p4-execution-proposal-and-ai-checklist)
+defines the work packages and completion conditions. P1 is closed for its ten
+named propositions; P2 is active. P3 separates conditional margins from explicit
+instances; P4 recommends a controlled practical comparison while retaining the
+optional mathematical-preservation branch.
+
+**Implementation project: [NSRW MomentBound](momentbound/README.md).** The
+[detailed design](momentbound/IMPLEMENTATION_PLAN.md) specifies the scaled
+coefficient algebra, exact-rational first calculation, source/Lean obligations,
+record format and rejection tests. [Implementation tasks](momentbound/TASKS.md)
+track ongoing source-instance work. The [coefficient receipt](stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md)
+and [normalized margin receipt](stage_receipts/MOMENTBOUND_NORMALIZED_J_COLAB_2026-11-13.md)
+give the exact admitted scope. The fixed source Profile remains open.
+
 The [research library](https://flamehaven01.github.io/NavierStokes-Research-Workbench/docs/) offers a document sidebar and section TOC. Start with the [research guide](NSRW_RESEARCH_GUIDE.md), [math-to-code architecture](NSRW_MATH_TO_CODE_BRIDGE.md) or [second-backend scalar check](NSRW_CORE_SCALAR_CROSSCHECK.md).
 
-## Current publication and computation - 31 October 2026
+## Publication and computation snapshot — 31 October 2026
 
 - [Software v0.5.0](https://github.com/flamehaven01/NavierStokes-Research-Workbench/releases/tag/v0.5.0) is published at `cdce801d7c3f1991e8a0dce48aae9f825b03e9b1`; [all six exact-commit CI jobs passed](https://github.com/flamehaven01/NavierStokes-Research-Workbench/actions/runs/41195880606).
 - Public preprints: [P01 v0.5](https://doi.org/10.5281/zenodo.23835054) and [P02 v0.6](https://doi.org/10.5281/zenodo.23835112), PDF plus source, CC BY 4.0. P03 remains deferred.

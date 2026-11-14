@@ -1,6 +1,6 @@
 schema: flamehaven.e2a-resource-claim-ledger.v1
-valid_as_of: "2026-10-22"
-reviewed_on: "2026-10-22"
+valid_as_of: "2026-11-13"
+reviewed_on: "2026-11-13"
 # Evidence index only. Each claim retains its own dated evidence boundary.
 # Strict L2, L3, D and C01 retain separate 10/6 compiled receipts.
 # C02 admits only two equalities from a separate 10/7 replay reviewed on 10/8.
@@ -9,6 +9,7 @@ reviewed_on: "2026-10-22"
 # Z-core and Z+J named scopes are admitted by separate 10/12 receipts after new replay/archive review.
 # Both share one execution/trust domain; original metadata remains NONE/UNVERIFIED.
 # P1's ten exact-real margin/normalization propositions have one scoped 10/22 receipt.
+# MomentBound adds fourteen exact coefficient propositions under the 11/13 scoped receipt.
 # Each retains its own explicit hypotheses; OE-2 and numerical/non-claim boundaries remain.
 # Entries retain their individual evidence dates; no uniform/numerical epsilon or Q pole is admitted.
 # falsifier: claim-domain contradiction, not compile/identity failure.
@@ -904,6 +905,600 @@ claims:
     reopening_condition: null
     lineage:
       upstream: ["nsrw/p1/margin/angular-lower-bound","nsrw/p1/margin/weight-gap-positive","nsrw/p1/normalization/second-bump-scaling","nsrw/p1/normalization/plateau-lower-bound"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/moment-decay
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "normalizedMainMoment c 0 <= exp(-2 + 3*c.lam) * normalizedMainMoment c 1"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_normalizedMainMoment_zero_le_decay_one
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p2/l2a/log-short"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/prefix-row-difference
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "C_prefix = (R_1 - R_0) / D, with rows and separation gap defined in receipt"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_prefix_one_eq_row_difference
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/common-scale-positive
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < mbCommonScale c"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mbCommonScale_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/actual-coefficient-affine
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "c1(F, eta) = parameterPolynomial eta * C_prefix + F.amp eta * C_main"
+    hypotheses: ["F : Profile", "eta : Real"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_actualSecondRepairCoefficient_eq
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p2/c02/profile-second-coefficient-decomposition"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/actual-coefficient-gt-qstar
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "mbQStar F.data.core eta < c1(F, eta)"
+    hypotheses: ["F : Profile", "eta : Real", "9/10 < F.amp eta"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_actualSecondRepairCoefficient_gt_qStar
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/actual-coefficient-affine", "nsrw/p2/c01/main-only-coefficient"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/qstar-ge-scaled-coarse
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "mbCommonScale c * mbCoarseBound c eta <= mbQStar c eta"
+    hypotheses: ["c : Parameters", "eta : Real", "s * (1 / (10000 * c.lam)) <= C_main", "abs(C_prefix) <= s * (328 + 3099396717 / 2)"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_qStar_ge_scaled_coarse
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/actual-coefficient-gt-scaled-coarse
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "mbCommonScale c * mbCoarseBound c eta < c1(F, eta)"
+    hypotheses: ["F : Profile", "eta : Real", "9/10 < F.amp eta", "s * (1 / (10000 * c.lam)) <= C_main", "abs(C_prefix) <= s * (328 + 3099396717 / 2)"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_actualSecondRepairCoefficient_gt_scaled_coarse
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/qstar-ge-scaled-coarse", "nsrw/momentbound/actual-coefficient-gt-qstar"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/actual-coefficient-pos-of-scaled-coarse
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < c1(F, eta)"
+    hypotheses: ["F : Profile", "eta : Real", "9/10 < F.amp eta", "s * (1 / (10000 * c.lam)) <= C_main", "abs(C_prefix) <= s * (328 + 3099396717 / 2)", "0 < mbCoarseBound F.data.core eta"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientScaledBounds.lean
+      declaration: NSRW.P2.mb_actualSecondRepairCoefficient_pos_of_scaled_coarse
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: 7b75a32b7c9ca3023a3e7dfb47389c07af0382c48e32db4caadd82cb1f7c9719
+      proof_git_blob_sha1: 5af9c1ddc8ea5757f6a7e76fd80f416d47abe029
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/actual-coefficient-gt-scaled-coarse", "nsrw/momentbound/common-scale-positive"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/main-source-lower-bound
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "mbCommonScale c * (1 / (10000 * c.lam)) <= C_main"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientSourceBounds.lean
+      declaration: NSRW.P2.mb_main_one_ge_coarse
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: f2e04f957e37c16ba4428e18dd4640b7662fd66051d2796836464603839e8ccf
+      proof_git_blob_sha1: b26fbb1214a79702e3fdd04f7802374ffea1d6f8
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/moment-decay", "nsrw/p2/c01/main-only-coefficient"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/prefix-source-absolute-bound
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "abs(C_prefix) <= mbCommonScale c * (328 + 3099396717 / 2)"
+    hypotheses: ["c : Parameters", "c.P = 1", "c.m = 1"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientSourceBounds.lean
+      declaration: NSRW.P2.mb_prefix_one_abs_le_coarse
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: f2e04f957e37c16ba4428e18dd4640b7662fd66051d2796836464603839e8ccf
+      proof_git_blob_sha1: b26fbb1214a79702e3fdd04f7802374ffea1d6f8
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/prefix-row-difference"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/qstar-ge-source-coarse
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "mbCommonScale c * mbCoarseBound c eta <= mbQStar c eta"
+    hypotheses: ["c : Parameters", "eta : Real", "c.P = 1", "c.m = 1"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientSourceBounds.lean
+      declaration: NSRW.P2.mb_qStar_ge_source_coarse
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: f2e04f957e37c16ba4428e18dd4640b7662fd66051d2796836464603839e8ccf
+      proof_git_blob_sha1: b26fbb1214a79702e3fdd04f7802374ffea1d6f8
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/qstar-ge-scaled-coarse", "nsrw/momentbound/main-source-lower-bound", "nsrw/momentbound/prefix-source-absolute-bound"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/fixed-coarse-rational
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "mbCoarseBound c (1 / 1048576) = 207522463005781740692370179 / 2305843009213693952"
+    hypotheses: ["c : Parameters", "c.lam = 1 / 1000000000000"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientSourceBounds.lean
+      declaration: NSRW.P2.mb_fixed_coarse_eq
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: f2e04f957e37c16ba4428e18dd4640b7662fd66051d2796836464603839e8ccf
+      proof_git_blob_sha1: b26fbb1214a79702e3fdd04f7802374ffea1d6f8
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/fixed-coarse-positive
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < mbCoarseBound c (1 / 1048576)"
+    hypotheses: ["c : Parameters", "c.lam = 1 / 1000000000000"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientSourceBounds.lean
+      declaration: NSRW.P2.mb_fixed_coarse_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: f2e04f957e37c16ba4428e18dd4640b7662fd66051d2796836464603839e8ccf
+      proof_git_blob_sha1: b26fbb1214a79702e3fdd04f7802374ffea1d6f8
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/fixed-coarse-rational"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/actual-coefficient-fixed-positive
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < c1(F, 1 / 1048576)"
+    hypotheses: ["F : Profile", "F.data.core.P = 1", "F.data.core.m = 1", "F.data.core.lam = 1 / 1000000000000", "9/10 < F.amp (1 / 1048576)"]
+    source_pin:
+      external_module: formal/p2/P2_CoefficientSourceBounds.lean
+      declaration: NSRW.P2.mb_actualSecondRepairCoefficient_fixed_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MOMENTBOUND_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_COEFFICIENT_COLAB_2026-11-13.md
+      sha256: ee36e3216742b7af0d0b03d370f680b982919e039819b93a76d76cf53c97e6f7
+      nsrw_commit: fb5ad6001f1637417efda6ef34f3b75c8266c059
+      proof_sha256: f2e04f957e37c16ba4428e18dd4640b7662fd66051d2796836464603839e8ccf
+      proof_git_blob_sha1: b26fbb1214a79702e3fdd04f7802374ffea1d6f8
+      archive_sha256: 4d474507418d5820f10b538f15cf87476c793384d10117c1e0abab9bc143d9e1
+      independent_attestation: false
+    non_claims: [numerical_scale, numerical_actual_coefficient, explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, literature_novelty, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/actual-coefficient-pos-of-scaled-coarse", "nsrw/momentbound/main-source-lower-bound", "nsrw/momentbound/prefix-source-absolute-bound", "nsrw/momentbound/fixed-coarse-positive"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/repair-ratio-positive
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < R(c.lam)"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_MB06_NormalizedJ.lean
+      declaration: NSRW.P2.mbRepairRatio_pos
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_NORMALIZED_J_COLAB_2026-11-13.md
+      sha256: 1b51f63f88970ec60203a157042c3a9e6e383fea905ad228285f694f8e65743b
+      nsrw_commit: 40e0cfe7c2defeeeee871f1923552c352f28ee5c
+      proof_sha256: e326e79968d7bd9fcba7f7ac0d220b0db50a18a641b901cd0ddf8c05dcd76648
+      proof_git_blob_sha1: a3990853ab8e3ef70ab47aa592d88941123b47c3
+      archive_sha256: cc5fbbdde35ffbd153564ca5c698b3f98652710555136ad84e6a9819969c6a86
+      independent_attestation: false
+    non_claims: [explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: []
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/scaled-moment-gap-factorization
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "s*I01*Delta = (A_0/A_1)*exp(3*c.lam/20)*R(c.lam)"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_MB06_NormalizedJ.lean
+      declaration: NSRW.P2.mb_scale_mul_secondBump_mul_weightGap
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_NORMALIZED_J_COLAB_2026-11-13.md
+      sha256: 1b51f63f88970ec60203a157042c3a9e6e383fea905ad228285f694f8e65743b
+      nsrw_commit: 40e0cfe7c2defeeeee871f1923552c352f28ee5c
+      proof_sha256: e326e79968d7bd9fcba7f7ac0d220b0db50a18a641b901cd0ddf8c05dcd76648
+      proof_git_blob_sha1: a3990853ab8e3ef70ab47aa592d88941123b47c3
+      archive_sha256: cc5fbbdde35ffbd153564ca5c698b3f98652710555136ad84e6a9819969c6a86
+      independent_attestation: false
+    non_claims: [explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/p1/normalization/weight-gap-exponential", "nsrw/p1/normalization/second-bump-scaling", "nsrw/p1/normalization/row-moment-link"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/scaled-moment-gap-lower-bound
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "R(c.lam) <= s*I01*Delta"
+    hypotheses: ["c : Parameters"]
+    source_pin:
+      external_module: formal/p2/P2_MB06_NormalizedJ.lean
+      declaration: NSRW.P2.mb_repairRatio_le_scale_mul_secondBump_mul_weightGap
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_NORMALIZED_J_COLAB_2026-11-13.md
+      sha256: 1b51f63f88970ec60203a157042c3a9e6e383fea905ad228285f694f8e65743b
+      nsrw_commit: 40e0cfe7c2defeeeee871f1923552c352f28ee5c
+      proof_sha256: e326e79968d7bd9fcba7f7ac0d220b0db50a18a641b901cd0ddf8c05dcd76648
+      proof_git_blob_sha1: a3990853ab8e3ef70ab47aa592d88941123b47c3
+      archive_sha256: cc5fbbdde35ffbd153564ca5c698b3f98652710555136ad84e6a9819969c6a86
+      independent_attestation: false
+    non_claims: [explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/repair-ratio-positive", "nsrw/momentbound/scaled-moment-gap-factorization", "nsrw/p2/l3/template-ratio"]
+      downstream: []
+    reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
+
+  - resource_id: nsrw/momentbound/normalized-angular-moment-lower-bound
+    version: 1
+    valid_as_of: "2026-11-13"
+    status: CONFIRMED
+    claim_status: CONFIRMED
+    claim_type: formal_lean
+    claim: "0 < B*R(c.lam) < localAngularMoment F eta r / K1 for c = F.data.core"
+    hypotheses: ["F : Profile", "eta r : Real", "c.P = 1", "c.m = 1", "9/10 < F.amp eta", "0 < mbCoarseBound c eta", "c.lower 0 < r", "r < c.upper 0", "localMass F eta r = 0"]
+    source_pin:
+      external_module: formal/p2/P2_MB06_NormalizedJ.lean
+      declaration: NSRW.P2.mb_normalizedAngularMoment_gt_coarse_mul_ratio
+    gate_state: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    check_status: PASS[COMMIT_BOUND_EXTERNAL_MB06_NORMALIZED_J_REPLAY]
+    task_status: COMPLETED
+    oe_level: OE-2
+    evidence_class: [source_review, external_clean_compile, same_session_artifact_review]
+    receipt:
+      path: docs/stage_receipts/MOMENTBOUND_NORMALIZED_J_COLAB_2026-11-13.md
+      sha256: 1b51f63f88970ec60203a157042c3a9e6e383fea905ad228285f694f8e65743b
+      nsrw_commit: 40e0cfe7c2defeeeee871f1923552c352f28ee5c
+      proof_sha256: e326e79968d7bd9fcba7f7ac0d220b0db50a18a641b901cd0ddf8c05dcd76648
+      proof_git_blob_sha1: a3990853ab8e3ef70ab47aa592d88941123b47c3
+      archive_sha256: cc5fbbdde35ffbd153564ca5c698b3f98652710555136ad84e6a9819969c6a86
+      independent_attestation: false
+    non_claims: [explicit_profile_certificate, amplitude_hypothesis_verified, numerical_j_certificate, computed_root, independent_reproduction, application_performance]
+    falsifier: "an admissible object satisfying the named declaration's hypotheses but violating its conclusion"
+    admission_failure: "commit, execution, archive or named statement identity mismatch"
+    reopening_condition: null
+    lineage:
+      upstream: ["nsrw/momentbound/scaled-moment-gap-lower-bound", "nsrw/momentbound/qstar-ge-source-coarse", "nsrw/momentbound/actual-coefficient-gt-qstar", "nsrw/p1/margin/angular-lower-bound"]
       downstream: []
     reverify_on: [proof_bytes_change, upstream_claim_change, source_repin, toolchain_change]
 

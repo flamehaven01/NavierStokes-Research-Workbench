@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "navier-stokes-research-workbench"
-version = "0.5.0"
+version = "0.6.0"
 description = "Research-lab workbench for traceable Navier-Stokes evidence and bounded checks"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -32,6 +32,7 @@ dev = [
 [project.scripts]
 nsrw = "nsrw.cli:main"
 nsrw-math = "nsrw.math_cli:main"
+nsrw-verify = "nsrw.research_verification_cli:main"
 nsrw-analytic = "nsrw.analytic_cli:main"
 nsrw-m3 = "nsrw.m3_cli:main"
 nsrw-m3-evidence = "nsrw.m3_evidence_cli:main"

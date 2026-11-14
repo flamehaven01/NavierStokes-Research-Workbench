@@ -71,7 +71,11 @@ The original mathematical result is not enlarged by these software tests.
 ## Remaining research
 
 Validated moment quadrature, determinant/affine coefficient enclosures, positive
-q, actual reset/K/combinedScale admissibility, source nonemptiness and a compiled
-named quantitative Profile.J wrapper remain separate. Numerical backend progress
+q, actual reset/K/combinedScale admissibility, an evaluable source instance at the
+selected numerical tuple, and a compiled named quantitative Profile.J wrapper
+remain separate. The pinned source proves existence of Profiles for sufficiently
+small schedule parameters; it does not provide an evaluated threshold certifying
+this selected tuple. Explicit analytic bounds may avoid quadrature for the first
+coefficient target. Numerical backend progress
 for these core factors does not discharge the selected-constant dependency in
 the source amplitude hypotheses. No independent reproduction is asserted.

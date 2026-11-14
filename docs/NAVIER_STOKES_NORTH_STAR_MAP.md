@@ -1,7 +1,7 @@
 # Navier--Stokes research direction map
 
 Document status: `ADOPTED`
-Scope: stable mathematical research policy; not a dated status report and not an
+Scope: stable mathematical and scientific-computation direction; not a dated status report and not an
 execution gate.
 
 The filename preserves the project's historical internal "north-star" naming.
@@ -9,15 +9,32 @@ Public summaries should call this the research direction map.
 
 ## 1. Long-range objective
 
-The workbench exists to discover, isolate, and eventually prove a mathematical
-mechanism that closes a genuine gap in the three-dimensional incompressible
-Navier--Stokes problem.
+The workbench investigates Navier--Stokes mathematics to obtain justified
+mathematical results and turn reusable structures into useful scientific
+computation.
 
-The long-horizon objective is a rigorous theorem-level contribution. The
-immediate product is a sharper, reproducible understanding of which analytic
-obligations are true, false, held, or still missing.
+Two connected outcomes guide the work:
 
-Receipts and CI are guardrails. They are not the mathematical destination.
+- **Mathematical research:** discover, isolate and prove mechanisms that clarify
+  genuine analytic questions, with a rigorous theorem-level contribution as a
+  long-horizon objective.
+- **Scientific use:** produce an evaluable algorithm, bound or diagnostic with
+  explicit inputs and error assumptions, then demonstrate its value in a named
+  scientific or engineering workflow.
+
+A theorem is a substantial milestone. Useful, measured scientific computation
+is the practical destination. A general Navier--Stokes solution is not a
+prerequisite for a bounded scientific application.
+
+Receipts, CI, papers and websites preserve or communicate the results. The next
+research priority is the mathematical or computational output they support.
+
+The nearest useful output may be a conservative bound rather than a full
+function evaluator. Reuse explicit inequalities when they suffice for the
+specified decision, and compute additional quantities only as needed. Keep
+core-dependent computation separate from the existence and evaluability of a
+complete source instance. Each application must name the decision it improves
+and compare against methods given the same mathematical information.
 
 ## 2. Research directions
 
@@ -52,6 +69,12 @@ formal-semantic bridge
             |
             v
 candidate theorem contribution
+            |
+            v
+evaluable bound / algorithm / diagnostic
+            |
+            v
+comparison in a selected scientific workflow
 ~~~
 
 ## 4. Architecture test
@@ -63,12 +86,16 @@ Before adding code, a ledger, a receipt, or a new research direction, ask:
 2. Does it support an independent derivation or kill a concrete alternative?
 3. Does it preserve source hypotheses and boundary cases?
 4. Does it produce the next falsifier or proof obligation?
+5. Does it turn an established structure into a bounded computation, or measure
+   whether an existing computation is useful against a relevant baseline?
 
 If all answers are no, the artifact is process growth rather than research
 progress and should be removed or deferred.
 
 ## 5. Nontriviality and semantic-review gate
 
+State the derived propositions and their mechanism directly. Their mathematical
+content is not diminished by an incomplete literature-priority assessment.
 A proposition should not be described as an independent nontrivial mathematical
 result merely because it was not copied verbatim from the source.
 
@@ -90,8 +117,8 @@ Until this review is complete, use a bounded status such as
 
 ## 6. Relation to the wider Equation to Artifact program
 
-This map governs the mathematical objective. The broader program continues only
-when an admitted artifact exposes a reusable computational structure:
+This map connects the mathematical objective to scientific use. A theorem-derived
+application must identify the reusable structure and preserve its hypotheses:
 
 ~~~text
 mathematical result
@@ -119,7 +146,9 @@ This policy document intentionally contains no "current map position" section.
 
 Dated state belongs in:
 
-- `CURRENT_POSITION_2026-10-05.md`;
+- [Current-position reassessment with its 12 November addendum](CURRENT_POSITION_2026-11-02.md), followed by the
+  active tasks in the restart checklist;
+- `CURRENT_POSITION_2026-10-05.md` as a historical snapshot;
 - execution receipts;
 - `E2A_RESOURCE_CLAIM_LEDGER.yaml`;
 - `NEGATIVE_RESULT_REGISTER.md`.

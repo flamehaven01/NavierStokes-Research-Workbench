@@ -42,6 +42,8 @@ upstream theorem is wrong, and literature novelty has not been established.
 **Start here:** [Research website](https://flamehaven01.github.io/NavierStokes-Research-Workbench/)
 · [Research roadmap](docs/EQUATION_TO_ARTIFACT_VISION_ROADMAP.md)
 · [Current P2 work](#current-p2-research)
+· [Current position & next research](docs/CURRENT_POSITION_2026-11-02.md)
+· [Research verification workflow](docs/NSRW_RESEARCH_VERIFICATION.md)
 · [Install](#installation)
 · [Reproduce P2](#reproduce-the-current-p2-artifacts)
 · [Run software checks](#running-the-workbench)
@@ -460,6 +462,19 @@ The development extra pins the optional SPAR structural-check dependency to the
 reviewed public commit used by this project. No local source archive is included.
 
 ## Running the workbench
+
+`nsrw-verify` runs scoped checks for numerical models, exact calculations,
+and retained Lean evidence. Its optional execution manifest binds the input
+and report hashes to the observed implementation files and runtime.
+
+```shell
+python -m pip install -e ".[verification]"
+nsrw-verify forced-shear --input fixture=examples/research-verification/forced-shear.json
+nsrw-verify mb06-ratio --input record=examples/research-verification/mb06-ratio-20261113.json
+```
+
+See the [workflow and extension guide](docs/NSRW_RESEARCH_VERIFICATION.md)
+for checker registration, evidence classes and manifest output.
 
 Portable contract-only and manufactured checks:
 

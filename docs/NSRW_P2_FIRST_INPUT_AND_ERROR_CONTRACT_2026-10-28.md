@@ -9,6 +9,19 @@ This contract implements the next step of the
 [computational bridge plan](NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md).
 It is not a numerical certificate, source-Profile construction or new receipt.
 
+Reassessment, 2 November 2026: the [current-position document](CURRENT_POSITION_2026-11-02.md)
+sets normalized main/prefix moment and coefficient enclosure as the next work.
+Core scalars now also have a [separate interval-arithmetic cross-check](NSRW_CORE_SCALAR_CROSSCHECK.md).
+That checker does not provide a validated quadrature method. Prefer explicit
+computable analytic bounds where sufficient, and justify any remaining integral
+enclosures. The tuple, unresolved source hypotheses and budget below are unchanged.
+
+Reassessment, 12 November 2026: section 3.1 makes the analytic-first route
+explicit. The first coefficient target permits justified one-sided bounds and
+an exactly linked scaled q bound. It does not require accurate evaluation of
+all integrals, or a full Profile evaluator. No new coefficient computation or
+Lean admission is recorded by this clarification.
+
 ## 1. Selected model and first output
 
 Select the **conditional source-family route**. Its mathematical inputs remain
@@ -70,7 +83,8 @@ Do not evaluate exp(L) or the physical radius X as an ordinary floating point.
 2. Enclose the positive plateau width `w=(v-ell)/4`. The admitted inequality
    `mu01>=w` avoids numerical quadrature of this bump moment in the first target.
 3. Preserve `I01=exp(L*beta0)*mu01` in a scaled/logarithmic representation.
-4. Enclose the normalized core moments and affine coefficients. For the
+4. Obtain justified bounds on the affine coefficients, using analytic moment
+   bounds first and numerical integral enclosures where needed. For the
    main-only denominator, beta0=1/2-lambda and beta1=1/2-2*lambda imply exactly
    `exp(2*beta0)-exp(2*beta1)=exp(1-4*lambda)*(exp(2*lambda)-1)`.
    The numerical module checks the two exponent relations with exact rational
@@ -94,6 +108,74 @@ The output must preserve unresolved hypotheses. A numerical positive q and
 factor product, even if obtained, are not an explicit source-Profile certificate.
 Whole-window endpoint signs and continuity would be theorem-derived, not
 numerically evaluated M values. A narrow root bracket is a later experiment.
+
+### 3.1 Analytic-first coefficient route — 12 November 2026
+
+The following is a static derivation from the existing proof/source, proposed
+for the next bounded calculation. It is not a new compiled proposition or a
+successful numerical q evaluation.
+
+Define `F_i=normalizedMainMoment(c,i)`, `A_i=rowMoment(c.exponents i)` and
+`D=exp(2*beta0)-exp(2*beta1)>0`. The L2 proof contains the explicit estimate
+`F_0 <= exp(-2+3*lambda)*F_1`; L3 gives
+`A_0 >= exp(-3*lambda/20)*A_1 > 0`. Therefore
+
+```text
+kappa = 1 - exp(-2 + 63*lambda/20)
+-deltaM = F_1/A_1 - F_0/A_0 >= kappa * F_1/A_1
+C_main >= kappa * F_1 / (A_1 * D).
+```
+
+`kappa>0` under the source bound `0<lambda<1/10`. F1 supplies the further
+explicit inequality
+
+```text
+F_1 >= exp(-beta1*center(c,0)) / (5000*lambda).
+```
+
+Source bindings:
+
+- [L2 decay estimate](../formal/p2/P2_L2_NormalizedMainMomentComparison.lean):
+  private `normalizedMainMoment_zero_le_decay_one`.
+- [L3 template comparison](../formal/p2/P2_L3_TemplateMomentComparison.lean):
+  `rowMoment_one_scaled_le_rowMoment_zero`.
+- [F1 lower bound](../formal/p2/P2_F1_MainMomentPositivity.lean):
+  `mainMoment_one_lower` and the definition of `normalizedMainMoment` in L2.
+- [C01 coefficient identity](../formal/p2/P2_C_MainOnlyCoefficient.lean):
+  `affineCoefficients_main_one_eq_neg_deltaM_div_gap`.
+- Pinned upstream `NavierStokes/OutgoingPulseBounds.lean`:
+  `prefixBound`, `prefixCoefficient_le_bound`, `prefixCoefficient_small`, and
+  `actual_coefficients_normalized_system` supply prefix and system bounds.
+  All upstream locators refer to the source commit in section 1.
+
+The remaining obligations include a computable upper bound on A_1 unless that
+factor cancels by an exact positive rescaling, a bound on the actual prefix-only
+coefficient from the same normalized system, and a consistent scale conversion.
+A positive kappa alone does not close q. When
+turning the private L2 estimate into a reusable Lean result, add and verify a
+separate bridge rather than altering the admitted module bytes.
+
+The [MomentBound detailed design](momentbound/IMPLEMENTATION_PLAN.md#3-derivation-a-remove-the-enormous-common-scale)
+develops the positive-rescaling alternative: factor
+`s=exp(-beta1*center(c,0))/(A_1*D)`, bound both affine components relative to s,
+and use coarse rational prefix bounds for P=m=1. This may remove row-moment
+evaluation and quadrature from the first q-sign decision. Its source bridge is
+new, statically derived work; the design arithmetic check is not a certificate.
+
+The common positive exponential scales must be factored before numerical
+subtraction. If `q >= s*qhat_lower`, retain the exact definition of `s>0`, its
+source identity and the proof/derivation of that inequality. Certification of
+`qhat_lower>0` then gives a scaled positive q bound; it does not mean the code
+evaluated q as an ordinary floating-point or fixed-point number. Propagate s
+into the later J bound unless it cancels by an exact identity.
+
+The current `exp_bounds` API is intentionally restricted to rational arguments
+in [-16,16], and its precision denotes absolute fractional bits. Increasing that
+precision is not a remedy for an exponent of order 1/lambda. Keep the existing
+five-scalar interface and records unchanged; implement only justified new bound
+operations needed by this route. Use quadrature only if analytic bounds do not
+close the fixed-input target. A future quadrature path must evaluate the actual
+source cutoff and supply its own enclosure justification.
 
 ## 4. Arithmetic and stopping rule
 
@@ -148,7 +230,8 @@ invented I01 upper bounds and inflated bounds. Its scaled I01 value is a
 **lower-bound expression**, not an enclosure of I01 from above or an evaluated
 logarithm. A separate recomputation under one operator is not independent attestation.
 
-The next implementation task is a justified enclosure for the normalized
-moment integrals and affine coefficients. The source-instance lane remains HELD until its actual
+The next implementation task is a justified main-coefficient lower bound and
+prefix-coefficient absolute upper bound, using the analytic route first.
+The source-instance lane remains HELD until its actual
 admissibility obligations are discharged. This is a precise outstanding condition,
 not a counterexample to Z+J or the P1 exact-real propositions.

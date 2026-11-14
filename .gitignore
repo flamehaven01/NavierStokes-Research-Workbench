@@ -30,6 +30,9 @@ colab/*.log
 colab/*.olean
 colab/*.ilean
 # Unapproved text/evidence candidates and machine-local build/review helpers.
+/publication/writing-drafts/
+/docs/momentbound/DETERMINISTIC_SCRUTINY_SPAR_FHVAL_P0_*.md
+/docs/momentbound/P0_DETERMINISTIC_EVIDENCE_HARDENING_*.md
 publication/p2-z-phase-*-candidate/
 publication/*_BUILD_REVIEW_*.md
 publication/*.zip

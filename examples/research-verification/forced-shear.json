@@ -1,0 +1,6 @@
+{
+  "point": [0, 0.75, 0],
+  "time": 0.5,
+  "viscosity": 1,
+  "tolerance": 0.000002
+}

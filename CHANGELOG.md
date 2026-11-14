@@ -6,6 +6,20 @@ artifacts. Research claims retain their separate evidence statuses.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-14
+
+### Added
+
+- Installed `nsrw-verify` command for exact arithmetic diagnostics, interval
+  cross-checks, sampled PDE diagnostics and retained Lean evidence checks.
+- Optional execution manifests with input, report and implementation hashes,
+  observed dependency metadata and Python runtime identity.
+- Core CI runs the installed forced-shear and normalized-factor checks and
+  retains their reports and manifests.
+- MomentBound coefficient and conditional normalized-margin proofs with
+  their scoped dated receipts. MB-08 operator bounds remain development
+  results while the source cutoff jet and amplitude conditions remain open.
+
 ### Added
 
 - Paper cards now include short abstracts, verified page counts, manuscript/release version mapping, version and all-version DOIs, theorem-to-Lean links and official Zenodo BibTeX copy/download. P02 v0.6’s reported scalar experiment is distinguished from the later second-backend check.
@@ -336,7 +350,8 @@ published.
 
 - Initial evidence-bound Navier--Stokes research workbench.
 
-[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/flamehaven01/NavierStokes-Research-Workbench/compare/v0.3.2...v0.4.0

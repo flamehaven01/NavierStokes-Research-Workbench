@@ -16,7 +16,9 @@ Equation -> Artifact
 Artifact -> Application
 ~~~
 
-The first arc is claim custody. The second is technological translation.
+The first arc combines mathematical investigation, falsification, proof and
+computational realization. Source and execution traceability support that work.
+The second arc tests whether the resulting computation is useful in practice.
 
 The second arc may begin only from an explicitly identified claim and artifact.
 Application ambition does not widen an unverified mathematical claim.
@@ -238,13 +240,58 @@ source definition branch: C02 actual-coefficient decomposition
                               v
                    C04: per-Profile small-positive-eta sign
                               v
-                   Z: first-repair interior zero
+                   Z-core: first-repair interior mass zero
+
+separated-support weighted-tail comparison
+        -> Z+J: M = 0 and c1 > 0 imply local J > 0
+
+Z-core + Z+J + source-coordinate bridges
+        -> same-point source M = 0 and J > 0
+
+weighted-tail comparison
+        -> quantitative local J margin
+        -> normalization and conservative plateau bound
+
+core-scalar enclosures + second arithmetic path
+        -> justified analytic coefficient bounds (quadrature if needed)
+        -> q bound with explicit amplitude hypotheses
+        -> conditional local-J bound, then quantitative source-J bridge
+        -> explicit-instance same-zero certificate, if constructed
+
+coefficient milestone + justified target-model correspondence
+        -> selected scientific diagnostic and comparative utility experiment
+        (an explicit target model need not be the full source Profile)
 ~~~
 
-This is a dependency route, not a claim that every step has compiled. In
-particular, main-only positivity is not positivity of the actual coefficient.
+This is a dependency and research route; its dated completion status belongs in
+the current-position document and checklist. Main-only positivity and actual
+coefficient positivity have distinct statements and receipts.
 C02 consumes the upstream `OutgoingProfile` surface; it does not import the
 F1/L2/L3/D/C01 modules. Those branches meet only in later sign arguments.
+
+The [current-position reassessment](CURRENT_POSITION_2026-11-02.md), updated on
+12 November 2026, places NSRW at
+the boundary between implemented core-scalar computation and the next
+moment/coefficient enclosure. It records the completed Z+J/quantitative work,
+publication, and second-backend checks without treating them as a numerical J
+certificate. The immediate deliverable is the exact coefficient-bound
+specification and error justification, followed by C_main/C_prefix/q bounds.
+Use existing explicit inequalities before introducing numerical quadrature;
+preserve positive scale factors when deciding q's sign. Source admissibility
+remains a parallel obligation.
+
+The [P0-P4 execution plan](NSRW_POST_Z_COMPUTATIONAL_BRIDGE_PLAN_2026-10-21.md#7-p0-p4-execution-proposal-and-ai-checklist)
+specializes this route: P0 binds assumptions; P1 supplies the admitted exact
+quantitative mathematics; P2 computes coefficient bounds; P3 composes the
+conditional margin and later instance certificate; P4 selects one bounded
+preservation experiment or practical comparison. Practical branch B is the
+recommended next transfer direction; mathematical branch A remains deferred.
+P0-P4 are work packages, distinct from the R/OE/TR evidence axes above.
+
+[NSRW MomentBound](momentbound/README.md) is the named implementation package
+for the next coefficient-bound step. Its design and code handoff keep the
+mathematical derivation, arithmetic result and source-instance conditions
+separate, while targeting the smallest useful callable calculation.
 
 The dated execution status and next action live in the
 [restart checklist](NSRW_COLAB_RESTART_TASKS_2026-10-06.md), with individual
